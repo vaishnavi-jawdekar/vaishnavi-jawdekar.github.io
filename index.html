@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vaishnavi Jawdekar — Product Designer</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐️</text></svg>">
+  <link rel="icon" id="favicon" type="image/png">
   <meta name="description" content="Product Designer at Yulu. I design things people actually want to use.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2126,6 +2126,17 @@
 </div>
 
 <script>
+(function(){
+  var canvas = document.createElement('canvas');
+  canvas.width = 64; canvas.height = 64;
+  var ctx = canvas.getContext('2d');
+  ctx.font = '52px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('⭐', 32, 36);
+  var link = document.getElementById('favicon');
+  if (link) link.href = canvas.toDataURL('image/png');
+})();
 (function() {
   // always start at top on load/refresh
   if (history.scrollRestoration) history.scrollRestoration = 'manual';
