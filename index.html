@@ -2598,7 +2598,16 @@
     ppScene.classList.remove('pressing');
   }
 
-  ppScene.addEventListener('pointerdown', startPress, { passive: true });
+  ppScene.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    startPress(e.touches[0]);
+  }, { passive: false });
+  ppScene.addEventListener('pointerdown', function(e) {
+    if (e.pointerType === 'touch') return; // handled by touchstart above
+    startPress(e);
+  }, { passive: true });
+  ppScene.addEventListener('touchend',    cancelPress, { passive: true });
+  ppScene.addEventListener('touchcancel', cancelPress, { passive: true });
   ppScene.addEventListener('pointerup',   cancelPress, { passive: true });
   ppScene.addEventListener('pointerleave', cancelPress, { passive: true });
   ppScene.addEventListener('pointermove', function(e) {
