@@ -1659,6 +1659,7 @@
       .reveal { opacity: 1; transform: none; }
     }
   </style>
+  <script>if (history.scrollRestoration) history.scrollRestoration = 'manual';</script>
 </head>
 <body>
 
@@ -2145,6 +2146,7 @@
   // always start at top on load/refresh
   if (history.scrollRestoration) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
+  window.addEventListener('beforeunload', function() { window.scrollTo(0, 0); });
 
   // ── Passport cover open animation
   var ppCover = document.getElementById('pp-cover');
