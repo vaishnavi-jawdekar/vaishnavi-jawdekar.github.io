@@ -145,6 +145,9 @@
       position: relative;
       width: 520px;
       height: 336px;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
       perspective: 550px;
       /* closed: scene shifted LEFT so cover (on right half x=260-520) appears centred */
       transform: rotate(2deg) translateX(-130px);
@@ -428,6 +431,8 @@
       object-position: center top;
       display: block;
       user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
       pointer-events: none;
       bottom: 0; top: auto; left: 0;
     }
