@@ -2311,14 +2311,13 @@
   }, { passive: true });
 
   ppSpread.addEventListener('touchmove', function(e) {
-    e.preventDefault();
     var touch = e.touches[0];
     var rect  = ppSpread.getBoundingClientRect();
     applyHolo(
       (touch.clientX - rect.left) / rect.width,
       (touch.clientY - rect.top)  / rect.height
     );
-  }, { passive: false });
+  }, { passive: true });
 
   ppSpread.addEventListener('touchend', function() {
     if (ppScene) ppScene.classList.remove('pp-touched');
@@ -2587,15 +2586,13 @@
     ppScene.classList.remove('pressing');
   }
 
-  ppScene.addEventListener('pointerdown', startPress);
-  ppScene.addEventListener('pointerup',   cancelPress);
-  ppScene.addEventListener('pointerleave', cancelPress);
+  ppScene.addEventListener('pointerdown', startPress, { passive: true });
+  ppScene.addEventListener('pointerup',   cancelPress, { passive: true });
+  ppScene.addEventListener('pointerleave', cancelPress, { passive: true });
   ppScene.addEventListener('pointermove', function(e) {
-    if (e.buttons === 0) return; // not pressed, ignore
-    // cancel if moved more than 10px
+    if (e.buttons === 0) return;
     if (pressTimer && (Math.abs(e.movementX) > 10 || Math.abs(e.movementY) > 10)) cancelPress();
-  });
-  // prevent context menu on long-press mobile
+  }, { passive: true });
   ppScene.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 })();
 
