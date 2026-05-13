@@ -1,0 +1,213 @@
+<h2>Holographic passport element — 3 directions</h2>
+<p class="subtitle">Hover each passport to see the holo shift. Click to pick.</p>
+
+<style>
+@keyframes holoShift {
+  0%   { filter: hue-rotate(0deg) brightness(1); }
+  25%  { filter: hue-rotate(60deg) brightness(1.08); }
+  50%  { filter: hue-rotate(140deg) brightness(1.04); }
+  75%  { filter: hue-rotate(220deg) brightness(1.1); }
+  100% { filter: hue-rotate(360deg) brightness(1); }
+}
+@keyframes holoShiftFast {
+  0%   { filter: hue-rotate(0deg) brightness(1.05); }
+  100% { filter: hue-rotate(360deg) brightness(1.05); }
+}
+
+.pp-preview {
+  width: 260px; height: 196px;
+  background: #F0EAD0;
+  position: relative; overflow: hidden;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 8px 32px rgba(13,13,43,0.22), 0 2px 0 rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+.pp-fields-overlay {
+  position: absolute; top: 14px; left: 13px;
+  display: flex; flex-direction: column; gap: 10px; z-index: 10;
+}
+.pp-field { display: flex; flex-direction: column; gap: 1px; }
+.pp-flabel { font-size: 6px; color: rgba(13,13,43,0.35); text-transform: uppercase; letter-spacing: 0.13em; font-family: monospace; }
+.pp-fval { font-size: 11.5px; font-weight: 700; color: #0D0D2B; font-family: system-ui, sans-serif; line-height: 1.2; }
+.pp-pagenum { position: absolute; bottom: 7px; left: 10px; font-family: monospace; font-size: 7px; color: rgba(13,13,43,0.22); z-index: 10; }
+.card-image { display: flex; align-items: center; justify-content: center; padding: 1.5rem; height: 256px; background: #111; }
+
+/* shared wave bg */
+.wave-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='6'%3E%3Cpath d='M0 3 Q25 0 50 3 Q75 6 100 3 Q125 0 150 3 Q175 6 200 3' stroke='rgba(13%2C13%2C43%2C0.065)' fill='none' stroke-width='0.6'/%3E%3C/svg%3E");
+  background-size: 200px 6px;
+  pointer-events: none; z-index: 1;
+}
+
+/* ── Option A: full-page holo wash ── */
+.holo-wash {
+  position: absolute; inset: 0;
+  background: conic-gradient(
+    from 0deg at 60% 40%,
+    rgba(255,100,100,0.18) 0deg,
+    rgba(255,200,50,0.15) 40deg,
+    rgba(80,255,120,0.18) 80deg,
+    rgba(50,180,255,0.2) 130deg,
+    rgba(180,80,255,0.18) 200deg,
+    rgba(255,80,180,0.18) 260deg,
+    rgba(255,100,100,0.18) 360deg
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  z-index: 2;
+  animation: holoShift 6s linear infinite paused;
+  transition: opacity 0.3s;
+}
+.pp-preview:hover .holo-wash {
+  animation-play-state: running;
+  opacity: 0.75;
+}
+
+/* ── Option B: circular holo patch ── */
+.holo-circle {
+  position: absolute;
+  width: 90px; height: 90px;
+  right: 18px; bottom: 22px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #c77dff, #ff6b6b
+  );
+  opacity: 0.45;
+  z-index: 2;
+  animation: holoShiftFast 4s linear infinite paused;
+  transition: opacity 0.3s, transform 0.4s;
+  box-shadow: 0 0 0 1px rgba(13,13,43,0.12), inset 0 0 20px rgba(255,255,255,0.3);
+  overflow: hidden;
+}
+.holo-circle::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-conic-gradient(
+    rgba(255,255,255,0.12) 0deg 5deg,
+    transparent 5deg 10deg
+  );
+  border-radius: 50%;
+}
+.holo-circle::before {
+  content: '';
+  position: absolute; inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.4);
+  z-index: 1;
+  box-shadow: inset 0 0 12px rgba(255,255,255,0.2);
+}
+.pp-preview:hover .holo-circle {
+  animation-play-state: running;
+  opacity: 0.7;
+  transform: scale(1.04);
+}
+
+/* ── Option C: holo stripe ── */
+.holo-stripe {
+  position: absolute;
+  left: 0; right: 0;
+  top: 50%; transform: translateY(-50%);
+  height: 44px;
+  background: repeating-linear-gradient(
+    105deg,
+    rgba(255,100,100,0.22) 0px,
+    rgba(255,200,50,0.2) 12px,
+    rgba(80,255,150,0.22) 24px,
+    rgba(50,180,255,0.22) 36px,
+    rgba(180,80,255,0.22) 48px,
+    rgba(255,80,180,0.2) 60px,
+    rgba(255,100,100,0.22) 72px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+  z-index: 2;
+  animation: holoShift 5s linear infinite paused;
+  transition: opacity 0.3s, height 0.3s;
+  border-top: 0.5px solid rgba(13,13,43,0.08);
+  border-bottom: 0.5px solid rgba(13,13,43,0.08);
+}
+.holo-stripe::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    rgba(255,255,255,0.08) 2px,
+    transparent 4px
+  );
+}
+.pp-preview:hover .holo-stripe {
+  animation-play-state: running;
+  opacity: 0.75;
+  height: 52px;
+}
+</style>
+
+<div class="cards">
+
+  <!-- A: full-page holo wash -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pp-preview">
+        <div class="wave-bg"></div>
+        <div class="holo-wash"></div>
+        <div class="pp-fields-overlay">
+          <div class="pp-field"><span class="pp-flabel">Occupation</span><span class="pp-fval">Product Designer</span></div>
+          <div class="pp-field"><span class="pp-flabel">Experience</span><span class="pp-fval">3+ years</span></div>
+          <div class="pp-field"><span class="pp-flabel">Based in</span><span class="pp-fval">Bengaluru, India</span></div>
+          <div class="pp-field"><span class="pp-flabel">Currently at</span><span class="pp-fval">Yulu</span></div>
+        </div>
+        <span class="pp-pagenum">7</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Full-page holo wash</h3>
+      <p>Rainbow conic gradient tints the whole right page. Subtle at rest, shifts on hover. Like a foil-printed biographical page.</p>
+    </div>
+  </div>
+
+  <!-- B: circular holo patch -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pp-preview">
+        <div class="wave-bg"></div>
+        <div class="holo-circle"></div>
+        <div class="pp-fields-overlay">
+          <div class="pp-field"><span class="pp-flabel">Occupation</span><span class="pp-fval">Product Designer</span></div>
+          <div class="pp-field"><span class="pp-flabel">Experience</span><span class="pp-fval">3+ years</span></div>
+          <div class="pp-field"><span class="pp-flabel">Based in</span><span class="pp-fval">Bengaluru, India</span></div>
+          <div class="pp-field"><span class="pp-flabel">Currently at</span><span class="pp-fval">Yulu</span></div>
+        </div>
+        <span class="pp-pagenum">7</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Circular holo patch</h3>
+      <p>A discrete hologram sticker, bottom-right corner. Spins on hover. Exactly like the security emblem on real passports/IDs.</p>
+    </div>
+  </div>
+
+  <!-- C: horizontal holo stripe -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pp-preview">
+        <div class="wave-bg"></div>
+        <div class="holo-stripe"></div>
+        <div class="pp-fields-overlay">
+          <div class="pp-field"><span class="pp-flabel">Occupation</span><span class="pp-fval">Product Designer</span></div>
+          <div class="pp-field"><span class="pp-flabel">Experience</span><span class="pp-fval">3+ years</span></div>
+          <div class="pp-field"><span class="pp-flabel">Based in</span><span class="pp-fval">Bengaluru, India</span></div>
+          <div class="pp-field"><span class="pp-flabel">Currently at</span><span class="pp-fval">Yulu</span></div>
+        </div>
+        <span class="pp-pagenum">7</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Holo stripe</h3>
+      <p>A rainbow band across the middle of the page. Like the holographic strip on a credit card or ID. Activates on hover.</p>
+    </div>
+  </div>
+
+</div>

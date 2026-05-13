@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111; font-family: 'Satoshi', system-ui, sans-serif; padding: 2rem 1.5rem 4rem; color: #F7F7F5; }
+
+  h2 { font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+  .sub { font-size: 0.75rem; color: #555; margin-bottom: 2.5rem; line-height: 1.5; }
+
+  .q-block { margin-bottom: 2.5rem; }
+  .q-meta { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+  .q-num { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; color: #4B4EFC; text-transform: uppercase; }
+  .q-title { font-size: 0.85rem; font-weight: 700; color: #F7F7F5; }
+
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .opt { border-radius: 10px; overflow: hidden; border: 1.5px solid #2a2a2a; cursor: pointer; transition: border-color 0.15s; }
+  .opt:hover { border-color: #4B4EFC; }
+  .opt-preview { height: 100px; display: flex; align-items: center; justify-content: center; padding: 12px; position: relative; overflow: hidden; }
+  .opt-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.04em; padding: 7px 10px; line-height: 1.35; }
+
+  hr { border: none; border-top: 1px solid #1e1e1e; margin: 2.5rem 0; }
+</style>
+</head>
+<body>
+
+<h2>Questions — v2</h2>
+<p class="sub">No design jargon. No correct answer. Pure taste — each one pulls you toward a world, not a verdict.</p>
+
+<!-- Q1 -->
+<div class="q-block">
+  <div class="q-meta">
+    <span class="q-num">Q1</span>
+    <span class="q-title">Pick an art movement.</span>
+  </div>
+  <div class="pair">
+    <div class="opt">
+      <div class="opt-preview" style="background:#E8E4D9;">
+        <!-- Bauhaus-style: geometric shapes, primary colours -->
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <rect x="10" y="10" width="40" height="40" fill="#0A0A0A"/>
+          <circle cx="58" cy="28" r="18" fill="#e63946"/>
+          <rect x="10" y="55" width="60" height="14" fill="#4B4EFC"/>
+        </svg>
+      </div>
+      <div class="opt-label" style="background:#DDD9CF;color:#0A0A0A;">Bauhaus — geometry, function, bold primaries</div>
+    </div>
+    <div class="opt">
+      <div class="opt-preview" style="background:#ff6b9d;">
+        <!-- Memphis-style: squiggles, dots, chaos -->
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <rect x="0" y="0" width="80" height="80" fill="#ff6b9d"/>
+          <rect x="5" y="5" width="20" height="20" fill="#ffe135" rx="2"/>
+          <circle cx="60" cy="20" r="12" fill="#00cfcf"/>
+          <rect x="30" y="50" width="40" height="8" fill="#0A0A0A" transform="rotate(-15 30 50)"/>
+          <circle cx="15" cy="65" r="8" fill="#ff3366"/>
+          <path d="M50 35 Q65 20 70 50" stroke="#0A0A0A" stroke-width="3" fill="none"/>
+          <rect x="55" y="55" width="18" height="18" fill="#ffe135" transform="rotate(20 55 55)" rx="2"/>
+        </svg>
+      </div>
+      <div class="opt-label" style="background:#e0457a;color:#fff;">Memphis — clashing colour, chaos, no rules</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Q2 -->
+<div class="q-block">
+  <div class="q-meta">
+    <span class="q-num">Q2</span>
+    <span class="q-title">Which room would you live in?</span>
+  </div>
+  <div class="pair">
+    <div class="opt">
+      <div class="opt-preview" style="background:#F0EDE6;flex-direction:column;gap:6px;justify-content:flex-end;padding:10px;">
+        <!-- Minimal Japanese room -->
+        <div style="width:100%;height:2px;background:#C8C2B6"></div>
+        <div style="display:flex;gap:8px;align-items:flex-end;width:100%">
+          <div style="width:3px;height:50px;background:#A09080;border-radius:1px"></div>
+          <div style="flex:1;height:30px;background:#E0D8CE;border-radius:2px;border:1px solid #C8C2B6"></div>
+          <div style="width:3px;height:65px;background:#A09080;border-radius:1px"></div>
+        </div>
+        <div style="font-size:7px;color:#A09080;letter-spacing:0.08em;text-align:center">empty. still. enough.</div>
+      </div>
+      <div class="opt-label" style="background:#E8E4DC;color:#0A0A0A;">Minimal, Japanese, one perfect object</div>
+    </div>
+    <div class="opt">
+      <div class="opt-preview" style="background:#2C1810;flex-direction:column;gap:4px;padding:10px;">
+        <!-- Maximalist bookshelf room -->
+        <div style="display:flex;gap:3px;width:100%;align-items:flex-end;">
+          <div style="width:6px;height:45px;background:#8B4513;border-radius:1px"></div>
+          <div style="width:8px;height:55px;background:#e63946;border-radius:1px"></div>
+          <div style="width:5px;height:40px;background:#4B4EFC;border-radius:1px"></div>
+          <div style="width:9px;height:60px;background:#2d6a4f;border-radius:1px"></div>
+          <div style="width:6px;height:35px;background:#c9a84c;border-radius:1px"></div>
+          <div style="width:7px;height:50px;background:#6d3b8c;border-radius:1px"></div>
+          <div style="width:5px;height:42px;background:#e8a87c;border-radius:1px"></div>
+          <div style="width:8px;height:58px;background:#1a1a2e;border-radius:1px"></div>
+          <div style="width:6px;height:38px;background:#c0392b;border-radius:1px"></div>
+        </div>
+        <div style="font-size:7px;color:#8B6355;letter-spacing:0.06em;text-align:center">every shelf full. always.</div>
+      </div>
+      <div class="opt-label" style="background:#1a0e08;color:#F7F7F5;">Every wall a bookshelf, plants everywhere</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Q3 -->
+<div class="q-block">
+  <div class="q-meta">
+    <span class="q-num">Q3</span>
+    <span class="q-title">Pick a city at night.</span>
+  </div>
+  <div class="pair">
+    <div class="opt">
+      <div class="opt-preview" style="background:#0a0a14;position:relative;">
+        <!-- Tokyo neon density -->
+        <div style="display:flex;flex-direction:column;gap:3px;width:100%;padding:4px;">
+          <div style="display:flex;gap:3px;justify-content:center">
+            <div style="width:4px;height:35px;background:#ff0080;border-radius:1px;box-shadow:0 0 8px #ff0080"></div>
+            <div style="width:4px;height:50px;background:#00cfff;border-radius:1px;box-shadow:0 0 8px #00cfff"></div>
+            <div style="width:4px;height:40px;background:#ff0080;border-radius:1px;box-shadow:0 0 8px #ff0080"></div>
+            <div style="width:4px;height:55px;background:#ffe135;border-radius:1px;box-shadow:0 0 8px #ffe135"></div>
+            <div style="width:4px;height:38px;background:#00cfff;border-radius:1px;box-shadow:0 0 8px #00cfff"></div>
+            <div style="width:4px;height:48px;background:#ff0080;border-radius:1px;box-shadow:0 0 8px #ff0080"></div>
+          </div>
+          <div style="font-size:7px;color:#ff0080;letter-spacing:0.1em;text-align:center;text-shadow:0 0 8px #ff0080">TOKYO</div>
+        </div>
+      </div>
+      <div class="opt-label" style="background:#060610;color:#F7F7F5;">Tokyo — neon, dense, electric</div>
+    </div>
+    <div class="opt">
+      <div class="opt-preview" style="background:#1C2030;">
+        <!-- Copenhagen quiet -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="display:flex;gap:12px;align-items:flex-end;">
+            <div style="width:18px;height:45px;background:#2a3050;border-radius:2px 2px 0 0;border:1px solid #3a4060;position:relative;">
+              <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);width:8px;height:8px;background:#c9a84c44;border-radius:1px;box-shadow:0 0 4px #c9a84c66"></div>
+            </div>
+            <div style="width:14px;height:35px;background:#2a3050;border-radius:2px 2px 0 0;border:1px solid #3a4060"></div>
+            <div style="width:20px;height:52px;background:#2a3050;border-radius:2px 2px 0 0;border:1px solid #3a4060;position:relative;">
+              <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);width:8px;height:8px;background:#c9a84c44;border-radius:1px;box-shadow:0 0 4px #c9a84c66"></div>
+            </div>
+          </div>
+          <div style="font-size:7px;color:#4a5070;letter-spacing:0.1em">COPENHAGEN</div>
+        </div>
+      </div>
+      <div class="opt-label" style="background:#141824;color:#F7F7F5;">Copenhagen — quiet, cobblestones, amber light</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Q4 -->
+<div class="q-block">
+  <div class="q-meta">
+    <span class="q-num">Q4</span>
+    <span class="q-title">Pick a decade to design in.</span>
+  </div>
+  <div class="pair">
+    <div class="opt">
+      <div class="opt-preview" style="background:#F5E6C8;flex-direction:column;gap:5px;align-items:flex-start;padding:14px;">
+        <div style="font-family:Georgia,serif;font-size:13px;font-weight:700;color:#3D2B1F;font-style:italic;letter-spacing:-0.01em">Studio 54</div>
+        <div style="font-size:7px;color:#8B6355;letter-spacing:0.06em">1970s — warm, analog, handcrafted</div>
+        <div style="display:flex;gap:4px;margin-top:4px;">
+          <div style="width:16px;height:16px;border-radius:50%;background:#c9a84c"></div>
+          <div style="width:16px;height:16px;border-radius:50%;background:#8B4513"></div>
+          <div style="width:16px;height:16px;border-radius:50%;background:#3D2B1F"></div>
+        </div>
+      </div>
+      <div class="opt-label" style="background:#EDD9B5;color:#3D2B1F;">70s — warm tones, analog texture, groovy</div>
+    </div>
+    <div class="opt">
+      <div class="opt-preview" style="background:#000;flex-direction:column;gap:5px;align-items:flex-start;padding:14px;">
+        <div style="font-family:monospace;font-size:13px;font-weight:700;color:#00FF41;letter-spacing:0.1em">SYS_INIT</div>
+        <div style="font-size:7px;color:#00FF4188;letter-spacing:0.08em;font-family:monospace">1990s — digital, grid, early internet</div>
+        <div style="display:flex;gap:4px;margin-top:4px;">
+          <div style="width:16px;height:16px;border-radius:2px;background:#00FF41;opacity:0.8"></div>
+          <div style="width:16px;height:16px;border-radius:2px;background:#0066FF;opacity:0.8"></div>
+          <div style="width:16px;height:16px;border-radius:2px;background:#FF00FF;opacity:0.8"></div>
+        </div>
+      </div>
+      <div class="opt-label" style="background:#0a0a0a;color:#00FF41;">90s — digital grids, early web, system fonts</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Q5 -->
+<div class="q-block">
+  <div class="q-meta">
+    <span class="q-num">Q5</span>
+    <span class="q-title">Pick a poster.</span>
+  </div>
+  <div class="pair">
+    <div class="opt">
+      <div class="opt-preview" style="background:#F5F0E8;flex-direction:column;gap:4px;padding:12px;align-items:flex-start;">
+        <!-- Swiss international style -->
+        <div style="width:100%;height:3px;background:#0A0A0A;margin-bottom:6px"></div>
+        <div style="font-family:system-ui,sans-serif;font-size:14px;font-weight:900;color:#0A0A0A;letter-spacing:-0.02em;line-height:1">KUNST</div>
+        <div style="font-family:system-ui,sans-serif;font-size:14px;font-weight:900;color:#0A0A0A;letter-spacing:-0.02em;line-height:1">MUSEUM</div>
+        <div style="width:45px;height:45px;background:#e63946;margin:6px 0"></div>
+        <div style="font-size:6px;color:#666;letter-spacing:0.1em;text-transform:uppercase">Zürich — 1958</div>
+      </div>
+      <div class="opt-label" style="background:#EAE6DC;color:#0A0A0A;">Swiss International — grid, Helvetica, red block</div>
+    </div>
+    <div class="opt">
+      <div class="opt-preview" style="background:#1a0a2e;flex-direction:column;gap:0;padding:10px;position:relative;overflow:hidden;">
+        <!-- Psychedelic poster -->
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%, #8B00FF44, transparent 60%), radial-gradient(ellipse at 70% 60%, #FF006644, transparent 60%)"></div>
+        <div style="font-family:Georgia,serif;font-size:13px;font-weight:700;font-style:italic;color:#FFD700;text-shadow:0 0 12px #FFD700;line-height:1.2;position:relative;z-index:1">Velvet<br>Underground</div>
+        <div style="font-size:6px;color:#aa88ff;letter-spacing:0.08em;margin-top:8px;position:relative;z-index:1">San Francisco — 1967</div>
+      </div>
+      <div class="opt-label" style="background:#100720;color:#FFD700;">Psychedelic — layered, glowing, no rules</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Q6 -->
+<div class="q-block">
+  <div class="q-meta">
+    <span class="q-num">Q6</span>
+    <span class="q-title">Pick a texture.</span>
+  </div>
+  <div class="pair">
+    <div class="opt">
+      <div class="opt-preview" style="background:#E8E8E8;background-image:repeating-linear-gradient(0deg,transparent,transparent 19px,rgba(0,0,0,0.04) 19px,rgba(0,0,0,0.04) 20px),repeating-linear-gradient(90deg,transparent,transparent 19px,rgba(0,0,0,0.04) 19px,rgba(0,0,0,0.04) 20px);">
+        <div style="font-size:7px;color:#888;letter-spacing:0.1em;text-transform:uppercase">graph paper</div>
+      </div>
+      <div class="opt-label" style="background:#DCDCDC;color:#0A0A0A;">Graph paper — precise, ordered, gridded</div>
+    </div>
+    <div class="opt">
+      <div class="opt-preview" style="background:#C4956A;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/><feColorMatrix type=%22saturate%22 values=%220%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22 opacity=%220.3%22/></svg>');">
+        <div style="font-size:7px;color:#6B3A1F;letter-spacing:0.08em;text-transform:uppercase;font-weight:700">linen</div>
+      </div>
+      <div class="opt-label" style="background:#B8845A;color:#fff;">Linen — warm, organic, imperfect</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

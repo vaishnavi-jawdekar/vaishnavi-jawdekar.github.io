@@ -1,0 +1,186 @@
+<h2>Mobile: how do you reveal the review?</h2>
+<p class="subtitle">No hover on touch screens. These are the realistic options — try tapping the books.</p>
+
+<style>
+  .shelf-row-m { display: flex; gap: 10px; align-items: flex-end; margin: 0.5rem 0; }
+  .bk {
+    width: 58px; flex-shrink: 0;
+    border-radius: 3px 6px 6px 3px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.45), inset -2px 0 4px rgba(0,0,0,0.2);
+    position: relative; cursor: pointer; overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Option A — tap reveals tooltip that auto-dismisses */
+  .opt-a .bk { height: 84px; display: flex; align-items: flex-end; padding: 5px; }
+  .opt-a .bk .label { font-size: 7.5px; color: rgba(255,255,255,0.85); font-weight: 600; line-height: 1.25; position: relative; z-index: 2; }
+  .opt-a .bk .bubble {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: #111; color: #eee; font-size: 10px; line-height: 1.45;
+    padding: 7px 10px; border-radius: 8px; opacity: 0; pointer-events: none;
+    transition: opacity 0.18s; z-index: 30; width: 150px; text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.5); font-style: italic;
+    white-space: normal;
+  }
+  .opt-a .bk.tapped .bubble { opacity: 1; }
+  .opt-a .bk.tapped { transform: translateY(-8px) scale(1.06); transition: transform 0.2s cubic-bezier(0.16,1,0.3,1); z-index: 10; }
+
+  /* Option B — tap flips */
+  .opt-b .bk { height: 84px; perspective: 400px; background: transparent !important; box-shadow: none; }
+  .opt-b .flip-inner {
+    position: absolute; inset: 0; transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); border-radius: inherit;
+  }
+  .opt-b .bk.tapped .flip-inner { transform: rotateY(-180deg); }
+  .opt-b .flip-f, .opt-b .flip-b {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: 3px 6px 6px 3px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.45), inset -2px 0 4px rgba(0,0,0,0.2);
+    display: flex; align-items: flex-end; padding: 5px;
+  }
+  .opt-b .flip-b {
+    background: #1a1a1a; transform: rotateY(180deg);
+    flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 3px;
+  }
+  .opt-b .flip-b .stars { font-size: 10px; }
+  .opt-b .flip-b .rev { font-size: 7px; color: #ccc; font-style: italic; line-height: 1.4; }
+  .opt-b .flip-b .tap-back { font-size: 6.5px; color: #555; margin-top: 4px; }
+
+  /* Option C — always visible title + stars below */
+  .opt-c .bk { height: 84px; }
+  .opt-c .bk-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 64px; flex-shrink: 0; }
+  .opt-c .bk-wrap .bk { width: 100%; }
+  .opt-c .bk-inner { display: flex; align-items: flex-end; padding: 5px; height: 100%; }
+  .opt-c .bk-inner .label { font-size: 7.5px; color: rgba(255,255,255,0.85); font-weight: 600; line-height: 1.25; }
+  .opt-c .bk-meta { text-align: center; }
+  .opt-c .bk-meta .title { font-size: 7.5px; color: #666; line-height: 1.3; }
+  .opt-c .bk-meta .stars { font-size: 9px; color: #aaa; }
+
+  .bc1 { background: linear-gradient(150deg,#3B3DF0,#2325BE); }
+  .bc2 { background: linear-gradient(150deg,#c0392b,#7B241C); }
+  .bc3 { background: linear-gradient(150deg,#1a6b3c,#145a32); }
+  .bc4 { background: linear-gradient(150deg,#7d3c98,#6c3483); }
+
+  .phone-frame {
+    background: #111;
+    border-radius: 12px;
+    padding: 1rem 1rem 0.5rem;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+  .shelf-label { font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: #666; margin-bottom: 6px; }
+  .shelf-plank { height: 8px; background: linear-gradient(to bottom,#5C4A36,#3A2E24); border-radius: 0 0 3px 3px; margin: 0 -1rem; }
+</style>
+
+<script>
+  document.addEventListener('click', function(e) {
+    var bk = e.target.closest('.tappable');
+    if (!bk) return;
+
+    // untap siblings in same group
+    var group = bk.closest('.shelf-row-m, .opt-b');
+    if (group) {
+      group.querySelectorAll('.tappable.tapped').forEach(function(el) {
+        if (el !== bk) el.classList.remove('tapped');
+      });
+    }
+    bk.classList.toggle('tapped');
+
+    // auto-dismiss tooltip after 2.5s for opt-a
+    if (bk.closest('.opt-a') && bk.classList.contains('tapped')) {
+      setTimeout(function() { bk.classList.remove('tapped'); }, 2500);
+    }
+  });
+</script>
+
+<div class="cards">
+
+  <div class="card" data-choice="tap-tooltip" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:1rem;">
+      <div class="phone-frame">
+        <div class="shelf-label">Design</div>
+        <div class="shelf-row-m opt-a" style="padding-bottom:0;margin-bottom:0;">
+          <div class="bk bc1 tappable"><div class="label">The Design of Everyday Things</div><div class="bubble">"Changed how I see every door handle."</div></div>
+          <div class="bk bc2 tappable" style="height:76px"><div class="label">Sprint</div><div class="bubble">"5 days to validate anything."</div></div>
+          <div class="bk bc3 tappable" style="height:80px"><div class="label">Shape Up</div><div class="bubble">"Opinionated in the best way."</div></div>
+          <div class="bk bc4 tappable" style="height:78px"><div class="label">Continuous Discovery</div><div class="bubble">"Habits that actually stick."</div></div>
+        </div>
+        <div class="shelf-plank"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Tap to pop quote, auto-dismiss</h3>
+      <p>Tap lifts the book and shows your quote above it. Disappears after ~2s or on next tap. Same feel as desktop hover, just intentional.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="tap-flip" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:1rem;">
+      <div class="phone-frame">
+        <div class="shelf-label">Design</div>
+        <div class="shelf-row-m opt-b" style="padding-bottom:0;margin-bottom:0;">
+          <div class="bk tappable" style="height:84px">
+            <div class="flip-inner">
+              <div class="flip-f bc1"><span style="font-size:7.5px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.25;">Design of Everyday Things</span></div>
+              <div class="flip-b"><div class="stars">★★★★★</div><div class="rev">"Changed how I see every door handle."</div><div class="tap-back">tap to flip back</div></div>
+            </div>
+          </div>
+          <div class="bk tappable" style="height:76px">
+            <div class="flip-inner">
+              <div class="flip-f bc2"><span style="font-size:7.5px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.25;">Sprint</span></div>
+              <div class="flip-b"><div class="stars">★★★★☆</div><div class="rev">"5 days to validate anything."</div><div class="tap-back">tap to flip back</div></div>
+            </div>
+          </div>
+          <div class="bk tappable" style="height:80px">
+            <div class="flip-inner">
+              <div class="flip-f bc3"><span style="font-size:7.5px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.25;">Shape Up</span></div>
+              <div class="flip-b"><div class="stars">★★★★☆</div><div class="rev">"Opinionated in the best way."</div><div class="tap-back">tap to flip back</div></div>
+            </div>
+          </div>
+          <div class="bk tappable" style="height:78px">
+            <div class="flip-inner">
+              <div class="flip-f bc4"><span style="font-size:7.5px;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.25;">Continuous Discovery</span></div>
+              <div class="flip-b"><div class="stars">★★★★★</div><div class="rev">"Habits that actually stick."</div><div class="tap-back">tap to flip back</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="shelf-plank"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Tap to flip (toggle)</h3>
+      <p>First tap flips, second tap flips back. Stays flipped until you dismiss. Discoverable and fun — works identically on desktop and mobile.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="always-visible" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:1rem;">
+      <div class="phone-frame">
+        <div class="shelf-label">Design</div>
+        <div class="shelf-row-m opt-c" style="align-items: flex-start; padding-bottom: 0; margin-bottom:0;">
+          <div class="bk-wrap">
+            <div class="bk bc1"><div class="bk-inner"><div class="label">Design of Everyday Things</div></div></div>
+            <div class="bk-meta"><div class="stars">★★★★★</div><div class="title">DoET</div></div>
+          </div>
+          <div class="bk-wrap">
+            <div class="bk bc2" style="height:76px"><div class="bk-inner"><div class="label">Sprint</div></div></div>
+            <div class="bk-meta"><div class="stars">★★★★☆</div><div class="title">Sprint</div></div>
+          </div>
+          <div class="bk-wrap">
+            <div class="bk bc3" style="height:80px"><div class="bk-inner"><div class="label">Shape Up</div></div></div>
+            <div class="bk-meta"><div class="stars">★★★★☆</div><div class="title">Shape Up</div></div>
+          </div>
+          <div class="bk-wrap">
+            <div class="bk bc4" style="height:78px"><div class="bk-inner"><div class="label">Cont. Discovery</div></div></div>
+            <div class="bk-meta"><div class="stars">★★★★★</div><div class="title">Cont. Discovery</div></div>
+          </div>
+        </div>
+        <div class="shelf-plank" style="margin-top:6px"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Stars always visible below</h3>
+      <p>No interaction needed — rating + short title sits below each cover. Simple and scannable. No hidden state, works equally well on all screen sizes without any JS.</p>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111; font-family: 'Satoshi', system-ui, sans-serif; padding: 2rem 1rem 3rem; color: #F7F7F5; }
+
+  h2 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.3rem; color: #F7F7F5; }
+  .sub { font-size: 0.8rem; color: #666; margin-bottom: 2rem; }
+
+  .flow { display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 1rem; align-items: flex-start; }
+  .flow::-webkit-scrollbar { display: none; }
+
+  .screen-wrap { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+  .screen-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; }
+  .arrow { color: #333; font-size: 1.2rem; align-self: center; flex-shrink: 0; margin-top: -1.5rem; }
+
+  /* phone frame */
+  .phone {
+    width: 180px;
+    background: #1a1a1a;
+    border-radius: 20px;
+    border: 1px solid #2a2a2a;
+    padding: 1rem 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+
+  .progress { display: flex; gap: 3px; margin-bottom: 10px; }
+  .pd { flex: 1; height: 2.5px; border-radius: 99px; background: #2a2a2a; }
+  .pd.done { background: #4B4EFC; }
+  .pd.active { background: #F7F7F5; }
+
+  .round-label { font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 4px; }
+  .round-q { font-size: 10px; font-weight: 700; color: #F7F7F5; margin-bottom: 10px; line-height: 1.35; }
+
+  .choice-pair { display: flex; gap: 6px; }
+  .choice {
+    flex: 1; border-radius: 8px; overflow: hidden; cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: border-color 0.15s;
+  }
+  .choice:hover { border-color: #4B4EFC; }
+  .choice-img { height: 56px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 3px; }
+  .choice-lbl { font-size: 6.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; text-align: center; padding: 4px 4px 5px; }
+
+  /* result card */
+  .result-card {
+    background: #0A0A0A;
+    border-radius: 12px;
+    padding: 1rem 0.85rem;
+    border: 1px solid #2a2a2a;
+  }
+  .result-eyebrow { font-size: 6.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 4px; }
+  .result-type { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.03em; color: #4B4EFC; margin-bottom: 6px; }
+  .result-desc { font-size: 7.5px; color: rgba(247,247,245,0.55); line-height: 1.55; margin-bottom: 10px; }
+  .result-share { background: #4B4EFC; color: #fff; border: none; border-radius: 6px; padding: 6px 10px; font-size: 7px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; width: 100%; }
+
+  /* sections */
+  .section { margin-bottom: 2.5rem; }
+  .section-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 1rem; border-bottom: 1px solid #222; padding-bottom: 0.5rem; }
+
+  /* archetype grid */
+  .archetypes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; max-width: 480px; }
+  .arch {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 0.9rem;
+    border: 1px solid #2a2a2a;
+  }
+  .arch-name { font-size: 0.85rem; font-weight: 800; letter-spacing: -0.02em; color: #F7F7F5; margin-bottom: 0.3rem; }
+  .arch-axes { font-size: 0.6rem; color: #4B4EFC; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .arch-desc { font-size: 0.65rem; color: #666; line-height: 1.5; }
+
+  /* questions list */
+  .q-list { display: flex; flex-direction: column; gap: 0.6rem; max-width: 480px; }
+  .q-row {
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid #2a2a2a;
+  }
+  .q-num { font-size: 0.6rem; font-weight: 700; color: #4B4EFC; width: 14px; flex-shrink: 0; }
+  .q-text { font-size: 0.7rem; color: #F7F7F5; flex: 1; }
+  .q-vs { font-size: 0.6rem; color: #444; }
+  .q-axis { font-size: 0.55rem; color: #555; letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<h2>Design Instinct — full game flow</h2>
+<p class="sub">Long-press passport → 6 questions → one of 4 archetypes. Scroll right to see all screens →</p>
+
+<!-- ── FLOW ───────────────────────────────── -->
+<div class="section">
+  <div class="section-title">Screen flow</div>
+  <div class="flow">
+
+    <!-- INTRO -->
+    <div class="screen-wrap">
+      <div class="screen-label">1 · Intro</div>
+      <div class="phone">
+        <div style="text-align:center;padding:0.5rem 0 1rem;">
+          <div style="font-size:1.5rem;margin-bottom:8px">🔍</div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:-0.02em;color:#F7F7F5;margin-bottom:5px">You found it.</div>
+          <div style="font-size:7.5px;color:#555;line-height:1.55;margin-bottom:14px">6 quick picks. No wrong answers.<br>Find out what kind of designer you are.</div>
+          <div style="background:#4B4EFC;color:#fff;border-radius:8px;padding:7px;font-size:7.5px;font-weight:700;letter-spacing:0.04em">Let's go →</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- Q1 -->
+    <div class="screen-wrap">
+      <div class="screen-label">2 · Question</div>
+      <div class="phone">
+        <div class="progress">
+          <div class="pd active"></div><div class="pd"></div><div class="pd"></div>
+          <div class="pd"></div><div class="pd"></div><div class="pd"></div>
+        </div>
+        <div class="round-label">Round 1 of 6</div>
+        <div class="round-q">Which layout feels right?</div>
+        <div class="choice-pair">
+          <div class="choice">
+            <div class="choice-img" style="background:#F7F7F5;">
+              <div style="width:65%;height:5px;background:#0A0A0A;border-radius:1px"></div>
+              <div style="width:80%;height:3px;background:#ddd;border-radius:1px"></div>
+              <div style="width:55%;height:3px;background:#ddd;border-radius:1px"></div>
+            </div>
+            <div class="choice-lbl" style="background:#F0F0EE;color:#0A0A0A;">Spacious</div>
+          </div>
+          <div class="choice">
+            <div class="choice-img" style="background:#0A0A0A;">
+              <div style="width:80%;display:flex;flex-direction:column;gap:2px;">
+                <div style="height:3px;background:#333;border-radius:1px"></div>
+                <div style="height:3px;background:#333;border-radius:1px"></div>
+                <div style="height:3px;background:#4B4EFC;border-radius:1px"></div>
+                <div style="height:3px;background:#333;border-radius:1px"></div>
+                <div style="height:3px;background:#333;border-radius:1px"></div>
+              </div>
+            </div>
+            <div class="choice-lbl" style="background:#111;color:#F7F7F5;">Dense</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- Q4 -->
+    <div class="screen-wrap">
+      <div class="screen-label">3 · Mid-game</div>
+      <div class="phone">
+        <div class="progress">
+          <div class="pd done"></div><div class="pd done"></div><div class="pd done"></div>
+          <div class="pd active"></div><div class="pd"></div><div class="pd"></div>
+        </div>
+        <div class="round-label">Round 4 of 6</div>
+        <div class="round-q">Pick a button.</div>
+        <div class="choice-pair">
+          <div class="choice">
+            <div class="choice-img" style="background:#F7F7F5;gap:5px;">
+              <div style="background:#0A0A0A;color:#F7F7F5;font-size:6px;font-weight:700;padding:4px 8px;border-radius:4px;letter-spacing:0.05em">CONFIRM</div>
+            </div>
+            <div class="choice-lbl" style="background:#F0F0EE;color:#0A0A0A;">Direct</div>
+          </div>
+          <div class="choice">
+            <div class="choice-img" style="background:#1a1a2e;gap:5px;overflow:hidden;position:relative;">
+              <div style="background:linear-gradient(135deg,#4B4EFC,#a78bfa);color:#fff;font-size:6px;font-weight:700;padding:4px 8px;border-radius:99px;letter-spacing:0.04em">Continue ✦</div>
+              <div style="position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(75,78,252,0.2);border-radius:50%"></div>
+            </div>
+            <div class="choice-lbl" style="background:#111;color:#F7F7F5;">Expressive</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- RESULT -->
+    <div class="screen-wrap">
+      <div class="screen-label">4 · Result</div>
+      <div class="phone">
+        <div style="text-align:center;margin-bottom:10px;">
+          <div style="font-size:7px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">you are</div>
+          <div style="font-size:1.2rem;font-weight:800;color:#4B4EFC;letter-spacing:-0.03em">The Poet</div>
+        </div>
+        <div class="result-card">
+          <div class="result-desc">You make space do the work. Restraint is your superpower — what you leave out says more than what you put in. Your designs feel inevitable.</div>
+          <div style="height:1px;background:#222;margin:8px 0"></div>
+          <div style="font-size:6.5px;color:#555;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px">your instincts</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;">
+            <span style="background:#1a1a1a;color:#aaa;font-size:6px;padding:2px 6px;border-radius:99px;border:1px solid #2a2a2a">minimal</span>
+            <span style="background:#1a1a1a;color:#aaa;font-size:6px;padding:2px 6px;border-radius:99px;border:1px solid #2a2a2a">expressive</span>
+            <span style="background:#1a1a1a;color:#aaa;font-size:6px;padding:2px 6px;border-radius:99px;border:1px solid #2a2a2a">typographic</span>
+          </div>
+          <button class="result-share">Share your type</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── QUESTIONS ───────────────────────────── -->
+<div class="section">
+  <div class="section-title">6 questions — what they measure</div>
+  <div class="q-list">
+    <div class="q-row">
+      <div class="q-num">1</div>
+      <div class="q-text">Spacious layout <span class="q-vs">vs</span> Dense information layout</div>
+      <div class="q-axis">minimal ↔ rich</div>
+    </div>
+    <div class="q-row">
+      <div class="q-num">2</div>
+      <div class="q-text">Monochrome palette <span class="q-vs">vs</span> Vibrant multi-colour</div>
+      <div class="q-axis">minimal ↔ rich</div>
+    </div>
+    <div class="q-row">
+      <div class="q-num">3</div>
+      <div class="q-text">Clean sans-serif type <span class="q-vs">vs</span> Layered serif editorial</div>
+      <div class="q-axis">minimal ↔ rich</div>
+    </div>
+    <div class="q-row">
+      <div class="q-num">4</div>
+      <div class="q-text">Flat direct button <span class="q-vs">vs</span> Gradient expressive button</div>
+      <div class="q-axis">structured ↔ expressive</div>
+    </div>
+    <div class="q-row">
+      <div class="q-num">5</div>
+      <div class="q-text">Geometric icon <span class="q-vs">vs</span> Illustrative icon</div>
+      <div class="q-axis">structured ↔ expressive</div>
+    </div>
+    <div class="q-row">
+      <div class="q-num">6</div>
+      <div class="q-text">Uniform grid card <span class="q-vs">vs</span> Organic varied card</div>
+      <div class="q-axis">structured ↔ expressive</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ARCHETYPES ──────────────────────────── -->
+<div class="section">
+  <div class="section-title">4 archetypes — scored by 2 axes</div>
+  <div class="archetypes">
+    <div class="arch">
+      <div class="arch-name">The Surgeon</div>
+      <div class="arch-axes">Minimal + Structured</div>
+      <div class="arch-desc">Cuts everything that doesn't belong. Precision over decoration. Your work is clean because you know exactly what to remove.</div>
+    </div>
+    <div class="arch">
+      <div class="arch-name">The Poet</div>
+      <div class="arch-axes">Minimal + Expressive</div>
+      <div class="arch-desc">Makes space do the work. Restraint is your superpower — what you leave out says more than what you put in.</div>
+    </div>
+    <div class="arch">
+      <div class="arch-name">The Architect</div>
+      <div class="arch-axes">Rich + Structured</div>
+      <div class="arch-desc">Builds systems that hold. Every detail earns its place. Your designs feel considered because they are.</div>
+    </div>
+    <div class="arch">
+      <div class="arch-name">The Collector</div>
+      <div class="arch-axes">Rich + Expressive</div>
+      <div class="arch-desc">Finds beauty in abundance. Texture, warmth, detail — you believe design should feel lived-in and full of life.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<h2>Bolder aurora — two intensities</h2>
+<p class="subtitle">Same cream base and dark text. Pick how loud.</p>
+
+<style>
+@keyframes blobDrift {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50%       { transform: translate(6px,-5px) scale(1.03); }
+}
+.pp-wrap {
+  width: 520px; height: 336px; display: flex;
+  border-radius: 12px 16px 16px 12px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.18), 0 28px 72px rgba(13,13,43,0.22);
+  overflow: hidden; transform: rotate(2deg);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); flex-shrink: 0;
+}
+.pp-wrap:hover { transform: rotate(0deg) translateY(-4px); }
+.pp-left, .pp-right { flex: 1; position: relative; overflow: hidden; background: #F0EAD0; }
+.pp-left  { border-radius: 12px 0 0 12px; box-shadow: inset -3px 0 10px rgba(0,0,0,0.08); }
+.pp-right { border-radius: 0 16px 16px 0; box-shadow: inset 3px 0 10px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+.aurora-bg { position: absolute; inset: -30%; z-index: 1; pointer-events: none; mix-blend-mode: multiply; }
+.blob { position: absolute; border-radius: 50%; filter: blur(36px); animation: blobDrift ease-in-out infinite; }
+.grain { position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px; mix-blend-mode: multiply; }
+.waves { position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='10'%3E%3Cpath d='M0 5 Q25 0 50 5 Q75 10 100 5 Q125 0 150 5 Q175 10 200 5' stroke='rgba(13%2C13%2C43%2C0.045)' fill='none' stroke-width='0.7'/%3E%3C/svg%3E");
+  background-size: 200px 10px; }
+.pp-photo-block { position: relative; z-index: 4; height: 220px; overflow: hidden; border-bottom: 1px solid rgba(13,13,43,0.12); }
+.pp-photo-block img { position: absolute; width: 100%; height: 140%; object-fit: cover; object-position: center top; bottom: 0; left: 0; user-select: none; pointer-events: none; }
+.pp-name { padding: 0.8rem 1rem; position: relative; z-index: 4; }
+.pp-label { font-size: 0.38rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(13,13,43,0.4); display: block; margin-bottom: 0.2rem; font-family: monospace; }
+.pp-fullname { font-size: 0.95rem; font-weight: 700; color: #0D0D2B; font-family: system-ui; }
+.pp-fields { padding: 1.1rem 1rem; display: flex; flex-direction: column; justify-content: space-around; position: relative; z-index: 4; flex: 1; }
+.pp-fgroup { display: flex; flex-direction: column; }
+.pp-fvalue { font-size: 0.85rem; font-weight: 700; color: #0D0D2B; font-family: system-ui; }
+.pp-pagenum { position: absolute; bottom: 0.5rem; left: 0.75rem; font-family: monospace; font-size: 0.46rem; color: rgba(13,13,43,0.28); z-index: 4; }
+.card-image { display: flex; align-items: center; justify-content: center; padding: 1.5rem; height: 280px; background: #1a1a2e; }
+</style>
+
+<div class="cards">
+
+  <!-- A: Medium — clearly visible but still pastel -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pp-wrap">
+        <div class="pp-left">
+          <div class="aurora-bg">
+            <div class="blob" style="width:210px;height:210px;top:0%;left:-5%;background:radial-gradient(circle,rgba(255,160,210,0.82),transparent 70%);animation-duration:18s;animation-delay:0s;"></div>
+            <div class="blob" style="width:190px;height:190px;top:30%;left:30%;background:radial-gradient(circle,rgba(160,205,255,0.78),transparent 70%);animation-duration:22s;animation-delay:-7s;"></div>
+            <div class="blob" style="width:160px;height:160px;top:60%;left:0%;background:radial-gradient(circle,rgba(200,160,255,0.75),transparent 70%);animation-duration:16s;animation-delay:-11s;"></div>
+          </div>
+          <div class="grain" style="opacity:0.12;"></div>
+          <div class="waves" style="top:220px;height:auto;bottom:0;left:0;right:0;position:absolute;"></div>
+          <div class="pp-photo-block"><img src="photo.png" alt="Vaishnavi"></div>
+          <div class="pp-name"><span class="pp-label">Name</span><div class="pp-fullname">Vaishnavi Jawdekar</div></div>
+        </div>
+        <div class="pp-right">
+          <div class="aurora-bg">
+            <div class="blob" style="width:220px;height:220px;top:-10%;left:10%;background:radial-gradient(circle,rgba(160,210,255,0.8),transparent 70%);animation-duration:20s;animation-delay:-3s;"></div>
+            <div class="blob" style="width:180px;height:180px;top:40%;left:-10%;background:radial-gradient(circle,rgba(255,160,220,0.78),transparent 70%);animation-duration:24s;animation-delay:-9s;"></div>
+            <div class="blob" style="width:160px;height:160px;top:10%;left:45%;background:radial-gradient(circle,rgba(210,160,255,0.75),transparent 70%);animation-duration:19s;animation-delay:-6s;"></div>
+          </div>
+          <div class="grain" style="opacity:0.12;"></div>
+          <div class="waves"></div>
+          <div class="pp-fields">
+            <div class="pp-fgroup"><span class="pp-label">Occupation</span><span class="pp-fvalue">Product Designer</span></div>
+            <div class="pp-fgroup"><span class="pp-label">Experience</span><span class="pp-fvalue">3+ years</span></div>
+            <div class="pp-fgroup"><span class="pp-label">Based in</span><span class="pp-fvalue">Bengaluru, India</span></div>
+            <div class="pp-fgroup"><span class="pp-label">Currently at</span><span class="pp-fvalue">Yulu</span></div>
+          </div>
+          <div class="pp-pagenum">7</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body"><h3>A — Medium</h3><p>Clearly visible pink/blue/lavender tint on cream. Still reads as light mode.</p></div>
+  </div>
+
+  <!-- B: Strong — bold pastel, almost like dye on paper -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pp-wrap">
+        <div class="pp-left">
+          <div class="aurora-bg">
+            <div class="blob" style="width:230px;height:230px;top:-5%;left:-10%;background:radial-gradient(circle,rgba(255,130,195,0.95),transparent 65%);animation-duration:18s;animation-delay:0s;"></div>
+            <div class="blob" style="width:200px;height:200px;top:25%;left:25%;background:radial-gradient(circle,rgba(130,190,255,0.92),transparent 65%);animation-duration:22s;animation-delay:-7s;"></div>
+            <div class="blob" style="width:180px;height:180px;top:55%;left:-5%;background:radial-gradient(circle,rgba(190,130,255,0.9),transparent 65%);animation-duration:16s;animation-delay:-11s;"></div>
+          </div>
+          <div class="grain" style="opacity:0.15;"></div>
+          <div class="waves" style="top:220px;height:auto;bottom:0;left:0;right:0;position:absolute;"></div>
+          <div class="pp-photo-block"><img src="photo.png" alt="Vaishnavi"></div>
+          <div class="pp-name"><span class="pp-label">Name</span><div class="pp-fullname">Vaishnavi Jawdekar</div></div>
+        </div>
+        <div class="pp-right">
+          <div class="aurora-bg">
+            <div class="blob" style="width:240px;height:240px;top:-15%;left:5%;background:radial-gradient(circle,rgba(130,200,255,0.93),transparent 65%);animation-duration:20s;animation-delay:-3s;"></div>
+            <div class="blob" style="width:190px;height:190px;top:35%;left:-15%;background:radial-gradient(circle,rgba(255,130,210,0.9),transparent 65%);animation-duration:24s;animation-delay:-9s;"></div>
+            <div class="blob" style="width:170px;height:170px;top:5%;left:40%;background:radial-gradient(circle,rgba(200,130,255,0.88),transparent 65%);animation-duration:19s;animation-delay:-6s;"></div>
+          </div>
+          <div class="grain" style="opacity:0.15;"></div>
+          <div class="waves"></div>
+          <div class="pp-fields">
+            <div class="pp-fgroup"><span class="pp-label">Occupation</span><span class="pp-fvalue">Product Designer</span></div>
+            <div class="pp-fgroup"><span class="pp-label">Experience</span><span class="pp-fvalue">3+ years</span></div>
+            <div class="pp-fgroup"><span class="pp-label">Based in</span><span class="pp-fvalue">Bengaluru, India</span></div>
+            <div class="pp-fgroup"><span class="pp-label">Currently at</span><span class="pp-fvalue">Yulu</span></div>
+          </div>
+          <div class="pp-pagenum">7</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body"><h3>B — Strong</h3><p>Bold dye-on-paper feel. Pink, blue, violet punching through the cream. Still light mode but very present.</p></div>
+  </div>
+
+</div>

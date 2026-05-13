@@ -1,0 +1,143 @@
+<h2>What happens when you hover a book?</h2>
+<p class="subtitle">Each option below simulates the hover state. Move your mouse over the book covers to feel it.</p>
+
+<style>
+  .shelf-demo { display: flex; gap: 12px; align-items: flex-end; margin: 1rem 0 0.5rem; }
+  .book-cover {
+    width: 64px; height: 90px;
+    border-radius: 3px 6px 6px 3px;
+    box-shadow: 2px 4px 14px rgba(0,0,0,0.45), inset -2px 0 4px rgba(0,0,0,0.2);
+    position: relative; cursor: pointer; flex-shrink: 0;
+    transition: transform 0.22s cubic-bezier(0.16,1,0.3,1), box-shadow 0.22s ease;
+    display: flex; align-items: flex-end; padding: 5px;
+    overflow: hidden;
+  }
+  .book-cover span { font-size: 7.5px; color: rgba(255,255,255,0.85); font-weight: 600; line-height: 1.25; position: relative; z-index: 2; }
+  .bc-1 { background: linear-gradient(150deg,#3B3DF0,#2325BE); }
+  .bc-2 { background: linear-gradient(150deg,#c0392b,#7B241C); }
+  .bc-3 { background: linear-gradient(150deg,#1a6b3c,#145a32); }
+  .bc-4 { background: linear-gradient(150deg,#7d3c98,#6c3483); }
+
+  /* Option A — tilt + tooltip above */
+  .opt-a .book-cover:hover { transform: translateY(-10px) rotate(-3deg) scale(1.08); box-shadow: 4px 16px 28px rgba(0,0,0,0.5); z-index: 10; }
+  .opt-a .book-cover .tip {
+    position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+    background: #111; color: #f0f0f0; font-size: 10px; line-height: 1.4;
+    padding: 6px 9px; border-radius: 6px; white-space: nowrap; opacity: 0;
+    pointer-events: none; transition: opacity 0.18s ease; z-index: 20;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    font-style: italic; max-width: 160px; white-space: normal; text-align: center; width: 160px;
+  }
+  .opt-a .book-cover:hover .tip { opacity: 1; }
+
+  /* Option B — cover flips to show review text */
+  .opt-b .book-cover { perspective: 500px; }
+  .opt-b .flip-inner {
+    position: absolute; inset: 0; transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+  }
+  .opt-b .book-cover:hover .flip-inner { transform: rotateY(-180deg); }
+  .opt-b .flip-front, .opt-b .flip-back {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: inherit;
+  }
+  .opt-b .flip-back {
+    background: #1a1a1a; transform: rotateY(180deg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 6px; text-align: center;
+  }
+  .opt-b .flip-back .stars { font-size: 9px; margin-bottom: 3px; }
+  .opt-b .flip-back .review { font-size: 7.5px; color: #ccc; line-height: 1.4; font-style: italic; }
+
+  /* Option C — overlay fades in over cover */
+  .opt-c .book-cover .overlay {
+    position: absolute; inset: 0; background: rgba(10,10,10,0.82);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 6px; text-align: center; opacity: 0; border-radius: inherit;
+    transition: opacity 0.2s ease; z-index: 5;
+  }
+  .opt-c .book-cover:hover .overlay { opacity: 1; }
+  .opt-c .book-cover:hover { transform: translateY(-6px) scale(1.05); box-shadow: 4px 14px 24px rgba(0,0,0,0.5); z-index: 10; }
+  .opt-c .overlay .stars { font-size: 9px; margin-bottom: 3px; }
+  .opt-c .overlay .review { font-size: 7.5px; color: #ddd; line-height: 1.4; font-style: italic; }
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="tilt-tooltip" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0f0f0f;padding:1.25rem 1.25rem 0.75rem;display:flex;flex-direction:column;gap:0;">
+      <div class="shelf-demo opt-a">
+        <div class="book-cover bc-1"><span>The Design of Everyday Things</span>
+          <div class="tip">"Changed how I see every door handle."</div>
+        </div>
+        <div class="book-cover bc-2" style="height:82px"><span>Sprint</span>
+          <div class="tip">"5 days to validate anything. Pure gold."</div>
+        </div>
+        <div class="book-cover bc-3" style="height:86px"><span>Shape Up</span>
+          <div class="tip">"Basecamp's take on shipping. Opinionated in the best way."</div>
+        </div>
+        <div class="book-cover bc-4" style="height:88px"><span>Continuous Discovery</span>
+          <div class="tip">"Weekly habits that actually stick."</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Tilt up + quote tooltip</h3>
+      <p>Book tilts and lifts on hover, a floating quote appears above it. Light and playful. Your words float up like a thought bubble.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="flip" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0f0f0f;padding:1.25rem 1.25rem 0.75rem;display:flex;flex-direction:column;">
+      <div class="shelf-demo opt-b">
+        <div class="book-cover bc-1"><div class="flip-inner">
+          <div class="flip-front" style="background:linear-gradient(150deg,#3B3DF0,#2325BE);display:flex;align-items:flex-end;padding:5px;"><span>The Design of Everyday Things</span></div>
+          <div class="flip-back"><div class="stars">★★★★★</div><div class="review">"Changed how I see every door handle."</div></div>
+        </div></div>
+        <div class="book-cover bc-2" style="height:82px"><div class="flip-inner">
+          <div class="flip-front" style="background:linear-gradient(150deg,#c0392b,#7B241C);display:flex;align-items:flex-end;padding:5px;"><span>Sprint</span></div>
+          <div class="flip-back"><div class="stars">★★★★☆</div><div class="review">"5 days to validate anything."</div></div>
+        </div></div>
+        <div class="book-cover bc-3" style="height:86px"><div class="flip-inner">
+          <div class="flip-front" style="background:linear-gradient(150deg,#1a6b3c,#145a32);display:flex;align-items:flex-end;padding:5px;"><span>Shape Up</span></div>
+          <div class="flip-back"><div class="stars">★★★★☆</div><div class="review">"Opinionated in the best way."</div></div>
+        </div></div>
+        <div class="book-cover bc-4" style="height:88px"><div class="flip-inner">
+          <div class="flip-front" style="background:linear-gradient(150deg,#7d3c98,#6c3483);display:flex;align-items:flex-end;padding:5px;"><span>Continuous Discovery</span></div>
+          <div class="flip-back"><div class="stars">★★★★★</div><div class="review">"Habits that actually stick."</div></div>
+        </div></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Cover flips to reveal review</h3>
+      <p>Hover flips the book like turning it over. Back shows stars + your one-line take. Feels like handling a physical book.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="overlay" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0f0f0f;padding:1.25rem 1.25rem 0.75rem;display:flex;flex-direction:column;">
+      <div class="shelf-demo opt-c">
+        <div class="book-cover bc-1">
+          <span>The Design of Everyday Things</span>
+          <div class="overlay"><div class="stars">★★★★★</div><div class="review">"Changed how I see every door handle."</div></div>
+        </div>
+        <div class="book-cover bc-2" style="height:82px">
+          <span>Sprint</span>
+          <div class="overlay"><div class="stars">★★★★☆</div><div class="review">"5 days to validate anything."</div></div>
+        </div>
+        <div class="book-cover bc-3" style="height:86px">
+          <span>Shape Up</span>
+          <div class="overlay"><div class="stars">★★★★☆</div><div class="review">"Opinionated in the best way."</div></div>
+        </div>
+        <div class="book-cover bc-4" style="height:88px">
+          <span>Continuous Discovery</span>
+          <div class="overlay"><div class="stars">★★★★★</div><div class="review">"Habits that actually stick."</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Dark overlay fades in</h3>
+      <p>Cover dims and text fades in over it — stars + your note. Lifts slightly. Clean and minimal, keeps the cover art visible at the edges.</p>
+    </div>
+  </div>
+
+</div>

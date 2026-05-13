@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #F7F7F5; font-family: 'Satoshi', system-ui, sans-serif; padding: 3rem 2rem 4rem; }
+
+  .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 0.5rem; }
+  .section-heading { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; color: #0A0A0A; margin-bottom: 0.3rem; }
+  .section-sub { font-size: 0.875rem; color: #888; margin-bottom: 2rem; }
+
+  /* scroll track */
+  .book-track {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 0.35rem 1.5rem 6px;
+    scrollbar-width: none;
+    cursor: grab;
+    align-items: flex-end;
+    width: max-content;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  .book-track::-webkit-scrollbar { display: none; }
+  .book-track:active { cursor: grabbing; }
+
+  /* fade edges + glass shelf */
+  .book-scroll-wrap {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: top;
+  }
+  .book-scroll-wrap::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 60px;
+    background: linear-gradient(to left, #F7F7F5, transparent);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* glass shelf plank — overlaps the bottom portion of books, sits in front */
+  .shelf-plank {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 0;
+    height: 56px;
+    background: rgba(75,78,252,0.18);
+    border-top: 1.5px solid rgba(255,255,255,0.55);
+    border-radius: 12px 12px 4px 4px;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* individual book */
+  .book {
+    flex-shrink: 0;
+    width: 88px;
+    height: 128px;
+    border-radius: 2px 5px 5px 2px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 3px 5px 16px rgba(0,0,0,0.18), inset -3px 0 5px rgba(0,0,0,0.12);
+    perspective: 600px;
+    /* no float, no animation */
+  }
+
+  .flip-inner {
+    position: absolute; inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.42s cubic-bezier(0.4,0,0.2,1);
+    border-radius: inherit;
+  }
+  .book:hover .flip-inner,
+  .book.tapped .flip-inner {
+    transform: rotateY(-180deg);
+  }
+
+  .flip-front, .flip-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: inherit;
+    box-shadow: inset -3px 0 5px rgba(0,0,0,0.12);
+  }
+
+  /* spine line on front */
+  .flip-front::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+    background: rgba(0,0,0,0.18);
+    border-radius: 2px 0 0 2px;
+  }
+
+  .flip-front {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+  }
+  .flip-front .ttl {
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-align: center;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .flip-back {
+    background: #0A0A0A;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+    gap: 6px;
+  }
+  .flip-back .star { font-size: 11px; letter-spacing: 1px; }
+  .flip-back .note {
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.45;
+    font-style: italic;
+  }
+  .flip-back .title-back {
+    font-size: 7.5px;
+    color: rgba(255,255,255,0.35);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* colors */
+  .b1  .flip-front { background: #0A0A0A; color: #F7F7F5; }
+  .b2  .flip-front { background: #4B4EFC; color: #fff; }
+  .b3  .flip-front { background: #F7F7F5; color: #0A0A0A; border: 1.5px solid #e0e0e0; }
+  .b4  .flip-front { background: #c9a84c; color: #0A0A0A; }
+  .b5  .flip-front { background: #1a1a2e; color: #e0e0ff; }
+  .b6  .flip-front { background: #e63946; color: #fff; }
+  .b7  .flip-front { background: #2d6a4f; color: #fff; }
+  .b8  .flip-front { background: #6d6875; color: #fff; }
+  .b9  .flip-front { background: #bc6c25; color: #fff; }
+
+  /* varying heights for visual rhythm */
+  .b1 { height: 128px; }
+  .b2 { height: 118px; }
+  .b3 { height: 124px; }
+  .b4 { height: 132px; }
+  .b5 { height: 120px; }
+  .b6 { height: 126px; }
+  .b7 { height: 130px; }
+  .b8 { height: 116px; }
+  .b9 { height: 122px; }
+
+  .hint { font-size: 0.75rem; color: #bbb; margin-top: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+
+  @media (hover: none) {
+    /* touch: tap to flip */
+    .book:hover .flip-inner { transform: none; }
+    .book.tapped .flip-inner { transform: rotateY(-180deg); }
+  }
+</style>
+</head>
+<body>
+
+<p class="section-label">easter egg</p>
+<h2 class="section-heading">📚 What I'm reading</h2>
+<p class="section-sub">You found it. Hover a cover to see what I think.</p>
+
+<div class="book-scroll-wrap">
+  <div class="shelf-plank"></div>
+  <div class="book-track" id="track">
+
+    <div class="book b1">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">Howl's Moving Castle</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★★</div>
+          <div class="note">"A castle that moves. So does your heart reading it."</div>
+          <div class="title-back">Howl's Moving Castle</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book b2">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">1984</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★★</div>
+          <div class="note">"Shake it off? More like listen on repeat for a week."</div>
+          <div class="title-back">1984 — Taylor Swift</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book b3">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">Animal Farm</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★☆</div>
+          <div class="note">"Short. Brutal. Still relevant 80 years later."</div>
+          <div class="title-back">Animal Farm</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book b4">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">Good Material</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★☆</div>
+          <div class="note">"A breakup from the guy's side. Painfully funny."</div>
+          <div class="title-back">Good Material</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book b5">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">Days at the Morisaki Bookshop</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★★</div>
+          <div class="note">"Quiet, warm, and makes you want to move to Tokyo."</div>
+          <div class="title-back">Days at the Morisaki Bookshop</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book b6">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">A Man Called Ove</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★★</div>
+          <div class="note">"I cried. I don't usually cry at books."</div>
+          <div class="title-back">A Man Called Ove</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book b7">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">Born a Crime</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★★</div>
+          <div class="note">"Trevor Noah survived apartheid with humour. Wild."</div>
+          <div class="title-back">Born a Crime</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book b8">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">Coraline</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★☆</div>
+          <div class="note">"Children's book that is genuinely creepy. Love it."</div>
+          <div class="title-back">Coraline</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book b9">
+      <div class="flip-inner">
+        <div class="flip-front"><span class="ttl">Butter</span></div>
+        <div class="flip-back">
+          <div class="star">★★★★☆</div>
+          <div class="note">"A murder mystery wrapped in food writing. Strange and delicious."</div>
+          <div class="title-back">Butter</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<p class="hint">← scroll to see all 9 →</p>
+
+<script>
+  // drag-to-scroll
+  var track = document.getElementById('track');
+  var isDown = false, startX, scrollLeft;
+  track.addEventListener('mousedown', function(e) {
+    isDown = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft;
+    track.style.cursor = 'grabbing';
+  });
+  track.addEventListener('mouseleave', function() { isDown = false; track.style.cursor = 'grab'; });
+  track.addEventListener('mouseup', function() { isDown = false; track.style.cursor = 'grab'; });
+  track.addEventListener('mousemove', function(e) {
+    if (!isDown) return; e.preventDefault();
+    var x = e.pageX - track.offsetLeft;
+    track.scrollLeft = scrollLeft - (x - startX);
+  });
+
+  // tap-to-flip on touch
+  track.addEventListener('click', function(e) {
+    var book = e.target.closest('.book');
+    if (!book) return;
+    var wasFlipped = book.classList.contains('tapped');
+    track.querySelectorAll('.book.tapped').forEach(function(b) { b.classList.remove('tapped'); });
+    if (!wasFlipped) book.classList.add('tapped');
+  });
+</script>
+
+</body>
+</html>

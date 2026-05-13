@@ -1,0 +1,60 @@
+<h2>How should books be displayed?</h2>
+<p class="subtitle">The Pinterest pin shows covers. The current shelf shows spines. Which direction feels right for your portfolio?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="covers" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0f0f0f;padding:1.5rem;display:flex;flex-direction:column;gap:0.75rem;">
+      <div style="font-size:0.65rem;letter-spacing:0.1em;color:#888;text-transform:uppercase;margin-bottom:0.25rem;">Design</div>
+      <div style="display:flex;gap:10px;align-items:flex-end;">
+        <div style="width:52px;height:72px;background:linear-gradient(135deg,#3B3DF0,#7c7fff);border-radius:3px;box-shadow:2px 4px 12px rgba(0,0,0,0.5);display:flex;align-items:flex-end;padding:4px;">
+          <div style="font-size:7px;color:rgba(255,255,255,0.8);line-height:1.2;font-weight:600;">The Design of Every&shy;day Things</div>
+        </div>
+        <div style="width:52px;height:68px;background:linear-gradient(135deg,#c0392b,#e74c3c);border-radius:3px;box-shadow:2px 4px 12px rgba(0,0,0,0.5);display:flex;align-items:flex-end;padding:4px;">
+          <div style="font-size:7px;color:rgba(255,255,255,0.8);line-height:1.2;font-weight:600;">Sprint</div>
+        </div>
+        <div style="width:52px;height:74px;background:linear-gradient(135deg,#1a6b3c,#27ae60);border-radius:3px;box-shadow:2px 4px 12px rgba(0,0,0,0.5);display:flex;align-items:flex-end;padding:4px;">
+          <div style="font-size:7px;color:rgba(255,255,255,0.8);line-height:1.2;font-weight:600;">Shape Up</div>
+        </div>
+        <div style="width:52px;height:70px;background:linear-gradient(135deg,#7d3c98,#a569bd);border-radius:3px;box-shadow:2px 4px 12px rgba(0,0,0,0.5);display:flex;align-items:flex-end;padding:4px;">
+          <div style="font-size:7px;color:rgba(255,255,255,0.8);line-height:1.2;font-weight:600;">Continuous Discovery</div>
+        </div>
+      </div>
+      <div style="font-size:0.65rem;letter-spacing:0.1em;color:#888;text-transform:uppercase;margin-top:0.5rem;margin-bottom:0.25rem;">Research</div>
+      <div style="display:flex;gap:10px;align-items:flex-end;">
+        <div style="width:52px;height:66px;background:linear-gradient(135deg,#e67e22,#f39c12);border-radius:3px;box-shadow:2px 4px 12px rgba(0,0,0,0.5);display:flex;align-items:flex-end;padding:4px;">
+          <div style="font-size:7px;color:rgba(255,255,255,0.9);line-height:1.2;font-weight:600;">Just Enough Research</div>
+        </div>
+        <div style="width:52px;height:72px;background:linear-gradient(135deg,#1a5276,#2980b9);border-radius:3px;box-shadow:2px 4px 12px rgba(0,0,0,0.5);display:flex;align-items:flex-end;padding:4px;">
+          <div style="font-size:7px;color:rgba(255,255,255,0.8);line-height:1.2;font-weight:600;">The Mom Test</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Book covers, grid by category</h3>
+      <p>Like the Pinterest pin — books as cover art, grouped by Design / Research / etc. Richer, more visual. Hover reveals your take on the book.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="spines-elevated" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#161210;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;justify-content:flex-end;">
+      <div style="display:flex;align-items:flex-end;gap:4px;padding-bottom:0;">
+        <div style="width:36px;min-height:160px;background:linear-gradient(160deg,#3B3DF0,#2325BE);border-radius:3px 5px 0 0;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:0.05em;box-shadow:inset -2px 0 5px rgba(0,0,0,0.3),2px 0 8px rgba(0,0,0,0.4);position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(255,255,255,0.03) 2px,rgba(255,255,255,0.03) 4px);"></div>
+          The Design of Everyday Things
+        </div>
+        <div style="width:36px;min-height:140px;background:linear-gradient(160deg,#1B3D5E,#0F2540);border-radius:3px 5px 0 0;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:0.05em;box-shadow:inset -2px 0 5px rgba(0,0,0,0.3),2px 0 8px rgba(0,0,0,0.4);">Sprint</div>
+        <div style="width:36px;min-height:150px;background:linear-gradient(160deg,#1B5E40,#0F3D28);border-radius:3px 5px 0 0;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:0.05em;box-shadow:inset -2px 0 5px rgba(0,0,0,0.3),2px 0 8px rgba(0,0,0,0.4);">Shape Up</div>
+        <div style="width:36px;min-height:155px;background:linear-gradient(160deg,#6A2080,#441555);border-radius:3px 5px 0 0;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:0.05em;box-shadow:inset -2px 0 5px rgba(0,0,0,0.3),2px 0 8px rgba(0,0,0,0.4);">Continuous Discovery</div>
+        <div style="width:36px;min-height:135px;background:linear-gradient(160deg,#B83B0C,#7A2608);border-radius:3px 5px 0 0;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:0.05em;box-shadow:inset -2px 0 5px rgba(0,0,0,0.3),2px 0 8px rgba(0,0,0,0.4);">Just Enough Research</div>
+        <div style="width:36px;min-height:158px;background:linear-gradient(160deg,#1E4080,#122855);border-radius:3px 5px 0 0;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:0.05em;box-shadow:inset -2px 0 5px rgba(0,0,0,0.3),2px 0 8px rgba(0,0,0,0.4);">The Mom Test</div>
+      </div>
+      <div style="height:14px;background:linear-gradient(to bottom,#5C4A36,#3A2E24);border-radius:0 0 4px 4px;margin:0 -1.5rem;"></div>
+    </div>
+    <div class="card-body">
+      <h3>Spines elevated — same concept, richer craft</h3>
+      <p>Keep the shelf metaphor but level it up: better wood texture, lighting, gold-foil titles, ambient glow, cloth/leather spine textures. Still the same "secret section" feel.</p>
+    </div>
+  </div>
+
+</div>

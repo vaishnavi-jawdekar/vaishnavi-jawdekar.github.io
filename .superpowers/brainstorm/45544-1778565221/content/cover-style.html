@@ -1,0 +1,128 @@
+<h2>What do the covers look like?</h2>
+<p class="subtitle">No external images in a single HTML file — covers need to be CSS. Three directions.</p>
+
+<style>
+  .shelf-scroll {
+    display: flex; gap: 14px; padding: 1.5rem 1rem 1.2rem;
+    overflow-x: auto; align-items: flex-end;
+    scrollbar-width: none; -webkit-scrollbar: none;
+    background: #F7F7F5;
+  }
+  .shelf-scroll::-webkit-scrollbar { display: none; }
+
+  .book-wrap { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  .bk {
+    width: 72px; height: 104px;
+    border-radius: 2px 6px 6px 2px;
+    position: relative; cursor: pointer; flex-shrink: 0;
+    box-shadow: 3px 6px 18px rgba(0,0,0,0.22), inset -2px 0 5px rgba(0,0,0,0.15);
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+  }
+  .bk:nth-child(odd) { animation-delay: -1.5s; }
+
+  /* ── Style A: Bold solid color + large type ── */
+  .style-a .bk { display: flex; flex-direction: column; justify-content: space-between; padding: 8px 7px; overflow: hidden; }
+  .style-a .bk::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:rgba(0,0,0,0.18); }
+  .style-a .bk .auth { font-size: 6.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.65; }
+  .style-a .bk .ttl { font-size: 11px; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; margin-top: auto; }
+  .sa1 { background: #e63946; color: #fff; }
+  .sa2 { background: #2a9d8f; color: #fff; }
+  .sa3 { background: #e9c46a; color: #1a1a1a; }
+  .sa4 { background: #264653; color: #f4f1de; }
+  .sa5 { background: #f4a261; color: #1a1a1a; }
+
+  /* ── Style B: Gradient + decorative element ── */
+  .style-b .bk { overflow: hidden; }
+  .style-b .bk .spine { position:absolute; left:0; top:0; bottom:0; width:6px; background:rgba(0,0,0,0.2); }
+  .style-b .bk .deco { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  .style-b .bk .meta { position:absolute; bottom:8px; left:8px; right:4px; }
+  .style-b .bk .ttl { font-size: 9.5px; font-weight: 700; line-height: 1.25; color: rgba(255,255,255,0.92); }
+  .sb1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .sb2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+  .sb3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+  .sb4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+  .sb5 { background: linear-gradient(135deg, #fa709a, #fee140); }
+  .sb-circle { width:55px; height:55px; border-radius:50%; background:rgba(255,255,255,0.12); }
+  .sb-ring { width:55px; height:55px; border-radius:50%; border:8px solid rgba(255,255,255,0.15); }
+  .sb-tri { width:0; height:0; border-left:22px solid transparent; border-right:22px solid transparent; border-bottom:38px solid rgba(255,255,255,0.15); }
+  .sb-dia { width:36px; height:36px; background:rgba(255,255,255,0.15); transform:rotate(45deg); }
+
+  /* ── Style C: Minimal, editorial — dominant color + bold title only ── */
+  .style-c .bk { display:flex; align-items:center; justify-content:center; padding: 10px 8px; }
+  .style-c .bk::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:rgba(0,0,0,0.15); }
+  .style-c .bk .ttl { font-size: 10.5px; font-weight: 900; line-height: 1.2; text-align: center; letter-spacing: -0.02em; text-transform: uppercase; }
+  .sc1 { background: #0a0a0a; color: #f7f7f5; }
+  .sc2 { background: #4B4EFC; color: #fff; }
+  .sc3 { background: #f7f7f5; color: #0a0a0a; border: 1px solid #e0e0e0; }
+  .sc4 { background: #c9a84c; color: #0a0a0a; }
+  .sc5 { background: #1a1a2e; color: #e0e0ff; }
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="bold-solid" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#F7F7F5;overflow:hidden;">
+      <div class="shelf-scroll style-a">
+        <div class="bk sa1" style="animation-delay:0s"><div class="auth">Diana W. Jones</div><div class="ttl">Howl's Moving Castle</div></div>
+        <div class="bk sa2" style="height:96px;animation-delay:-0.6s"><div class="auth">Taylor Swift</div><div class="ttl">1989</div></div>
+        <div class="bk sa3" style="height:100px;animation-delay:-1.2s"><div class="auth">George Orwell</div><div class="ttl">Animal Farm</div></div>
+        <div class="bk sa4" style="height:108px;animation-delay:-1.8s"><div class="auth">Dolly Alderton</div><div class="ttl">Good Material</div></div>
+        <div class="bk sa5" style="height:98px;animation-delay:-0.4s"><div class="auth">Satoshi Yagisawa</div><div class="ttl">Days at the Morisaki Bookshop</div></div>
+        <div class="bk sa1" style="background:#457b9d;height:102px;animation-delay:-1s"><div class="auth">Fredrik Backman</div><div class="ttl">A Man Called Ove</div></div>
+        <div class="bk sa2" style="background:#2d6a4f;height:106px;animation-delay:-1.6s"><div class="auth">Trevor Noah</div><div class="ttl">Born a Crime</div></div>
+        <div class="bk sa3" style="background:#6d6875;color:#fff;height:95px;animation-delay:-0.8s"><div class="auth">Neil Gaiman</div><div class="ttl" style="color:#fff">Coraline</div></div>
+        <div class="bk sa4" style="background:#bc6c25;height:103px;animation-delay:-1.4s"><div class="auth">Asako Yuzuki</div><div class="ttl">Butter</div></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Bold solid + author + title</h3>
+      <p>Each book gets a strong flat color. Author name small at top, title big at bottom. Like a real modern publisher's cover. Warm and punchy.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="gradient-deco" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#F7F7F5;overflow:hidden;">
+      <div class="shelf-scroll style-b">
+        <div class="bk sb1" style="animation-delay:0s"><div class="spine"></div><div class="deco"><div class="sb-circle"></div></div><div class="meta"><div class="ttl">Howl's Moving Castle</div></div></div>
+        <div class="bk sb2" style="height:96px;animation-delay:-0.6s"><div class="spine"></div><div class="deco"><div class="sb-ring"></div></div><div class="meta"><div class="ttl">1989</div></div></div>
+        <div class="bk sb3" style="height:100px;animation-delay:-1.2s"><div class="spine"></div><div class="deco"><div class="sb-tri"></div></div><div class="meta"><div class="ttl">Animal Farm</div></div></div>
+        <div class="bk sb4" style="height:108px;animation-delay:-1.8s"><div class="spine"></div><div class="deco"><div class="sb-dia"></div></div><div class="meta"><div class="ttl">Good Material</div></div></div>
+        <div class="bk sb5" style="height:98px;animation-delay:-0.4s"><div class="spine"></div><div class="deco"><div class="sb-circle"></div></div><div class="meta"><div class="ttl">Days at Morisaki</div></div></div>
+        <div class="bk" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb);height:102px;animation-delay:-1s"><div class="spine"></div><div class="deco"><div class="sb-ring"></div></div><div class="meta"><div class="ttl">A Man Called Ove</div></div></div>
+        <div class="bk" style="background:linear-gradient(135deg,#0f2027,#2c5364);height:106px;animation-delay:-1.6s"><div class="spine"></div><div class="deco"><div class="sb-tri"></div></div><div class="meta"><div class="ttl">Born a Crime</div></div></div>
+        <div class="bk" style="background:linear-gradient(135deg,#1a1a2e,#6a0572);height:95px;animation-delay:-0.8s"><div class="spine"></div><div class="deco"><div class="sb-circle"></div></div><div class="meta"><div class="ttl">Coraline</div></div></div>
+        <div class="bk" style="background:linear-gradient(135deg,#f7971e,#ffd200);height:103px;animation-delay:-1.4s"><div class="spine"></div><div class="deco"><div class="sb-dia"></div></div><div class="meta" style="bottom:8px;left:8px;right:4px;position:absolute;"><div class="ttl" style="color:#1a1a1a">Butter</div></div></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Gradient + geometric shape</h3>
+      <p>Each cover has a gradient background + a unique geometric element (circle, ring, triangle, diamond). More abstract and designed. Like contemporary art covers.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="minimal-editorial" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#F7F7F5;overflow:hidden;">
+      <div class="shelf-scroll style-c">
+        <div class="bk sc1" style="animation-delay:0s"><div class="ttl">Howl's Moving Castle</div></div>
+        <div class="bk sc2" style="height:96px;animation-delay:-0.6s"><div class="ttl">1989</div></div>
+        <div class="bk sc3" style="height:100px;animation-delay:-1.2s"><div class="ttl">Animal Farm</div></div>
+        <div class="bk sc4" style="height:108px;animation-delay:-1.8s"><div class="ttl">Good Material</div></div>
+        <div class="bk sc5" style="height:98px;animation-delay:-0.4s"><div class="ttl">Days at Morisaki</div></div>
+        <div class="bk" style="background:#e63946;color:#fff;height:102px;animation-delay:-1s"><div class="ttl">A Man Called Ove</div></div>
+        <div class="bk" style="background:#f8f9fa;color:#0a0a0a;border:1px solid #ddd;height:106px;animation-delay:-1.6s"><div class="ttl">Born a Crime</div></div>
+        <div class="bk sc1" style="background:#6d6875;height:95px;animation-delay:-0.8s"><div class="ttl">Coraline</div></div>
+        <div class="bk sc4" style="background:#bc6c25;height:103px;animation-delay:-1.4s"><div class="ttl">Butter</div></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Minimal editorial, title only</h3>
+      <p>Bold color block, big title centered, nothing else. Very clean. Matches the portfolio's "bold-minimal" aesthetic — ink on paper, no decoration.</p>
+    </div>
+  </div>
+
+</div>

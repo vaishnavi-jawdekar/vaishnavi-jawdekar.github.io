@@ -1,0 +1,256 @@
+<h2>Passport motifs — 3 directions</h2>
+<p class="subtitle">Decorative security-art patterns, like a real biographical page. Click to pick.</p>
+
+<style>
+.pp-preview {
+  width: 260px;
+  height: 196px;
+  background: #F0EAD0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 4px 24px rgba(13,13,43,0.18);
+  flex-shrink: 0;
+}
+.pp-fields-overlay {
+  position: absolute;
+  top: 12px; left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  z-index: 10;
+}
+.pp-field { display: flex; flex-direction: column; gap: 1px; }
+.pp-flabel { font-size: 6.5px; color: rgba(13,13,43,0.38); text-transform: uppercase; letter-spacing: 0.13em; font-family: monospace; }
+.pp-fval { font-size: 11px; font-weight: 700; color: #0D0D2B; font-family: system-ui, sans-serif; line-height: 1.2; }
+.pp-pagenum { position: absolute; bottom: 7px; left: 10px; font-family: monospace; font-size: 7px; color: rgba(13,13,43,0.22); z-index: 10; }
+.card-image { display: flex; align-items: center; justify-content: center; padding: 1.25rem; height: 240px; background: #1a1a2e; }
+</style>
+
+<div class="cards">
+
+  <!-- Option A: Rosette / mandala -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pp-preview">
+        <!-- Rosette centred on right page -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 260 196" xmlns="http://www.w3.org/2000/svg">
+          <!-- outer ring of petals -->
+          <g transform="translate(188,108)" opacity="0.11" fill="none" stroke="#0D0D2B" stroke-width="0.6">
+            <!-- 24 petals radiating -->
+            <circle cx="0" cy="0" r="64" stroke-width="0.4"/>
+            <circle cx="0" cy="0" r="52" stroke-width="0.4"/>
+            <circle cx="0" cy="0" r="40" stroke-width="0.4"/>
+            <circle cx="0" cy="0" r="28" stroke-width="0.4"/>
+            <circle cx="0" cy="0" r="16" stroke-width="0.4"/>
+            <circle cx="0" cy="0" r="6" stroke-width="0.4"/>
+            <!-- radial spokes -->
+            <line x1="0" y1="-64" x2="0" y2="64"/>
+            <line x1="-64" y1="0" x2="64" y2="0"/>
+            <line x1="-45.3" y1="-45.3" x2="45.3" y2="45.3"/>
+            <line x1="45.3" y1="-45.3" x2="-45.3" y2="45.3"/>
+            <line x1="-24.5" y1="-59.3" x2="24.5" y2="59.3"/>
+            <line x1="24.5" y1="-59.3" x2="-24.5" y2="59.3"/>
+            <line x1="-59.3" y1="-24.5" x2="59.3" y2="24.5"/>
+            <line x1="59.3" y1="-24.5" x2="-59.3" y2="24.5"/>
+            <!-- petal arcs at 45° intervals -->
+            <path d="M0,-40 Q16,-28 0,-16 Q-16,-28 0,-40"/>
+            <path d="M0,16 Q16,28 0,40 Q-16,28 0,16"/>
+            <path d="M-40,0 Q-28,16 -16,0 Q-28,-16 -40,0"/>
+            <path d="M16,0 Q28,16 40,0 Q28,-16 16,0"/>
+            <path d="M-28.3,-28.3 Q-11.3,-22.6 -5.7,-5.7 Q-22.6,-11.3 -28.3,-28.3"/>
+            <path d="M28.3,28.3 Q11.3,22.6 5.7,5.7 Q22.6,11.3 28.3,28.3"/>
+            <path d="M28.3,-28.3 Q22.6,-11.3 5.7,-5.7 Q11.3,-22.6 28.3,-28.3"/>
+            <path d="M-28.3,28.3 Q-22.6,11.3 -5.7,5.7 Q-11.3,22.6 -28.3,28.3"/>
+            <!-- outer decorative ring detail -->
+            <path d="M0,-64 Q8,-56 0,-48 Q-8,-56 0,-64"/>
+            <path d="M0,48 Q8,56 0,64 Q-8,56 0,48"/>
+            <path d="M-64,0 Q-56,8 -48,0 Q-56,-8 -64,0"/>
+            <path d="M48,0 Q56,8 64,0 Q56,-8 48,0"/>
+            <path d="M-45.3,-45.3 Q-36,-40 -33.9,-33.9 Q-40,-36 -45.3,-45.3"/>
+            <path d="M45.3,45.3 Q36,40 33.9,33.9 Q40,36 45.3,45.3"/>
+            <path d="M45.3,-45.3 Q40,-36 33.9,-33.9 Q36,-40 45.3,-45.3"/>
+            <path d="M-45.3,45.3 Q-40,36 -33.9,33.9 Q-36,40 -45.3,45.3"/>
+          </g>
+        </svg>
+        <!-- wave bg -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.05" preserveAspectRatio="xMidYMid slice">
+          <defs><pattern id="wvA" x="0" y="0" width="200" height="10" patternUnits="userSpaceOnUse">
+            <path d="M0 5 Q25 0 50 5 Q75 10 100 5 Q125 0 150 5 Q175 10 200 5" stroke="#0D0D2B" fill="none" stroke-width="0.7"/>
+          </pattern></defs>
+          <rect width="100%" height="100%" fill="url(#wvA)"/>
+        </svg>
+        <div class="pp-fields-overlay">
+          <div class="pp-field"><span class="pp-flabel">Occupation</span><span class="pp-fval">Product Designer</span></div>
+          <div class="pp-field"><span class="pp-flabel">Experience</span><span class="pp-fval">3+ years</span></div>
+          <div class="pp-field"><span class="pp-flabel">Based in</span><span class="pp-fval">Bengaluru, India</span></div>
+          <div class="pp-field"><span class="pp-flabel">Currently at</span><span class="pp-fval">Yulu</span></div>
+        </div>
+        <span class="pp-pagenum">7</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Rosette</h3>
+      <p>Concentric rings + radiating petals, offset to the right. Classic passport security emblem. Feels official, ornate.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Guilloche oval frame -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pp-preview">
+        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 260 196" xmlns="http://www.w3.org/2000/svg">
+          <!-- full guilloche field — tight wave rows covering the whole page -->
+          <g opacity="0.09" fill="none" stroke="#0D0D2B" stroke-width="0.55">
+            <!-- dense horizontal waves every 6px -->
+            <path d="M0,6 Q16,2 32,6 Q48,10 64,6 Q80,2 96,6 Q112,10 128,6 Q144,2 160,6 Q176,10 192,6 Q208,2 224,6 Q240,10 256,6 Q272,2 280,6"/>
+            <path d="M0,12 Q16,8 32,12 Q48,16 64,12 Q80,8 96,12 Q112,16 128,12 Q144,8 160,12 Q176,16 192,12 Q208,8 224,12 Q240,16 256,12 Q272,8 280,12"/>
+            <path d="M0,18 Q16,14 32,18 Q48,22 64,18 Q80,14 96,18 Q112,22 128,18 Q144,14 160,18 Q176,22 192,18 Q208,14 224,18 Q240,22 256,18 Q272,14 280,18"/>
+            <path d="M0,24 Q16,20 32,24 Q48,28 64,24 Q80,20 96,24 Q112,28 128,24 Q144,20 160,24 Q176,28 192,24 Q208,20 224,24 Q240,28 256,24 Q272,20 280,24"/>
+            <path d="M0,30 Q16,26 32,30 Q48,34 64,30 Q80,26 96,30 Q112,34 128,30 Q144,26 160,30 Q176,34 192,30 Q208,26 224,30 Q240,34 256,30 Q272,26 280,30"/>
+            <path d="M0,36 Q16,32 32,36 Q48,40 64,36 Q80,32 96,36 Q112,40 128,36 Q144,32 160,36 Q176,40 192,36 Q208,32 224,36 Q240,40 256,36 Q272,32 280,36"/>
+            <path d="M0,42 Q16,38 32,42 Q48,46 64,42 Q80,38 96,42 Q112,46 128,42 Q144,38 160,42 Q176,46 192,42 Q208,38 224,42 Q240,46 256,42 Q272,38 280,42"/>
+            <path d="M0,48 Q16,44 32,48 Q48,52 64,48 Q80,44 96,48 Q112,52 128,48 Q144,44 160,48 Q176,52 192,48 Q208,44 224,48 Q240,52 256,48 Q272,44 280,48"/>
+            <path d="M0,54 Q16,50 32,54 Q48,58 64,54 Q80,50 96,54 Q112,58 128,54 Q144,50 160,54 Q176,58 192,54 Q208,50 224,54 Q240,58 256,54 Q272,50 280,54"/>
+            <path d="M0,60 Q16,56 32,60 Q48,64 64,60 Q80,56 96,60 Q112,64 128,60 Q144,56 160,60 Q176,64 192,60 Q208,56 224,60 Q240,64 256,60 Q272,56 280,60"/>
+            <path d="M0,66 Q16,62 32,66 Q48,70 64,66 Q80,62 96,66 Q112,70 128,66 Q144,62 160,66 Q176,70 192,66 Q208,62 224,66 Q240,70 256,66 Q272,62 280,66"/>
+            <path d="M0,72 Q16,68 32,72 Q48,76 64,72 Q80,68 96,72 Q112,76 128,72 Q144,68 160,72 Q176,76 192,72 Q208,68 224,72 Q240,76 256,72 Q272,68 280,72"/>
+            <path d="M0,78 Q16,74 32,78 Q48,82 64,78 Q80,74 96,78 Q112,82 128,78 Q144,74 160,78 Q176,82 192,78 Q208,74 224,78 Q240,82 256,78 Q272,74 280,78"/>
+            <path d="M0,84 Q16,80 32,84 Q48,88 64,84 Q80,80 96,84 Q112,88 128,84 Q144,80 160,84 Q176,88 192,84 Q208,80 224,84 Q240,88 256,84 Q272,80 280,84"/>
+            <path d="M0,90 Q16,86 32,90 Q48,94 64,90 Q80,86 96,90 Q112,94 128,90 Q144,86 160,90 Q176,94 192,90 Q208,86 224,90 Q240,94 256,90 Q272,86 280,90"/>
+            <path d="M0,96 Q16,92 32,96 Q48,100 64,96 Q80,92 96,96 Q112,100 128,96 Q144,92 160,96 Q176,100 192,96 Q208,92 224,96 Q240,100 256,96 Q272,92 280,96"/>
+            <path d="M0,102 Q16,98 32,102 Q48,106 64,102 Q80,98 96,102 Q112,106 128,102 Q144,98 160,102 Q176,106 192,102 Q208,98 224,102 Q240,106 256,102 Q272,98 280,102"/>
+            <path d="M0,108 Q16,104 32,108 Q48,112 64,108 Q80,104 96,108 Q112,112 128,108 Q144,104 160,108 Q176,112 192,108 Q208,104 224,108 Q240,112 256,108 Q272,104 280,108"/>
+            <path d="M0,114 Q16,110 32,114 Q48,118 64,114 Q80,110 96,114 Q112,118 128,114 Q144,110 160,114 Q176,118 192,114 Q208,110 224,114 Q240,118 256,114 Q272,110 280,114"/>
+            <path d="M0,120 Q16,116 32,120 Q48,124 64,120 Q80,116 96,120 Q112,124 128,120 Q144,116 160,120 Q176,124 192,120 Q208,116 224,120 Q240,124 256,120 Q272,116 280,120"/>
+            <path d="M0,126 Q16,122 32,126 Q48,130 64,126 Q80,122 96,126 Q112,130 128,126 Q144,122 160,126 Q176,130 192,126 Q208,122 224,126 Q240,130 256,126 Q272,122 280,126"/>
+            <path d="M0,132 Q16,128 32,132 Q48,136 64,132 Q80,128 96,132 Q112,136 128,132 Q144,128 160,132 Q176,136 192,132 Q208,128 224,132 Q240,136 256,132 Q272,128 280,132"/>
+            <path d="M0,138 Q16,134 32,138 Q48,142 64,138 Q80,134 96,138 Q112,142 128,138 Q144,134 160,138 Q176,142 192,138 Q208,134 224,138 Q240,142 256,138 Q272,134 280,138"/>
+            <path d="M0,144 Q16,140 32,144 Q48,148 64,144 Q80,140 96,144 Q112,148 128,144 Q144,140 160,144 Q176,148 192,144 Q208,140 224,144 Q240,148 256,144 Q272,140 280,144"/>
+            <path d="M0,150 Q16,146 32,150 Q48,154 64,150 Q80,146 96,150 Q112,154 128,150 Q144,146 160,150 Q176,154 192,150 Q208,146 224,150 Q240,154 256,150 Q272,146 280,150"/>
+            <path d="M0,156 Q16,152 32,156 Q48,160 64,156 Q80,152 96,156 Q112,160 128,156 Q144,152 160,156 Q176,160 192,156 Q208,152 224,156 Q240,160 256,156 Q272,152 280,156"/>
+            <path d="M0,162 Q16,158 32,162 Q48,166 64,162 Q80,158 96,162 Q112,166 128,162 Q144,158 160,162 Q176,166 192,162 Q208,158 224,162 Q240,166 256,162 Q272,158 280,162"/>
+            <path d="M0,168 Q16,164 32,168 Q48,172 64,168 Q80,164 96,168 Q112,172 128,168 Q144,164 160,168 Q176,172 192,168 Q208,164 224,168 Q240,172 256,168 Q272,164 280,168"/>
+            <path d="M0,174 Q16,170 32,174 Q48,178 64,174 Q80,170 96,174 Q112,178 128,174 Q144,170 160,174 Q176,178 192,174 Q208,170 224,174 Q240,178 256,174 Q272,170 280,174"/>
+            <path d="M0,180 Q16,176 32,180 Q48,184 64,180 Q80,176 96,180 Q112,184 128,180 Q144,176 160,180 Q176,184 192,180 Q208,176 224,180 Q240,184 256,180 Q272,176 280,180"/>
+            <path d="M0,186 Q16,182 32,186 Q48,190 64,186 Q80,182 96,186 Q112,190 128,186 Q144,182 160,186 Q176,190 192,186 Q208,182 224,186 Q240,190 256,186 Q272,182 280,186"/>
+            <path d="M0,192 Q16,188 32,192 Q48,196 64,192 Q80,188 96,192 Q112,196 128,192 Q144,188 160,192 Q176,196 192,192 Q208,188 224,192 Q240,196 256,192 Q272,188 280,192"/>
+          </g>
+          <!-- Oval cutout — clears the wave field to show a clean oval frame for the fields -->
+          <ellipse cx="130" cy="98" rx="95" ry="72" fill="#F0EAD0" opacity="0.92"/>
+          <!-- Oval border — engraved-looking double ring -->
+          <ellipse cx="130" cy="98" rx="95" ry="72" fill="none" stroke="#0D0D2B" stroke-width="0.9" opacity="0.2"/>
+          <ellipse cx="130" cy="98" rx="90" ry="67" fill="none" stroke="#0D0D2B" stroke-width="0.4" opacity="0.15"/>
+        </svg>
+        <div class="pp-fields-overlay" style="top:50%;transform:translateY(-50%);left:50%;transform:translate(-50%,-50%);width:160px;">
+          <div class="pp-field"><span class="pp-flabel">Occupation</span><span class="pp-fval">Product Designer</span></div>
+          <div class="pp-field"><span class="pp-flabel">Experience</span><span class="pp-fval">3+ years</span></div>
+          <div class="pp-field"><span class="pp-flabel">Based in</span><span class="pp-fval">Bengaluru, India</span></div>
+          <div class="pp-field"><span class="pp-flabel">Currently at</span><span class="pp-fval">Yulu</span></div>
+        </div>
+        <span class="pp-pagenum">7</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Guilloche field + oval</h3>
+      <p>Dense wave field covers the whole page. An engraved oval clears the center for the fields to sit in. Very biographical-page, very passport.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Corner ornaments -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pp-preview">
+        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 260 196" xmlns="http://www.w3.org/2000/svg">
+          <!-- wave bg -->
+          <g opacity="0.06" fill="none" stroke="#0D0D2B" stroke-width="0.55">
+            <path d="M0,8 Q16,4 32,8 Q48,12 64,8 Q80,4 96,8 Q112,12 128,8 Q144,4 160,8 Q176,12 192,8 Q208,4 224,8 Q240,12 260,8"/>
+            <path d="M0,16 Q16,12 32,16 Q48,20 64,16 Q80,12 96,16 Q112,20 128,16 Q144,12 160,16 Q176,20 192,16 Q208,12 224,16 Q240,20 260,16"/>
+            <path d="M0,24 Q16,20 32,24 Q48,28 64,24 Q80,20 96,24 Q112,28 128,24 Q144,20 160,24 Q176,28 192,24 Q208,20 224,24 Q240,28 260,24"/>
+            <path d="M0,32 Q16,28 32,32 Q48,36 64,32 Q80,28 96,32 Q112,36 128,32 Q144,28 160,32 Q176,36 192,32 Q208,28 224,32 Q240,36 260,32"/>
+            <path d="M0,40 Q16,36 32,40 Q48,44 64,40 Q80,36 96,40 Q112,44 128,40 Q144,36 160,40 Q176,44 192,40 Q208,36 224,40 Q240,44 260,40"/>
+            <path d="M0,48 Q16,44 32,48 Q48,52 64,48 Q80,44 96,48 Q112,52 128,48 Q144,44 160,48 Q176,52 192,48 Q208,44 224,48 Q240,52 260,48"/>
+            <path d="M0,56 Q16,52 32,56 Q48,60 64,56 Q80,52 96,56 Q112,60 128,56 Q144,52 160,56 Q176,60 192,56 Q208,52 224,56 Q240,60 260,56"/>
+            <path d="M0,64 Q16,60 32,64 Q48,68 64,64 Q80,60 96,64 Q112,68 128,64 Q144,60 160,64 Q176,68 192,64 Q208,60 224,64 Q240,68 260,64"/>
+            <path d="M0,72 Q16,68 32,72 Q48,76 64,72 Q80,68 96,72 Q112,76 128,72 Q144,68 160,72 Q176,76 192,72 Q208,68 224,72 Q240,76 260,72"/>
+            <path d="M0,80 Q16,76 32,80 Q48,84 64,80 Q80,76 96,80 Q112,84 128,80 Q144,76 160,80 Q176,84 192,80 Q208,76 224,80 Q240,84 260,80"/>
+            <path d="M0,88 Q16,84 32,88 Q48,92 64,88 Q80,84 96,88 Q112,92 128,88 Q144,84 160,88 Q176,92 192,88 Q208,84 224,88 Q240,92 260,88"/>
+            <path d="M0,96 Q16,92 32,96 Q48,100 64,96 Q80,92 96,96 Q112,100 128,96 Q144,92 160,96 Q176,100 192,96 Q208,92 224,96 Q240,100 260,96"/>
+            <path d="M0,104 Q16,100 32,104 Q48,108 64,104 Q80,100 96,104 Q112,108 128,104 Q144,100 160,104 Q176,108 192,104 Q208,100 224,104 Q240,108 260,104"/>
+            <path d="M0,112 Q16,108 32,112 Q48,116 64,112 Q80,108 96,112 Q112,116 128,112 Q144,108 160,112 Q176,116 192,112 Q208,108 224,112 Q240,116 260,112"/>
+            <path d="M0,120 Q16,116 32,120 Q48,124 64,120 Q80,116 96,120 Q112,124 128,120 Q144,116 160,120 Q176,124 192,120 Q208,116 224,120 Q240,124 260,120"/>
+            <path d="M0,128 Q16,124 32,128 Q48,132 64,128 Q80,124 96,128 Q112,132 128,128 Q144,124 160,128 Q176,132 192,128 Q208,124 224,128 Q240,132 260,128"/>
+            <path d="M0,136 Q16,132 32,136 Q48,140 64,136 Q80,132 96,136 Q112,140 128,136 Q144,132 160,136 Q176,140 192,136 Q208,132 224,136 Q240,140 260,136"/>
+            <path d="M0,144 Q16,140 32,144 Q48,148 64,144 Q80,140 96,144 Q112,148 128,144 Q144,140 160,144 Q176,148 192,144 Q208,140 224,144 Q240,148 260,144"/>
+            <path d="M0,152 Q16,148 32,152 Q48,156 64,152 Q80,148 96,152 Q112,156 128,152 Q144,148 160,152 Q176,156 192,152 Q208,148 224,152 Q240,156 260,152"/>
+            <path d="M0,160 Q16,156 32,160 Q48,164 64,160 Q80,156 96,160 Q112,164 128,160 Q144,156 160,160 Q176,164 192,160 Q208,156 224,160 Q240,164 260,160"/>
+            <path d="M0,168 Q16,164 32,168 Q48,172 64,168 Q80,164 96,168 Q112,172 128,168 Q144,164 160,168 Q176,172 192,168 Q208,164 224,168 Q240,172 260,168"/>
+            <path d="M0,176 Q16,172 32,176 Q48,180 64,176 Q80,172 96,176 Q112,180 128,176 Q144,172 160,176 Q176,180 192,176 Q208,172 224,176 Q240,180 260,176"/>
+            <path d="M0,184 Q16,180 32,184 Q48,188 64,184 Q80,180 96,184 Q112,188 128,184 Q144,180 160,184 Q176,188 192,184 Q208,180 224,184 Q240,188 260,184"/>
+            <path d="M0,192 Q16,188 32,192 Q48,196 64,192 Q80,188 96,192 Q112,196 128,192 Q144,188 160,192 Q176,196 192,192 Q208,188 224,192 Q240,196 260,192"/>
+          </g>
+          <!-- 4 corner ornaments -->
+          <!-- top-left -->
+          <g transform="translate(4,4)" opacity="0.22" fill="none" stroke="#0D0D2B" stroke-width="0.7">
+            <path d="M0,28 L0,8 Q0,0 8,0 L28,0"/>
+            <path d="M4,28 L4,10 Q4,4 10,4 L28,4"/>
+            <circle cx="8" cy="8" r="4"/>
+            <circle cx="8" cy="8" r="2"/>
+            <path d="M12,0 L12,4"/>
+            <path d="M20,0 L20,4"/>
+            <path d="M0,12 L4,12"/>
+            <path d="M0,20 L4,20"/>
+          </g>
+          <!-- top-right -->
+          <g transform="translate(256,4) scale(-1,1)" opacity="0.22" fill="none" stroke="#0D0D2B" stroke-width="0.7">
+            <path d="M0,28 L0,8 Q0,0 8,0 L28,0"/>
+            <path d="M4,28 L4,10 Q4,4 10,4 L28,4"/>
+            <circle cx="8" cy="8" r="4"/>
+            <circle cx="8" cy="8" r="2"/>
+            <path d="M12,0 L12,4"/>
+            <path d="M20,0 L20,4"/>
+            <path d="M0,12 L4,12"/>
+            <path d="M0,20 L4,20"/>
+          </g>
+          <!-- bottom-left -->
+          <g transform="translate(4,192) scale(1,-1)" opacity="0.22" fill="none" stroke="#0D0D2B" stroke-width="0.7">
+            <path d="M0,28 L0,8 Q0,0 8,0 L28,0"/>
+            <path d="M4,28 L4,10 Q4,4 10,4 L28,4"/>
+            <circle cx="8" cy="8" r="4"/>
+            <circle cx="8" cy="8" r="2"/>
+            <path d="M12,0 L12,4"/>
+            <path d="M20,0 L20,4"/>
+            <path d="M0,12 L4,12"/>
+            <path d="M0,20 L4,20"/>
+          </g>
+          <!-- bottom-right -->
+          <g transform="translate(256,192) scale(-1,-1)" opacity="0.22" fill="none" stroke="#0D0D2B" stroke-width="0.7">
+            <path d="M0,28 L0,8 Q0,0 8,0 L28,0"/>
+            <path d="M4,28 L4,10 Q4,4 10,4 L28,4"/>
+            <circle cx="8" cy="8" r="4"/>
+            <circle cx="8" cy="8" r="2"/>
+            <path d="M12,0 L12,4"/>
+            <path d="M20,0 L20,4"/>
+            <path d="M0,12 L4,12"/>
+            <path d="M0,20 L4,20"/>
+          </g>
+          <!-- thin border inset -->
+          <rect x="8" y="8" width="244" height="180" rx="2" fill="none" stroke="#0D0D2B" stroke-width="0.5" opacity="0.15"/>
+          <rect x="12" y="12" width="236" height="172" rx="1" fill="none" stroke="#0D0D2B" stroke-width="0.3" opacity="0.1"/>
+        </svg>
+        <div class="pp-fields-overlay">
+          <div class="pp-field"><span class="pp-flabel">Occupation</span><span class="pp-fval">Product Designer</span></div>
+          <div class="pp-field"><span class="pp-flabel">Experience</span><span class="pp-fval">3+ years</span></div>
+          <div class="pp-field"><span class="pp-flabel">Based in</span><span class="pp-fval">Bengaluru, India</span></div>
+          <div class="pp-field"><span class="pp-flabel">Currently at</span><span class="pp-fval">Yulu</span></div>
+        </div>
+        <span class="pp-pagenum">7</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Corner ornaments + border</h3>
+      <p>Engraved corner brackets with a fine double border. Waves fill the field. Restrained, structured — like a visa page or a certificate.</p>
+    </div>
+  </div>
+
+</div>

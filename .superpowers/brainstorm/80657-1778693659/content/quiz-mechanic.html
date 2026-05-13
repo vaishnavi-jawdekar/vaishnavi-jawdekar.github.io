@@ -1,0 +1,93 @@
+<h2>How does each question work?</h2>
+<p class="subtitle">6 rounds. No right answer. The mechanic shapes how "instinctive" it feels.</p>
+
+<style>
+  .phone { background:#111; border-radius:16px; padding:1rem 1rem 0.75rem; max-width:220px; margin:0 auto; }
+  .ph-label { font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#555; margin-bottom:6px; }
+  .ph-q { font-size:11px; font-weight:700; color:#F7F7F5; margin-bottom:10px; line-height:1.3; }
+  .ph-progress { display:flex; gap:3px; margin-bottom:10px; }
+  .ph-dot { flex:1; height:3px; border-radius:99px; background:#333; }
+  .ph-dot.done { background:#4B4EFC; }
+  .ph-dot.active { background:#F7F7F5; }
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="side-by-side" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0A0A0A;padding:1rem;">
+      <div class="phone">
+        <div class="ph-progress">
+          <div class="ph-dot done"></div><div class="ph-dot done"></div>
+          <div class="ph-dot active"></div><div class="ph-dot"></div>
+          <div class="ph-dot"></div><div class="ph-dot"></div>
+        </div>
+        <div class="ph-q">Pick one — fast.</div>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;background:#F7F7F5;border-radius:8px;height:70px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;">
+            <div style="width:60%;height:6px;background:#0A0A0A;border-radius:2px"></div>
+            <div style="width:80%;height:4px;background:#ddd;border-radius:2px"></div>
+            <div style="width:50%;height:4px;background:#ddd;border-radius:2px"></div>
+          </div>
+          <div style="flex:1;background:#0b1854;border-radius:8px;height:70px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;">
+            <div style="width:60%;height:6px;background:#F7F7F5;border-radius:2px"></div>
+            <div style="width:80%;height:4px;background:rgba(255,255,255,0.2);border-radius:2px"></div>
+            <div style="width:50%;height:4px;background:rgba(255,255,255,0.2);border-radius:2px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Side by side, tap to choose</h3>
+      <p>Two options always visible at once. Tap either to advance instantly — no confirm button. Fast and decisive. The comparison is the point; seeing both together triggers gut instinct.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="full-screen" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0A0A0A;padding:1rem;">
+      <div class="phone">
+        <div class="ph-progress">
+          <div class="ph-dot done"></div><div class="ph-dot done"></div>
+          <div class="ph-dot active"></div><div class="ph-dot"></div>
+          <div class="ph-dot"></div><div class="ph-dot"></div>
+        </div>
+        <div class="ph-q">Pick one — fast.</div>
+        <div style="background:#e63946;border-radius:8px;height:55px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;">
+          <div style="font-size:9px;color:#fff;font-weight:700;letter-spacing:0.04em">BOLD & LOUD</div>
+        </div>
+        <div style="background:#F7F7F5;border-radius:8px;height:55px;display:flex;align-items:center;justify-content:center;">
+          <div style="font-size:9px;color:#0A0A0A;font-weight:700;letter-spacing:0.04em">quiet & considered</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Stacked full-width, scroll to choose</h3>
+      <p>Each option takes up full width, stacked vertically. Tap either to advance. More immersive — each option fills the frame so you feel it rather than compare it. Works well when choices are about mood/feeling.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="swipe" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0A0A0A;padding:1rem;">
+      <div class="phone">
+        <div class="ph-progress">
+          <div class="ph-dot done"></div><div class="ph-dot done"></div>
+          <div class="ph-dot active"></div><div class="ph-dot"></div>
+          <div class="ph-dot"></div><div class="ph-dot"></div>
+        </div>
+        <div class="ph-q">Swipe — left or right.</div>
+        <div style="background:#2d6a4f;border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;position:relative;">
+          <div style="font-size:9px;color:#fff;font-weight:700">this one?</div>
+          <div style="position:absolute;left:8px;font-size:10px;color:rgba(255,255,255,0.3)">←</div>
+          <div style="position:absolute;right:8px;font-size:10px;color:rgba(255,255,255,0.3)">→</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:8px;color:#555;">
+          <span>← nope</span><span>yes →</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Swipe card left/right (Tinder-style)</h3>
+      <p>One option at a time, swipe to keep or skip. More theatrical but adds friction — you see options one at a time, not side-by-side. Very mobile-native but loses the "comparison" feel that drives instinct.</p>
+    </div>
+  </div>
+
+</div>
