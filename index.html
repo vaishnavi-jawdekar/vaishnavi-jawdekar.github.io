@@ -1767,7 +1767,7 @@
       </div><!-- /.passport-scene -->
     </div>
     <p class="pp-hint pp-hint--desktop">long press. trust me.</p>
-    <p class="pp-hint pp-hint--mobile">long press. trust me.</p>
+    <p class="pp-hint pp-hint--mobile">tap the passport. trust me.</p>
     <div class="hero-actions">
       <a href="#work" class="hero-cta">See my work ↓</a>
     </div>
@@ -1886,7 +1886,7 @@
             </div>
           </div>
         </div>
-        <a href="Vaishnavi-Jawdekar-resume.pdf" target="_blank" class="cv-link">View CV ↗</a>
+        <a href="Vaishnavi-jawdekar-resume.pdf" target="_blank" class="cv-link">View CV ↗</a>
       </div>
     </div>
   </div>
@@ -2555,66 +2555,61 @@
   backdrop.addEventListener('click', function(e) { if (e.target === backdrop) closeGame(); });
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeGame(); });
 
-  // ── long-press on passport scene
-  var pressTimer = null;
-  var PRESS_DURATION = 1500;
-
-  // inject press glow overlay into passport scene
+  // ── press-ring glow overlay (desktop long-press only)
   var ring = document.createElement('div');
   ring.className = 'pp-press-ring';
   ppScene.style.position = 'relative';
   ppScene.appendChild(ring);
 
-  var GLOW_BASE = '0 0 0 1.5px rgba(255,255,255,0.55), 0 0 22px 7px rgba(200,210,255,0.48), 0 0 44px 18px rgba(75,78,252,0.3)';
-  var GLOW_FULL = '0 0 0 2px rgba(255,255,255,0.9), 0 0 36px 12px rgba(200,210,255,0.65), 0 0 76px 30px rgba(75,78,252,0.42)';
-  var GLOW_OFF  = '0 0 0px 0px rgba(200,210,255,0), 0 0 0px 0px rgba(75,78,252,0)';
+  var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-  function startPress(e) {
-    if (e.button !== undefined && e.button !== 0) return;
-    // snap instantly to base glow + white border
-    ring.style.transition = 'box-shadow 0.08s ease';
-    ring.style.boxShadow = GLOW_BASE;
-    // then slowly build to full intensity over the remaining duration
-    setTimeout(function() {
-      ring.style.transition = 'box-shadow ' + (PRESS_DURATION / 1000 - 0.1) + 's linear';
-      ring.style.boxShadow = GLOW_FULL;
-    }, 100);
-    ppScene.classList.add('pressing');
-    pressTimer = setTimeout(function() {
-      ring.style.transition = 'box-shadow 0.2s ease';
+  if (isTouchDevice) {
+    // mobile: simple tap opens the game
+    ppScene.addEventListener('click', function() { openGame(); });
+  } else {
+    // desktop: long-press
+    var pressTimer = null;
+    var PRESS_DURATION = 1500;
+    var GLOW_BASE = '0 0 0 1.5px rgba(255,255,255,0.55), 0 0 22px 7px rgba(200,210,255,0.48), 0 0 44px 18px rgba(75,78,252,0.3)';
+    var GLOW_FULL = '0 0 0 2px rgba(255,255,255,0.9), 0 0 36px 12px rgba(200,210,255,0.65), 0 0 76px 30px rgba(75,78,252,0.42)';
+    var GLOW_OFF  = '0 0 0px 0px rgba(200,210,255,0), 0 0 0px 0px rgba(75,78,252,0)';
+
+    function startPress(e) {
+      if (e.button !== undefined && e.button !== 0) return;
+      ring.style.transition = 'box-shadow 0.08s ease';
+      ring.style.boxShadow = GLOW_BASE;
+      setTimeout(function() {
+        ring.style.transition = 'box-shadow ' + (PRESS_DURATION / 1000 - 0.1) + 's linear';
+        ring.style.boxShadow = GLOW_FULL;
+      }, 100);
+      ppScene.classList.add('pressing');
+      pressTimer = setTimeout(function() {
+        ring.style.transition = 'box-shadow 0.2s ease';
+        ring.style.boxShadow = GLOW_OFF;
+        setTimeout(function() { ring.style.transition = ''; ring.style.boxShadow = ''; }, 250);
+        ppScene.classList.remove('pressing');
+        openGame();
+      }, PRESS_DURATION);
+    }
+
+    function cancelPress() {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+      ring.style.transition = 'box-shadow 0.3s ease';
       ring.style.boxShadow = GLOW_OFF;
-      setTimeout(function() { ring.style.transition = ''; ring.style.boxShadow = ''; }, 250);
+      setTimeout(function() { ring.style.transition = ''; ring.style.boxShadow = ''; }, 350);
       ppScene.classList.remove('pressing');
-      openGame();
-    }, PRESS_DURATION);
-  }
+    }
 
-  function cancelPress() {
-    clearTimeout(pressTimer);
-    pressTimer = null;
-    ring.style.transition = 'box-shadow 0.3s ease';
-    ring.style.boxShadow = GLOW_OFF;
-    setTimeout(function() { ring.style.transition = ''; ring.style.boxShadow = ''; }, 350);
-    ppScene.classList.remove('pressing');
+    ppScene.addEventListener('pointerdown', startPress, { passive: true });
+    ppScene.addEventListener('pointerup', cancelPress, { passive: true });
+    ppScene.addEventListener('pointerleave', cancelPress, { passive: true });
+    ppScene.addEventListener('pointermove', function(e) {
+      if (e.buttons === 0) return;
+      if (pressTimer && (Math.abs(e.movementX) > 10 || Math.abs(e.movementY) > 10)) cancelPress();
+    }, { passive: true });
+    ppScene.addEventListener('contextmenu', function(e) { e.preventDefault(); });
   }
-
-  ppScene.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    startPress(e.touches[0]);
-  }, { passive: false });
-  ppScene.addEventListener('pointerdown', function(e) {
-    if (e.pointerType === 'touch') return; // handled by touchstart above
-    startPress(e);
-  }, { passive: true });
-  ppScene.addEventListener('touchend',    cancelPress, { passive: true });
-  ppScene.addEventListener('touchcancel', cancelPress, { passive: true });
-  ppScene.addEventListener('pointerup',   cancelPress, { passive: true });
-  ppScene.addEventListener('pointerleave', cancelPress, { passive: true });
-  ppScene.addEventListener('pointermove', function(e) {
-    if (e.buttons === 0) return;
-    if (pressTimer && (Math.abs(e.movementX) > 10 || Math.abs(e.movementY) > 10)) cancelPress();
-  }, { passive: true });
-  ppScene.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 })();
 
 // ── Bookshelf: drag-to-scroll + tap-to-flip
