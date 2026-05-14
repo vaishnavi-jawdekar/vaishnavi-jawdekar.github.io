@@ -734,156 +734,196 @@
     }
 
     /* ─── WORK ───────────────────────────────────────────── */
+    /* ── Visa cards ── */
     .work-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 2rem 2rem;
-      overflow: visible;
+      gap: 1.5rem;
     }
-
 
     .work-card {
-      display: flex;
-      flex-direction: column;
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      overflow: visible;
-      text-decoration: none;
-      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
-    }
-
-    .work-card:hover {
-      transform: translateY(-4px);
-    }
-
-    /* image zone */
-    .work-card-media {
-      position: relative;
+      border-radius: 10px;
       overflow: hidden;
-      aspect-ratio: 16/9;
-      flex-shrink: 0;
-      border-radius: var(--radius) var(--radius) 0 0;
-      z-index: 1;
-    }
-
-    .card-indigo .work-card-media { background: #e8e9ff; }
-    .card-orange .work-card-media { background: #fff0eb; }
-    .card-green  .work-card-media { background: #e6f4ec; }
-
-    .work-card-img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      display: block;
-      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
-    }
-
-    .work-card:hover .work-card-img {
-      transform: scale(1.04);
-    }
-
-    /* glass text panel */
-    .work-card-body {
       position: relative;
-      margin: 0 -10px;
-      margin-top: -18px;
-      z-index: 2;
-      padding: 1.4rem 1.75rem 1.5rem;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.07), 0 2px 8px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+      cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
-      background: rgba(75,78,252,0.14);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.5);
-      border-radius: 12px 12px 4px 4px;
-      box-shadow: 0 4px 24px rgba(75,78,252,0.1);
+      background: var(--bg, #f5f1e8);
+      text-decoration: none;
+      transition: box-shadow 0.3s ease;
+    }
+    .work-card:hover {
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.13), 0 2px 6px rgba(0,0,0,0.07);
     }
 
-    /* screw brackets */
-    .work-card-body::before,
-    .work-card-body::after {
-      content: '';
+    .card-warm  { --bg: #f5f1e8; --img-bg: #ece6d8; }
+    .card-sky   { --bg: #edf3f9; --img-bg: #dce8f2; }
+    .card-sage  { --bg: #eaf4ef; --img-bg: #d8ecdf; }
+    .card-lilac { --bg: #f0ecf8; --img-bg: #e4ddf0; }
+
+    .work-card-media {
+      width: 100%; height: 148px;
+      position: relative; overflow: hidden;
+      flex-shrink: 0;
+      background: var(--img-bg, #ece6d8);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .work-card-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    /* stamp */
+    .visa-stamp {
       position: absolute;
-      top: 0.65rem;
-      width: 12px; height: 12px;
+      right: 0.7rem; top: 108px;
+      z-index: 30;
+      width: 54px; height: 54px;
       border-radius: 50%;
-      background: conic-gradient(
-        from 120deg,
-        #e8e8ea 0deg, #b0b0b5 60deg, #f2f2f4 120deg,
-        #8a8a90 180deg, #d4d4d8 240deg, #a8a8ae 300deg, #e8e8ea 360deg
-      );
-      box-shadow: 0 1px 3px rgba(0,0,0,0.35), inset 0 0.5px 1px rgba(255,255,255,0.5);
-    }
-    .work-card-body::before { left: 0.65rem; }
-    .work-card-body::after  { right: 0.65rem; }
-
-    .work-tags {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      color: rgba(10,10,10,0.4);
-      text-transform: uppercase;
-      margin-bottom: 0.1rem;
-    }
-
-    .work-title {
-      font-size: clamp(16px, 1.6vw, 20px);
-      font-weight: 700;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
-      color: #0A0A0A;
-    }
-
-    .work-desc {
-      font-size: 0.875rem;
-      color: rgba(10,10,10,0.55);
-      line-height: 1.5;
-      max-width: 520px;
-    }
-
-    .work-arrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      color: #4B4EFC;
-      transition: gap 0.2s;
-    }
-
-    .work-card:hover .work-arrow { gap: 0.5rem; }
-
-    /* coming soon card */
-    .work-card-soon {
-      cursor: default;
+      border: 2px solid rgba(0,0,0,0.52);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      font-size: 0.29rem; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      line-height: 1.55; color: rgba(0,0,0,0.68);
+      opacity: 0.38;
+      transform: rotate(-11deg);
       pointer-events: none;
     }
-    .work-card-soon:hover { transform: none; }
+    .visa-stamp::before {
+      content: '';
+      position: absolute; inset: 3px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.28);
+    }
+    .work-card-soon .visa-stamp { opacity: 0.14; }
 
-    .work-card-soon-media {
-      background: rgba(75,78,252,0.06);
-      border-radius: var(--radius) var(--radius) 0 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* doc section */
+    .visa-doc {
+      flex: 1; display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+      padding-top: 1.2rem;
     }
 
-    .work-soon-badge {
-      display: inline-block;
-      padding: 0.3rem 0.75rem;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #4B4EFC;
-      background: rgba(75,78,252,0.1);
-      border-radius: 999px;
-      border: 1px solid rgba(75,78,252,0.2);
+    .visa-waves {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='10'%3E%3Cpath d='M0 5 Q25 0 50 5 Q75 10 100 5 Q125 0 150 5 Q175 10 200 5' stroke='rgba(13%2C13%2C43%2C0.065)' fill='none' stroke-width='0.8'/%3E%3C/svg%3E");
+      background-size: 200px 10px;
     }
+
+    .visa-holo {
+      position: absolute; inset: 0; z-index: 3;
+      opacity: 0; pointer-events: none;
+      mix-blend-mode: multiply;
+      transition: opacity 0.35s ease;
+      background: conic-gradient(
+        from var(--angle, 0deg) at var(--cx, 50%) var(--cy, 50%),
+        rgba(110,60,255,0.55), rgba(255,50,130,0.45),
+        rgba(255,190,40,0.40), rgba(30,210,130,0.40),
+        rgba(40,130,255,0.50), rgba(110,60,255,0.55)
+      );
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at var(--cx, 50%) var(--cy, 50%), black 0%, transparent 100%);
+      mask-image: radial-gradient(ellipse 70% 60% at var(--cx, 50%) var(--cy, 50%), black 0%, transparent 100%);
+    }
+    .visa-specular {
+      position: absolute; inset: 0; z-index: 4;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+      background: radial-gradient(circle at var(--cx, 50%) var(--cy, 50%),
+        rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 32%, transparent 60%);
+    }
+    .visa-waves-holo {
+      position: absolute; inset: 0; pointer-events: none; z-index: 5;
+      opacity: 0;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='10'%3E%3Cpath d='M0 5 Q25 0 50 5 Q75 10 100 5 Q125 0 150 5 Q175 10 200 5' stroke='rgba(80%2C50%2C220%2C0.85)' fill='none' stroke-width='0.8'/%3E%3C/svg%3E");
+      background-size: 200px 10px;
+      -webkit-mask-image: radial-gradient(ellipse 55% 45% at var(--cx, 50%) var(--cy, 50%), black 0%, transparent 100%);
+      mask-image: radial-gradient(ellipse 55% 45% at var(--cx, 50%) var(--cy, 50%), black 0%, transparent 100%);
+      transition: opacity 0.35s ease;
+    }
+    .work-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+      z-index: 10;
+      background: conic-gradient(
+        from var(--angle, 0deg),
+        hsl(240,100%,60%), hsl(290,100%,65%), hsl(340,100%,62%),
+        hsl(40,100%,60%), hsl(165,100%,48%), hsl(210,100%,60%), hsl(240,100%,60%)
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      padding: 1.5px;
+    }
+    .work-card:hover::after        { opacity: 0.7; }
+    .work-card:hover .visa-holo    { opacity: 0.45; }
+    .work-card:hover .visa-specular { opacity: 1; }
+    .work-card:hover .visa-waves-holo { opacity: 0.8; }
+
+    .visa-header {
+      position: relative; z-index: 5;
+      padding: 0 0.8rem 0.6rem;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 0.4rem;
+    }
+    .visa-cat-pill {
+      font-size: 0.3rem; font-weight: 800;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(0,0,0,0.32);
+      border: 1px solid rgba(0,0,0,0.14);
+      border-radius: 2px;
+      padding: 2px 5px;
+      white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+    }
+    .visa-body {
+      position: relative; z-index: 5;
+      padding: 0 0.8rem 0.65rem;
+      flex: 1; display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .vf-l {
+      font-size: 0.28rem; font-weight: 800;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(0,0,0,0.3); margin-bottom: 2px; display: block;
+    }
+    .work-title {
+      font-size: 0.96rem; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: #0A0A0A; margin-top: 1px;
+    }
+    .work-desc {
+      font-size: 0.63rem; font-weight: 600;
+      color: rgba(0,0,0,0.58); line-height: 1.42;
+      letter-spacing: -0.008em; margin-top: 0.28rem;
+    }
+    .visa-row {
+      display: flex; gap: 1rem; margin-top: 0.1rem;
+    }
+    .vf { display: flex; flex-direction: column; }
+    .vf-v {
+      font-size: 0.48rem; font-weight: 700;
+      color: rgba(0,0,0,0.55); line-height: 1.2;
+    }
+    .visa-mrz {
+      position: relative; z-index: 5;
+      padding: 0.3rem 0.8rem 0.32rem;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      background: rgba(0,0,0,0.035);
+    }
+    .mrz {
+      font-family: 'Courier New', monospace;
+      font-size: 0.42rem; letter-spacing: 0.06em;
+      color: rgba(0,0,0,0.22); line-height: 1.85;
+      white-space: nowrap; overflow: hidden;
+    }
+
+    /* coming soon */
+    .work-card-soon { cursor: default; pointer-events: none; }
 
     /* ─── ABOUT ──────────────────────────────────────────── */
     .two-col {
@@ -1780,47 +1820,117 @@
     <p class="section-label reveal">Selected Work</p>
     <div class="work-grid">
 
-      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?node-id=4-79&t=ec6YrYBndbK4gQbr-1" target="_blank" rel="noopener" class="work-card card-indigo reveal">
+      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?node-id=4-79&t=ec6YrYBndbK4gQbr-1" target="_blank" rel="noopener" class="work-card card-warm reveal">
         <div class="work-card-media">
           <img src="earn-with-yulu.png" alt="Earn with Yulu" class="work-card-img">
         </div>
-        <div class="work-card-body">
-          <p class="work-tags">Yulu &middot; Logistics &middot; 2024</p>
-          <h3 class="work-title">Earn with Yulu</h3>
-          <p class="work-desc">99% order fulfillment for a gig initiative supporting delivery partners across India</p>
+        <div class="visa-stamp">Entry<br>Granted</div>
+        <div class="visa-doc">
+          <div class="visa-waves"></div>
+          <div class="visa-holo"></div>
+          <div class="visa-specular"></div>
+          <div class="visa-waves-holo"></div>
+          <div class="visa-header"><div></div><span class="visa-cat-pill">0→1 · Logistics</span></div>
+          <div class="visa-body">
+            <div>
+              <span class="vf-l">Project</span>
+              <h3 class="work-title">Earn with Yulu</h3>
+              <p class="work-desc">99% order fulfillment for gig delivery partners across India</p>
+            </div>
+            <div class="visa-row">
+              <div class="vf"><span class="vf-l">Shipped</span><span class="vf-v">Sep 2024</span></div>
+              <div class="vf"><span class="vf-l">Company</span><span class="vf-v">Yulu Bikes</span></div>
+            </div>
+          </div>
+          <div class="visa-mrz">
+            <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+            <div class="mrz">CASE0001&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2</div>
+          </div>
         </div>
       </a>
 
-      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?page-id=28%3A1921&node-id=32-1957&p=f&viewport=233%2C366%2C0.02&t=Nn1cvu3CtbHaSfIZ-1&scaling=contain&content-scaling=fixed" target="_blank" rel="noopener" class="work-card card-orange reveal" style="transition-delay:0.08s">
+      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?page-id=28%3A1921&node-id=32-1957&p=f&viewport=233%2C366%2C0.02&t=Nn1cvu3CtbHaSfIZ-1&scaling=contain&content-scaling=fixed" target="_blank" rel="noopener" class="work-card card-sky reveal" style="transition-delay:0.08s">
         <div class="work-card-media">
           <img src="quick-ride.png" alt="Quick Ride Revamp" class="work-card-img">
         </div>
-        <div class="work-card-body">
-          <p class="work-tags">Yulu &middot; Mobile &middot; 2024</p>
-          <h3 class="work-title">Quick Ride Revamp</h3>
-          <p class="work-desc">Ride details redesign. Better UX, meaningful reduction in tech support costs</p>
+        <div class="visa-stamp">Entry<br>Granted</div>
+        <div class="visa-doc">
+          <div class="visa-waves"></div>
+          <div class="visa-holo"></div>
+          <div class="visa-specular"></div>
+          <div class="visa-waves-holo"></div>
+          <div class="visa-header"><div></div><span class="visa-cat-pill">Redesign · Mobile</span></div>
+          <div class="visa-body">
+            <div>
+              <span class="vf-l">Project</span>
+              <h3 class="work-title">Quick Ride Revamp</h3>
+              <p class="work-desc">Better UX, meaningful drop in support costs</p>
+            </div>
+            <div class="visa-row">
+              <div class="vf"><span class="vf-l">Shipped</span><span class="vf-v">Sep 2024</span></div>
+              <div class="vf"><span class="vf-l">Company</span><span class="vf-v">Yulu Bikes</span></div>
+            </div>
+          </div>
+          <div class="visa-mrz">
+            <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+            <div class="mrz">CASE0002&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5</div>
+          </div>
         </div>
       </a>
 
-      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?page-id=23%3A1753&node-id=23-1774&viewport=7781%2C841%2C0.28&t=dow6kNtTyHIyAlJd-1&scaling=contain&content-scaling=fixed" target="_blank" rel="noopener" class="work-card card-green reveal" style="transition-delay:0.14s">
+      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?page-id=23%3A1753&node-id=23-1774&viewport=7781%2C841%2C0.28&t=dow6kNtTyHIyAlJd-1&scaling=contain&content-scaling=fixed" target="_blank" rel="noopener" class="work-card card-sage reveal" style="transition-delay:0.14s">
         <div class="work-card-media">
           <img src="coupon-framework.png" alt="Coupon Framework" class="work-card-img">
         </div>
-        <div class="work-card-body">
-          <p class="work-tags">Yulu &middot; Internal Tools &middot; 2023</p>
-          <h3 class="work-title">Coupon Framework</h3>
-          <p class="work-desc">Cut coupon creation time from 7 days to 10 minutes. A tool the whole ops team uses daily</p>
+        <div class="visa-stamp">Entry<br>Granted</div>
+        <div class="visa-doc">
+          <div class="visa-waves"></div>
+          <div class="visa-holo"></div>
+          <div class="visa-specular"></div>
+          <div class="visa-waves-holo"></div>
+          <div class="visa-header"><div></div><span class="visa-cat-pill">Tool · Internal Ops</span></div>
+          <div class="visa-body">
+            <div>
+              <span class="vf-l">Project</span>
+              <h3 class="work-title">Coupon Framework</h3>
+              <p class="work-desc">7 days → 10 minutes. Used daily by the ops team.</p>
+            </div>
+            <div class="visa-row">
+              <div class="vf"><span class="vf-l">Since</span><span class="vf-v">Sep 2023</span></div>
+              <div class="vf"><span class="vf-l">Status</span><span class="vf-v">Daily use</span></div>
+            </div>
+          </div>
+          <div class="visa-mrz">
+            <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+            <div class="mrz">CASE0003&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9</div>
+          </div>
         </div>
       </a>
 
-      <div class="work-card work-card-soon reveal" style="transition-delay:0.2s">
-        <div class="work-card-media work-card-soon-media">
-          <span class="work-soon-badge">Coming soon</span>
-        </div>
-        <div class="work-card-body">
-          <p class="work-tags">Yulu &middot; Design &middot; 2024–25</p>
-          <h3 class="work-title">Design System Documentation</h3>
-          <p class="work-desc">A living component library and token system powering Yulu's product suite. Documentation coming soon.</p>
+      <div class="work-card card-lilac work-card-soon reveal" style="transition-delay:0.2s">
+        <div class="work-card-media" style="opacity:0.45; font-size:2.4rem">🗂</div>
+        <div class="visa-stamp">Pending<br>Review</div>
+        <div class="visa-doc">
+          <div class="visa-waves"></div>
+          <div class="visa-holo"></div>
+          <div class="visa-specular"></div>
+          <div class="visa-waves-holo"></div>
+          <div class="visa-header"><div></div><span class="visa-cat-pill" style="opacity:0.4">System · Design</span></div>
+          <div class="visa-body">
+            <div>
+              <span class="vf-l" style="opacity:0.5">Project</span>
+              <h3 class="work-title" style="opacity:0.35">Design System Documentation</h3>
+              <p class="work-desc" style="opacity:0.3">Documentation in progress</p>
+            </div>
+            <div class="visa-row">
+              <div class="vf"><span class="vf-l" style="opacity:0.4">Since</span><span class="vf-v" style="opacity:0.35">2024</span></div>
+              <div class="vf"><span class="vf-l" style="opacity:0.4">Status</span><span class="vf-v" style="opacity:0.45">In progress</span></div>
+            </div>
+          </div>
+          <div class="visa-mrz">
+            <div class="mrz" style="opacity:0.5">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+            <div class="mrz" style="opacity:0.5">CASE0004&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1</div>
+          </div>
         </div>
       </div>
 
@@ -2645,6 +2755,21 @@
     if (!wasFlipped) book.classList.add('tapped');
   });
 })();
+
+  // Visa card holo effect
+  document.querySelectorAll('.work-card').forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var cx = ((e.clientX - rect.left) / rect.width * 100).toFixed(1) + '%';
+      var cy = ((e.clientY - rect.top) / rect.height * 100).toFixed(1) + '%';
+      var dx = (e.clientX - rect.left) / rect.width - 0.5;
+      var dy = (e.clientY - rect.top) / rect.height - 0.5;
+      var angle = (Math.atan2(dy, dx) * 180 / Math.PI + 180).toFixed(1) + 'deg';
+      card.style.setProperty('--cx', cx);
+      card.style.setProperty('--cy', cy);
+      card.style.setProperty('--angle', angle);
+    });
+  });
 </script>
 
 </div><!-- /.page-wrap -->
