@@ -17,6 +17,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@1&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2KY9L0CF7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-R2KY9L0CF7');
+  </script>
   <style>
     /* ─── TOKENS ─────────────────────────────────────────── */
     :root {
@@ -1769,7 +1777,7 @@
     <p class="pp-hint pp-hint--desktop">long press. trust me.</p>
     <p class="pp-hint pp-hint--mobile">drag it, tap it. just try.</p>
     <div class="hero-actions">
-      <a href="#work" class="hero-cta">See my work ↓</a>
+      <a href="#work" class="hero-cta" data-track="cta_click">See my work ↓</a>
     </div>
   </div>
 </section>
@@ -1780,7 +1788,7 @@
     <p class="section-label reveal">Selected Work</p>
     <div class="work-grid">
 
-      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?node-id=4-79&t=ec6YrYBndbK4gQbr-1" target="_blank" rel="noopener" class="work-card card-indigo reveal">
+      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?node-id=4-79&t=ec6YrYBndbK4gQbr-1" target="_blank" rel="noopener" class="work-card card-indigo reveal" data-track="project_view" data-label="earn-with-yulu">
         <div class="work-card-media">
           <img src="earn-with-yulu.png" alt="Earn with Yulu" class="work-card-img">
         </div>
@@ -1791,7 +1799,7 @@
         </div>
       </a>
 
-      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?page-id=28%3A1921&node-id=32-1957&p=f&viewport=233%2C366%2C0.02&t=Nn1cvu3CtbHaSfIZ-1&scaling=contain&content-scaling=fixed" target="_blank" rel="noopener" class="work-card card-orange reveal" style="transition-delay:0.08s">
+      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?page-id=28%3A1921&node-id=32-1957&p=f&viewport=233%2C366%2C0.02&t=Nn1cvu3CtbHaSfIZ-1&scaling=contain&content-scaling=fixed" target="_blank" rel="noopener" class="work-card card-orange reveal" style="transition-delay:0.08s" data-track="project_view" data-label="quick-ride-revamp">
         <div class="work-card-media">
           <img src="quick-ride.png" alt="Quick Ride Revamp" class="work-card-img">
         </div>
@@ -1802,7 +1810,7 @@
         </div>
       </a>
 
-      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?page-id=23%3A1753&node-id=23-1774&viewport=7781%2C841%2C0.28&t=dow6kNtTyHIyAlJd-1&scaling=contain&content-scaling=fixed" target="_blank" rel="noopener" class="work-card card-green reveal" style="transition-delay:0.14s">
+      <a href="https://www.figma.com/proto/VHlKxvi2mjquQZhTBtwIoS/Vaishnavi-Jawdekar_Portfolio?page-id=23%3A1753&node-id=23-1774&viewport=7781%2C841%2C0.28&t=dow6kNtTyHIyAlJd-1&scaling=contain&content-scaling=fixed" target="_blank" rel="noopener" class="work-card card-green reveal" style="transition-delay:0.14s" data-track="project_view" data-label="coupon-framework">
         <div class="work-card-media">
           <img src="coupon-framework.png" alt="Coupon Framework" class="work-card-img">
         </div>
@@ -1898,10 +1906,10 @@
     <div class="two-col reveal">
       <p class="col-label">Let's talk</p>
       <div class="contact-links">
-        <button class="contact-link contact-email-btn" id="copy-email-btn" onclick="(function(btn){navigator.clipboard.writeText('vaishnavijawdekar03@gmail.com').then(function(){var orig=btn.innerHTML;btn.innerHTML='Copied! <span class=\'c-arrow\'>✓</span>';setTimeout(function(){btn.innerHTML=orig;},2000);});})(this)">
+        <button class="contact-link contact-email-btn" id="copy-email-btn" data-track="contact_email" onclick="(function(btn){navigator.clipboard.writeText('vaishnavijawdekar03@gmail.com').then(function(){var orig=btn.innerHTML;btn.innerHTML='Copied! <span class=\'c-arrow\'>✓</span>';setTimeout(function(){btn.innerHTML=orig;},2000);});})(this)">
           Email <span class="c-arrow">↗</span>
         </button>
-        <a href="https://www.linkedin.com/in/vaishnavi-jawdekar/" target="_blank" rel="noopener" class="contact-link">
+        <a href="https://www.linkedin.com/in/vaishnavi-jawdekar/" target="_blank" rel="noopener" class="contact-link" data-track="contact_linkedin">
           LinkedIn <span class="c-arrow">↗</span>
         </a>
       </div>
@@ -2069,7 +2077,7 @@
 
 <!-- book suggestion trigger button -->
 <div class="suggest-trigger-wrap reveal">
-  <button class="suggest-trigger" id="suggest-open">Suggest a book</button>
+  <button class="suggest-trigger" id="suggest-open" data-track="bookshelf_suggest">Suggest a book</button>
 </div>
 
 <!-- book suggestion modal -->
@@ -2477,6 +2485,7 @@
   if (!backdrop || !ppScene) return;
 
   function openGame() {
+    if (typeof gtag !== 'undefined') gtag('event', 'game_open');
     answers = [];
     currentQ = 0;
     showScreen('intro');
@@ -2649,5 +2658,14 @@
 
 </div><!-- /.page-wrap -->
 <iframe name="hidden-iframe" style="display:none"></iframe>
+<script>
+  document.querySelectorAll('[data-track]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', el.dataset.track, { label: el.dataset.label || '' });
+      }
+    });
+  });
+</script>
 </body>
 </html>
