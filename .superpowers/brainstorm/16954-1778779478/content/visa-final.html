@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #F0EFE9; font-family: 'Satoshi', system-ui, sans-serif; padding: 2.5rem 2rem 5rem; }
+
+h2 { font-size: 1rem; font-weight: 700; color: #0A0A0A; margin-bottom: 0.25rem; }
+.sub { font-size: 0.75rem; color: #888; margin-bottom: 2.5rem; }
+
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; max-width: 580px; }
+
+.visa {
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg, #f0ede5);
+  transition: box-shadow 0.25s ease;
+}
+.visa:hover {
+  box-shadow: 0 6px 28px rgba(0,0,0,0.14), 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* image */
+.visa-img-zone {
+  width: 100%; height: 150px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; flex-shrink: 0;
+  position: relative; overflow: hidden;
+  background: var(--img-bg, #e0ddd5);
+}
+.visa-img-zone img { width:100%; height:100%; object-fit:cover; display:block; }
+.visa-img-zone::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.08) 100%);
+  pointer-events: none;
+}
+
+/* document section */
+.visa-doc {
+  flex: 1; display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+
+/* exact same guilloché wave as passport — tight horizontal repeat */
+.visa-doc::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='10'%3E%3Cpath d='M0 5 Q25 0 50 5 Q75 10 100 5 Q125 0 150 5 Q175 10 200 5' stroke='rgba(13%2C13%2C43%2C0.07)' fill='none' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 200px 10px;
+}
+
+/* holo */
+.visa-holo {
+  position: absolute; inset: 0; z-index: 3;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease;
+  mix-blend-mode: multiply;
+  background: conic-gradient(
+    from var(--angle, 0deg) at var(--cx, 50%) var(--cy, 50%),
+    rgba(75,78,252,0.12), rgba(167,139,250,0.1),
+    rgba(244,114,182,0.1), rgba(251,191,36,0.08),
+    rgba(52,211,153,0.08), rgba(75,78,252,0.12)
+  );
+}
+.visa-specular {
+  position: absolute; inset: 0; z-index: 4;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    circle at var(--cx, 50%) var(--cy, 50%),
+    rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.1) 35%, transparent 65%
+  );
+}
+.visa:hover .visa-holo    { opacity: 1; }
+.visa:hover .visa-specular { opacity: 1; }
+
+/* header */
+.visa-head {
+  position: relative; z-index: 2;
+  padding: 0.35rem 0.65rem;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.04);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.visa-authority { font-size: 0.37rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(0,0,0,0.38); }
+.visa-cat { font-size: 0.35rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.15); border-radius: 2px; padding: 1px 4px; }
+
+/* fields */
+.visa-fields {
+  position: relative; z-index: 2;
+  padding: 0.52rem 0.65rem 0.45rem;
+  flex: 1; display: flex; flex-direction: column; gap: 0.3rem;
+}
+.visa-row { display: flex; gap: 0.85rem; }
+.visa-row .vf { flex: 1; }
+.vf { display: flex; flex-direction: column; gap: 2px; }
+.vf-l { font-size: 0.33rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(0,0,0,0.35); }
+.vf-v { font-size: 0.55rem; font-weight: 700; color: rgba(0,0,0,0.72); line-height: 1.15; }
+.vf-v.pname { font-size: 0.88rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.05; color: #0A0A0A; }
+
+/* impact — highlighted block */
+.visa-impact {
+  position: relative; z-index: 2;
+  margin: 0 0.65rem 0.5rem;
+  padding: 0.45rem 0.55rem;
+  background: rgba(0,0,0,0.06);
+  border-radius: 4px;
+  border-left: 2px solid rgba(0,0,0,0.25);
+}
+.visa-impact-label { font-size: 0.32rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(0,0,0,0.35); margin-bottom: 3px; }
+.visa-impact-value { font-size: 0.7rem; font-weight: 800; color: #0A0A0A; line-height: 1.25; letter-spacing: -0.01em; }
+
+/* MRZ */
+.visa-mrz {
+  position: relative; z-index: 2;
+  padding: 0.24rem 0.65rem 0.28rem;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  background: rgba(0,0,0,0.03);
+}
+.visa-case { font-size: 0.4rem; font-weight: 700; letter-spacing: 0.06em; color: rgba(0,0,0,0.35); font-family: monospace; margin-bottom: 1px; }
+.mrz { font-family: 'Courier New', monospace; font-size: 0.36rem; letter-spacing: 0.05em; color: rgba(0,0,0,0.2); line-height: 1.7; white-space: nowrap; overflow: hidden; }
+
+.v-warm  { --bg: #ede8df; --img-bg: #ddd8cf; }
+.v-sky   { --bg: #dce6f0; --img-bg: #ccd6e0; }
+.v-sage  { --bg: #daeae0; --img-bg: #cadad0; }
+.v-lilac { --bg: #e8e0f0; --img-bg: #d8d0e0; }
+</style>
+</head>
+<body>
+
+<h2>Visa cards — passport waves + impact highlighted</h2>
+<p class="sub">Hover to see the iridescent sheen.</p>
+
+<div class="grid2">
+
+  <div class="visa v-warm">
+    <div class="visa-img-zone">
+      <img src="../../../../../earn-with-yulu.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛵'">
+    </div>
+    <div class="visa-doc">
+      <div class="visa-holo"></div>
+      <div class="visa-specular"></div>
+      <div class="visa-head">
+        <span class="visa-authority">Bureau of Shipped Work</span>
+        <span class="visa-cat">0→1 · Logistics</span>
+      </div>
+      <div class="visa-fields">
+        <div class="vf"><div class="vf-l">Project</div><div class="vf-v pname">Earn with Yulu</div></div>
+        <div class="visa-row">
+          <div class="vf"><div class="vf-l">Commenced</div><div class="vf-v">Jan 2024</div></div>
+          <div class="vf"><div class="vf-l">Shipped</div><div class="vf-v">Sep 2024</div></div>
+        </div>
+      </div>
+      <div class="visa-impact">
+        <div class="visa-impact-label">Impact</div>
+        <div class="visa-impact-value">99% order fulfillment for gig delivery partners</div>
+      </div>
+      <div class="visa-mrz">
+        <div class="visa-case">CASE-0001</div>
+        <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visa v-sky">
+    <div class="visa-img-zone">
+      <img src="../../../../../quick-ride.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛴'">
+    </div>
+    <div class="visa-doc">
+      <div class="visa-holo"></div>
+      <div class="visa-specular"></div>
+      <div class="visa-head">
+        <span class="visa-authority">Bureau of Shipped Work</span>
+        <span class="visa-cat">Redesign · Mobile</span>
+      </div>
+      <div class="visa-fields">
+        <div class="vf"><div class="vf-l">Project</div><div class="vf-v pname">Quick Ride Revamp</div></div>
+        <div class="visa-row">
+          <div class="vf"><div class="vf-l">Commenced</div><div class="vf-v">Apr 2024</div></div>
+          <div class="vf"><div class="vf-l">Shipped</div><div class="vf-v">Sep 2024</div></div>
+        </div>
+      </div>
+      <div class="visa-impact">
+        <div class="visa-impact-label">Impact</div>
+        <div class="visa-impact-value">Better UX, meaningful drop in support costs</div>
+      </div>
+      <div class="visa-mrz">
+        <div class="visa-case">CASE-0002</div>
+        <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visa v-sage">
+    <div class="visa-img-zone">
+      <img src="../../../../../coupon-framework.png" onerror="this.style.display='none';this.parentNode.innerHTML='🎟'">
+    </div>
+    <div class="visa-doc">
+      <div class="visa-holo"></div>
+      <div class="visa-specular"></div>
+      <div class="visa-head">
+        <span class="visa-authority">Bureau of Shipped Work</span>
+        <span class="visa-cat">Tool · Internal Ops</span>
+      </div>
+      <div class="visa-fields">
+        <div class="vf"><div class="vf-l">Project</div><div class="vf-v pname">Coupon Framework</div></div>
+        <div class="visa-row">
+          <div class="vf"><div class="vf-l">Commenced</div><div class="vf-v">Sep 2023</div></div>
+          <div class="vf"><div class="vf-l">Still in use</div><div class="vf-v">Daily</div></div>
+        </div>
+      </div>
+      <div class="visa-impact">
+        <div class="visa-impact-label">Impact</div>
+        <div class="visa-impact-value">7 days → 10 minutes. Used daily by ops.</div>
+      </div>
+      <div class="visa-mrz">
+        <div class="visa-case">CASE-0003</div>
+        <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visa v-lilac">
+    <div class="visa-img-zone" style="opacity:0.5; font-size:2.5rem">🗂</div>
+    <div class="visa-doc">
+      <div class="visa-holo"></div>
+      <div class="visa-specular"></div>
+      <div class="visa-head">
+        <span class="visa-authority">Bureau of Shipped Work</span>
+        <span class="visa-cat">System · Design</span>
+      </div>
+      <div class="visa-fields">
+        <div class="vf"><div class="vf-l">Project</div><div class="vf-v pname" style="opacity:0.45">Design System Docs</div></div>
+        <div class="visa-row">
+          <div class="vf"><div class="vf-l">Commenced</div><div class="vf-v" style="opacity:0.45">2024</div></div>
+          <div class="vf"><div class="vf-l">Status</div><div class="vf-v">In progress</div></div>
+        </div>
+      </div>
+      <div class="visa-impact" style="opacity:0.4">
+        <div class="visa-impact-label">Impact</div>
+        <div class="visa-impact-value">Documentation coming soon</div>
+      </div>
+      <div class="visa-mrz">
+        <div class="visa-case" style="opacity:0.35">CASE-0004</div>
+        <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.visa').forEach(function(card) {
+  card.addEventListener('mousemove', function(e) {
+    var rect = card.getBoundingClientRect();
+    var cx = ((e.clientX - rect.left) / rect.width * 100).toFixed(1) + '%';
+    var cy = ((e.clientY - rect.top) / rect.height * 100).toFixed(1) + '%';
+    var dx = (e.clientX - rect.left) / rect.width - 0.5;
+    var dy = (e.clientY - rect.top) / rect.height - 0.5;
+    var angle = (Math.atan2(dy, dx) * 180 / Math.PI + 180).toFixed(1) + 'deg';
+    card.style.setProperty('--cx', cx);
+    card.style.setProperty('--cy', cy);
+    card.style.setProperty('--angle', angle);
+  });
+});
+</script>
+</body>
+</html>

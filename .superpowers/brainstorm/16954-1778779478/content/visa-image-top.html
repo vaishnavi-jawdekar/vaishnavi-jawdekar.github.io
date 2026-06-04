@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1e1e1e; font-family: system-ui, sans-serif; padding: 2.5rem 2rem 5rem; }
+
+h2 { font-size: 1rem; font-weight: 700; color: #F7F7F5; margin-bottom: 0.25rem; }
+.sub { font-size: 0.75rem; color: #666; margin-bottom: 2.5rem; }
+.section-label { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #444; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: #333; }
+.concept { margin-bottom: 3rem; }
+hr.div { border: none; border-top: 1px solid #2e2e2e; margin: 2.5rem 0; }
+
+/* shared visa card base */
+.visa {
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.55);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg, #e8d5c4);
+}
+
+/* security guilloché on the lower section only */
+.visa-doc {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.visa-doc::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(0,0,0,0.025) 5px, rgba(0,0,0,0.025) 6px),
+    repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(0,0,0,0.025) 5px, rgba(0,0,0,0.025) 6px);
+  pointer-events: none;
+}
+.visa-doc::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Cpath d='M-50,50 C0,15 50,85 100,50 C150,15 200,85 250,50 C300,15 350,85 400,50' stroke='rgba(255,255,255,0.2)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M-50,65 C0,30 50,100 100,65 C150,30 200,100 250,65 C300,30 350,100 400,65' stroke='rgba(255,255,255,0.13)' stroke-width='1' fill='none'/%3E%3Cpath d='M-50,35 C0,0 50,70 100,35 C150,0 200,70 250,35 C300,0 350,70 400,35' stroke='rgba(255,255,255,0.13)' stroke-width='1' fill='none'/%3E%3Cpath d='M-50,80 C0,48 50,112 100,80 C150,48 200,112 250,80' stroke='rgba(0,0,0,0.05)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-size: 300px 100px;
+  pointer-events: none;
+}
+
+/* image zone */
+.visa-img {
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+.visa-img-placeholder {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 3rem;
+}
+
+/* header strip — sits between image and fields */
+.visa-head {
+  position: relative; z-index: 2;
+  padding: 0.32rem 0.65rem;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.visa-authority { font-size: 0.4rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(0,0,0,0.45); }
+.visa-category { font-size: 0.38rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.32); border: 1px solid rgba(0,0,0,0.18); border-radius: 2px; padding: 1px 5px; }
+
+/* fields */
+.visa-fields {
+  position: relative; z-index: 2;
+  padding: 0.55rem 0.65rem 0.45rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.visa-row { display: flex; gap: 1rem; }
+.visa-row .visa-f { flex: 1; }
+.visa-f { display: flex; flex-direction: column; gap: 1px; }
+.visa-f-label { font-size: 0.36rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(0,0,0,0.38); }
+.visa-f-value { font-size: 0.58rem; font-weight: 700; color: rgba(0,0,0,0.78); line-height: 1.15; }
+.visa-f-value.pname { font-size: 0.95rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.05; }
+
+/* MRZ */
+.visa-mrz {
+  position: relative; z-index: 2;
+  padding: 0.26rem 0.65rem 0.3rem;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.04);
+}
+.visa-mrz-line {
+  font-family: 'Courier New', monospace;
+  font-size: 0.4rem; letter-spacing: 0.05em;
+  color: rgba(0,0,0,0.28); line-height: 1.7;
+  white-space: nowrap; overflow: hidden;
+}
+
+/* colour variants */
+.v-salmon { --bg: #e8cbb5; }
+.v-sky    { --bg: #b8cfe8; }
+.v-mint   { --bg: #b8dfc9; }
+.v-lilac  { --bg: #d5c5e5; }
+.v-gold   { --bg: #e8ddb0; }
+
+
+/* ── LAYOUT A: 3-COLUMN GRID ──────────────────── */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 720px; }
+.grid3 .visa-img-placeholder { height: 130px; }
+.grid3 .visa-img { height: 130px; }
+
+/* ── LAYOUT B: 2-COLUMN GRID ──────────────────── */
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.1rem; max-width: 560px; }
+.grid2 .visa-img-placeholder { height: 160px; }
+.grid2 .visa-img { height: 160px; }
+
+/* ── LAYOUT C: SINGLE WIDE STACK ─────────────── */
+.stack1 { display: flex; flex-direction: column; gap: 0.85rem; max-width: 520px; }
+.stack1 .visa { flex-direction: row; }
+.stack1 .visa-doc { flex-direction: row; }
+.stack1 .visa-img-placeholder { width: 38%; height: auto; min-height: 140px; flex-shrink: 0; font-size: 2.5rem; }
+.stack1 .visa-img { width: 38%; height: auto; min-height: 140px; flex-shrink: 0; object-position: center; }
+.stack1 .visa-right { flex: 1; display: flex; flex-direction: column; }
+.stack1 .visa-head { border-bottom: none; border-left: 1px solid rgba(0,0,0,0.1); }
+.stack1 .visa-fields { border-left: 1px solid rgba(0,0,0,0.06); }
+.stack1 .visa-mrz { border-top: 1px solid rgba(0,0,0,0.1); border-left: 1px solid rgba(0,0,0,0.06); }
+</style>
+</head>
+<body>
+
+<h2>Visa card — image on top, 3 grid layouts</h2>
+<p class="sub">Same card, three ways to arrange them on the page.</p>
+
+
+<!-- ── LAYOUT A: 3-col ────────────────────────── -->
+<div class="concept">
+  <div class="section-label">A — 3-column grid &nbsp; compact, lots of cards visible at once</div>
+  <div class="grid3">
+
+    <div class="visa v-salmon">
+      <div class="visa-img-placeholder" style="background:#eeddd0">🛵</div>
+      <div class="visa-doc">
+        <div class="visa-head">
+          <span class="visa-authority">Bureau of Shipped Work</span>
+          <span class="visa-category">0→1 · Logistics</span>
+        </div>
+        <div class="visa-fields">
+          <div class="visa-f">
+            <div class="visa-f-label">Project</div>
+            <div class="visa-f-value pname">Earn with Yulu</div>
+          </div>
+          <div class="visa-row">
+            <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Jan 2024</div></div>
+            <div class="visa-f"><div class="visa-f-label">Shipped</div><div class="visa-f-value">Sep 2024</div></div>
+          </div>
+          <div class="visa-f">
+            <div class="visa-f-label">Impact</div>
+            <div class="visa-f-value">99% order fulfillment for gig delivery partners</div>
+          </div>
+        </div>
+        <div class="visa-mrz">
+          <div class="visa-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="visa-mrz-line">CASE0001&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa v-sky">
+      <div class="visa-img-placeholder" style="background:#cddde8">🛴</div>
+      <div class="visa-doc">
+        <div class="visa-head">
+          <span class="visa-authority">Bureau of Shipped Work</span>
+          <span class="visa-category">Redesign · Mobile</span>
+        </div>
+        <div class="visa-fields">
+          <div class="visa-f">
+            <div class="visa-f-label">Project</div>
+            <div class="visa-f-value pname">Quick Ride Revamp</div>
+          </div>
+          <div class="visa-row">
+            <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Apr 2024</div></div>
+            <div class="visa-f"><div class="visa-f-label">Shipped</div><div class="visa-f-value">Sep 2024</div></div>
+          </div>
+          <div class="visa-f">
+            <div class="visa-f-label">Impact</div>
+            <div class="visa-f-value">Better UX, meaningful drop in support costs</div>
+          </div>
+        </div>
+        <div class="visa-mrz">
+          <div class="visa-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="visa-mrz-line">CASE0002&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa v-mint">
+      <div class="visa-img-placeholder" style="background:#cce0d2">🎟</div>
+      <div class="visa-doc">
+        <div class="visa-head">
+          <span class="visa-authority">Bureau of Shipped Work</span>
+          <span class="visa-category">Tool · Internal</span>
+        </div>
+        <div class="visa-fields">
+          <div class="visa-f">
+            <div class="visa-f-label">Project</div>
+            <div class="visa-f-value pname">Coupon Framework</div>
+          </div>
+          <div class="visa-row">
+            <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Sep 2023</div></div>
+            <div class="visa-f"><div class="visa-f-label">Still in use</div><div class="visa-f-value">Daily</div></div>
+          </div>
+          <div class="visa-f">
+            <div class="visa-f-label">Impact</div>
+            <div class="visa-f-value">7 days → 10 mins. Used daily by ops.</div>
+          </div>
+        </div>
+        <div class="visa-mrz">
+          <div class="visa-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="visa-mrz-line">CASE0003&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ── LAYOUT B: 2-col ────────────────────────── -->
+<div class="concept">
+  <div class="section-label">B — 2-column grid &nbsp; more breathing room, image is bigger</div>
+  <div class="grid2">
+
+    <div class="visa v-salmon">
+      <div class="visa-img-placeholder" style="background:#eeddd0">🛵</div>
+      <div class="visa-doc">
+        <div class="visa-head">
+          <span class="visa-authority">Bureau of Shipped Work</span>
+          <span class="visa-category">0→1 · Logistics</span>
+        </div>
+        <div class="visa-fields">
+          <div class="visa-f">
+            <div class="visa-f-label">Project</div>
+            <div class="visa-f-value pname">Earn with Yulu</div>
+          </div>
+          <div class="visa-row">
+            <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Jan 2024</div></div>
+            <div class="visa-f"><div class="visa-f-label">Shipped</div><div class="visa-f-value">Sep 2024</div></div>
+          </div>
+          <div class="visa-f">
+            <div class="visa-f-label">Impact</div>
+            <div class="visa-f-value">99% order fulfillment for gig delivery partners across India</div>
+          </div>
+        </div>
+        <div class="visa-mrz">
+          <div class="visa-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="visa-mrz-line">CASE0001&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa v-sky">
+      <div class="visa-img-placeholder" style="background:#cddde8">🛴</div>
+      <div class="visa-doc">
+        <div class="visa-head">
+          <span class="visa-authority">Bureau of Shipped Work</span>
+          <span class="visa-category">Redesign · Mobile</span>
+        </div>
+        <div class="visa-fields">
+          <div class="visa-f">
+            <div class="visa-f-label">Project</div>
+            <div class="visa-f-value pname">Quick Ride Revamp</div>
+          </div>
+          <div class="visa-row">
+            <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Apr 2024</div></div>
+            <div class="visa-f"><div class="visa-f-label">Shipped</div><div class="visa-f-value">Sep 2024</div></div>
+          </div>
+          <div class="visa-f">
+            <div class="visa-f-label">Impact</div>
+            <div class="visa-f-value">Better UX, meaningful reduction in tech support costs</div>
+          </div>
+        </div>
+        <div class="visa-mrz">
+          <div class="visa-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="visa-mrz-line">CASE0002&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa v-mint">
+      <div class="visa-img-placeholder" style="background:#cce0d2">🎟</div>
+      <div class="visa-doc">
+        <div class="visa-head">
+          <span class="visa-authority">Bureau of Shipped Work</span>
+          <span class="visa-category">Tool · Internal</span>
+        </div>
+        <div class="visa-fields">
+          <div class="visa-f">
+            <div class="visa-f-label">Project</div>
+            <div class="visa-f-value pname">Coupon Framework</div>
+          </div>
+          <div class="visa-row">
+            <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Sep 2023</div></div>
+            <div class="visa-f"><div class="visa-f-label">Still in use</div><div class="visa-f-value">Daily</div></div>
+          </div>
+          <div class="visa-f">
+            <div class="visa-f-label">Impact</div>
+            <div class="visa-f-value">7 days → 10 mins. Used daily by ops.</div>
+          </div>
+        </div>
+        <div class="visa-mrz">
+          <div class="visa-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="visa-mrz-line">CASE0003&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa v-lilac">
+      <div class="visa-img-placeholder" style="background:#ddd0ec">🗂</div>
+      <div class="visa-doc">
+        <div class="visa-head">
+          <span class="visa-authority">Bureau of Shipped Work</span>
+          <span class="visa-category">System · Design</span>
+        </div>
+        <div class="visa-fields">
+          <div class="visa-f">
+            <div class="visa-f-label">Project</div>
+            <div class="visa-f-value pname">Design System Docs</div>
+          </div>
+          <div class="visa-row">
+            <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">2024</div></div>
+            <div class="visa-f"><div class="visa-f-label">Status</div><div class="visa-f-value">In progress</div></div>
+          </div>
+          <div class="visa-f">
+            <div class="visa-f-label">Note</div>
+            <div class="visa-f-value">Documentation coming soon</div>
+          </div>
+        </div>
+        <div class="visa-mrz">
+          <div class="visa-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="visa-mrz-line">CASE0004&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ── LAYOUT C: horizontal stack ─────────────── -->
+<div class="concept">
+  <div class="section-label">C — Horizontal stack &nbsp; image left, fields right — landscape visa feel</div>
+  <div class="stack1">
+
+    <div class="visa v-salmon">
+      <div class="visa-doc" style="flex-direction:row">
+        <div class="visa-img-placeholder" style="background:#eeddd0;width:38%;min-height:140px;font-size:2.5rem;flex-shrink:0">🛵</div>
+        <div style="flex:1;display:flex;flex-direction:column">
+          <div class="visa-head" style="border-left:1px solid rgba(0,0,0,0.1)">
+            <span class="visa-authority">Bureau of Shipped Work</span>
+            <span class="visa-category">0→1</span>
+          </div>
+          <div class="visa-fields" style="border-left:1px solid rgba(0,0,0,0.06)">
+            <div class="visa-f">
+              <div class="visa-f-label">Project</div>
+              <div class="visa-f-value pname" style="font-size:0.8rem">Earn with Yulu</div>
+            </div>
+            <div class="visa-row">
+              <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Jan 2024</div></div>
+              <div class="visa-f"><div class="visa-f-label">Shipped</div><div class="visa-f-value">Sep 2024</div></div>
+            </div>
+            <div class="visa-f">
+              <div class="visa-f-label">Impact</div>
+              <div class="visa-f-value">99% order fulfillment for gig partners</div>
+            </div>
+          </div>
+          <div class="visa-mrz" style="border-left:1px solid rgba(0,0,0,0.06)">
+            <div class="visa-mrz-line">CASE0001&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa v-sky">
+      <div class="visa-doc" style="flex-direction:row">
+        <div class="visa-img-placeholder" style="background:#cddde8;width:38%;min-height:140px;font-size:2.5rem;flex-shrink:0">🛴</div>
+        <div style="flex:1;display:flex;flex-direction:column">
+          <div class="visa-head" style="border-left:1px solid rgba(0,0,0,0.1)">
+            <span class="visa-authority">Bureau of Shipped Work</span>
+            <span class="visa-category">Redesign</span>
+          </div>
+          <div class="visa-fields" style="border-left:1px solid rgba(0,0,0,0.06)">
+            <div class="visa-f">
+              <div class="visa-f-label">Project</div>
+              <div class="visa-f-value pname" style="font-size:0.8rem">Quick Ride Revamp</div>
+            </div>
+            <div class="visa-row">
+              <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Apr 2024</div></div>
+              <div class="visa-f"><div class="visa-f-label">Shipped</div><div class="visa-f-value">Sep 2024</div></div>
+            </div>
+            <div class="visa-f">
+              <div class="visa-f-label">Impact</div>
+              <div class="visa-f-value">Better UX, drop in support costs</div>
+            </div>
+          </div>
+          <div class="visa-mrz" style="border-left:1px solid rgba(0,0,0,0.06)">
+            <div class="visa-mrz-line">CASE0002&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa v-mint">
+      <div class="visa-doc" style="flex-direction:row">
+        <div class="visa-img-placeholder" style="background:#cce0d2;width:38%;min-height:140px;font-size:2.5rem;flex-shrink:0">🎟</div>
+        <div style="flex:1;display:flex;flex-direction:column">
+          <div class="visa-head" style="border-left:1px solid rgba(0,0,0,0.1)">
+            <span class="visa-authority">Bureau of Shipped Work</span>
+            <span class="visa-category">Tool</span>
+          </div>
+          <div class="visa-fields" style="border-left:1px solid rgba(0,0,0,0.06)">
+            <div class="visa-f">
+              <div class="visa-f-label">Project</div>
+              <div class="visa-f-value pname" style="font-size:0.8rem">Coupon Framework</div>
+            </div>
+            <div class="visa-row">
+              <div class="visa-f"><div class="visa-f-label">Commenced</div><div class="visa-f-value">Sep 2023</div></div>
+              <div class="visa-f"><div class="visa-f-label">Still in use</div><div class="visa-f-value">Daily</div></div>
+            </div>
+            <div class="visa-f">
+              <div class="visa-f-label">Impact</div>
+              <div class="visa-f-value">7 days → 10 mins for ops</div>
+            </div>
+          </div>
+          <div class="visa-mrz" style="border-left:1px solid rgba(0,0,0,0.06)">
+            <div class="visa-mrz-line">CASE0003&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

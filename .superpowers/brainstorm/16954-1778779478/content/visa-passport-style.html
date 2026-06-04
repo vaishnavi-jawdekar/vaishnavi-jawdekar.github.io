@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #F7F7F5; font-family: 'Satoshi', system-ui, sans-serif; padding: 2.5rem 2rem 5rem; }
+
+h2 { font-size: 1rem; font-weight: 700; color: #0A0A0A; margin-bottom: 0.25rem; }
+.sub { font-size: 0.75rem; color: #888; margin-bottom: 2.5rem; }
+
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; max-width: 580px; }
+
+/* ── VISA CARD ────────────────────────────────── */
+.visa {
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(11,24,84,0.25), 0 1px 4px rgba(11,24,84,0.15);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  background: #0b1854;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transform-style: preserve-3d;
+}
+.visa:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(11,24,84,0.35), 0 2px 8px rgba(11,24,84,0.2);
+}
+
+/* ── IMAGE ZONE ───────────────────────────────── */
+.visa-img-zone {
+  width: 100%; height: 150px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; flex-shrink: 0;
+  position: relative; overflow: hidden;
+}
+.visa-img-zone img { width:100%; height:100%; object-fit:cover; display:block; }
+/* dark overlay so image bleeds into the navy doc area */
+.visa-img-zone::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(11,24,84,0.7) 100%);
+  pointer-events: none;
+}
+
+/* ── DOCUMENT SECTION ─────────────────────────── */
+.visa-doc {
+  flex: 1; display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+
+/* guilloché waves — same SVG pattern as passport */
+.visa-doc::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='120'%3E%3Cpath d='M-50,40 C0,10 50,70 100,40 C150,10 200,70 250,40 C300,10 350,70 400,40 C450,10 500,70 550,40' stroke='rgba(255,255,255,0.07)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M-50,60 C0,30 50,90 100,60 C150,30 200,90 250,60 C300,30 350,90 400,60' stroke='rgba(255,255,255,0.05)' stroke-width='1' fill='none'/%3E%3Cpath d='M-50,80 C0,50 50,110 100,80 C150,50 200,110 250,80 C300,50 350,110 400,80' stroke='rgba(255,255,255,0.05)' stroke-width='1' fill='none'/%3E%3Cpath d='M-50,20 C0,-10 50,50 100,20 C150,-10 200,50 250,20 C300,-10 350,50 400,20' stroke='rgba(255,255,255,0.04)' stroke-width='1' fill='none'/%3E%3Cpath d='M-50,100 C0,70 50,130 100,100 C150,70 200,130 250,100' stroke='rgba(255,255,255,0.04)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-size: 400px 120px;
+}
+
+/* fine micro grid */
+.visa-doc::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 6px, rgba(255,255,255,0.025) 6px, rgba(255,255,255,0.025) 7px),
+    repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(255,255,255,0.025) 6px, rgba(255,255,255,0.025) 7px);
+}
+
+/* ── HOLOGRAPHIC LAYER — appears on hover ─────── */
+.visa-holo {
+  position: absolute; inset: 0; z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+  background: conic-gradient(
+    from var(--holo-angle, 0deg) at var(--holo-cx, 50%) var(--holo-cy, 50%),
+    #4B4EFC22, #a78bfa33, #f472b622, #fbbf2422, #34d39922, #4B4EFC22
+  );
+}
+.visa-specular {
+  position: absolute; inset: 0; z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    circle at var(--holo-cx, 50%) var(--holo-cy, 50%),
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.04) 40%,
+    transparent 70%
+  );
+}
+.visa:hover .visa-holo { opacity: 1; }
+.visa:hover .visa-specular { opacity: 1; }
+
+/* ── HEADER ───────────────────────────────────── */
+.visa-head {
+  position: relative; z-index: 2;
+  padding: 0.4rem 0.7rem 0.35rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.visa-authority {
+  font-size: 0.38rem; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+}
+.visa-cat {
+  font-size: 0.36rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 2px; padding: 1px 4px;
+}
+
+/* ── FIELDS ───────────────────────────────────── */
+.visa-fields {
+  position: relative; z-index: 2;
+  padding: 0.55rem 0.7rem 0.45rem;
+  flex: 1; display: flex; flex-direction: column; gap: 0.32rem;
+}
+.visa-row { display: flex; gap: 0.85rem; }
+.visa-row .vf { flex: 1; }
+.vf { display: flex; flex-direction: column; gap: 2px; }
+.vf-l {
+  font-size: 0.34rem; font-weight: 700; letter-spacing: 0.13em;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+}
+.vf-v {
+  font-size: 0.56rem; font-weight: 700;
+  color: rgba(247,247,245,0.85); line-height: 1.15;
+}
+.vf-v.pname {
+  font-size: 0.9rem; font-weight: 800; letter-spacing: -0.025em;
+  line-height: 1.05; color: #F7F7F5;
+}
+
+/* ── MRZ ──────────────────────────────────────── */
+.visa-mrz {
+  position: relative; z-index: 2;
+  padding: 0.26rem 0.7rem 0.3rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.15);
+}
+.mrz {
+  font-family: 'Courier New', monospace;
+  font-size: 0.38rem; letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.18); line-height: 1.7;
+  white-space: nowrap; overflow: hidden;
+}
+
+/* gold accent on case number — like the passport emblem gold */
+.visa-case {
+  font-size: 0.42rem; font-weight: 700; letter-spacing: 0.06em;
+  color: #c9a84c; font-family: monospace;
+}
+</style>
+</head>
+<body>
+
+<h2>Visa cards — passport style</h2>
+<p class="sub">Navy #0b1854, cream text, guilloché waves, iridescent hover. Hover over a card to see the holo effect.</p>
+
+<div class="grid2">
+
+  <div class="visa" id="v1">
+    <div class="visa-holo"></div>
+    <div class="visa-specular"></div>
+    <div class="visa-img-zone" style="background:#1a2a6e">
+      <img src="../../../../../earn-with-yulu.png" onerror="this.style.display='none';this.parentNode.style.fontSize='3rem';this.parentNode.innerHTML+='🛵'">
+    </div>
+    <div class="visa-doc">
+      <div class="visa-head">
+        <span class="visa-authority">Bureau of Shipped Work</span>
+        <span class="visa-cat">0→1 · Logistics</span>
+      </div>
+      <div class="visa-fields">
+        <div class="vf">
+          <div class="vf-l">Project</div>
+          <div class="vf-v pname">Earn with Yulu</div>
+        </div>
+        <div class="visa-row">
+          <div class="vf"><div class="vf-l">Commenced</div><div class="vf-v">Jan 2024</div></div>
+          <div class="vf"><div class="vf-l">Shipped</div><div class="vf-v">Sep 2024</div></div>
+        </div>
+        <div class="vf">
+          <div class="vf-l">Impact</div>
+          <div class="vf-v">99% order fulfillment for gig delivery partners</div>
+        </div>
+      </div>
+      <div class="visa-mrz">
+        <div class="visa-case">CASE-0001</div>
+        <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visa" id="v2">
+    <div class="visa-holo"></div>
+    <div class="visa-specular"></div>
+    <div class="visa-img-zone" style="background:#1a2a6e">
+      <img src="../../../../../quick-ride.png" onerror="this.style.display='none';this.parentNode.style.fontSize='3rem';this.parentNode.innerHTML+='🛴'">
+    </div>
+    <div class="visa-doc">
+      <div class="visa-head">
+        <span class="visa-authority">Bureau of Shipped Work</span>
+        <span class="visa-cat">Redesign · Mobile</span>
+      </div>
+      <div class="visa-fields">
+        <div class="vf">
+          <div class="vf-l">Project</div>
+          <div class="vf-v pname">Quick Ride Revamp</div>
+        </div>
+        <div class="visa-row">
+          <div class="vf"><div class="vf-l">Commenced</div><div class="vf-v">Apr 2024</div></div>
+          <div class="vf"><div class="vf-l">Shipped</div><div class="vf-v">Sep 2024</div></div>
+        </div>
+        <div class="vf">
+          <div class="vf-l">Impact</div>
+          <div class="vf-v">Better UX, meaningful drop in support costs</div>
+        </div>
+      </div>
+      <div class="visa-mrz">
+        <div class="visa-case">CASE-0002</div>
+        <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visa" id="v3">
+    <div class="visa-holo"></div>
+    <div class="visa-specular"></div>
+    <div class="visa-img-zone" style="background:#1a2a6e">
+      <img src="../../../../../coupon-framework.png" onerror="this.style.display='none';this.parentNode.style.fontSize='3rem';this.parentNode.innerHTML+='🎟'">
+    </div>
+    <div class="visa-doc">
+      <div class="visa-head">
+        <span class="visa-authority">Bureau of Shipped Work</span>
+        <span class="visa-cat">Tool · Internal Ops</span>
+      </div>
+      <div class="visa-fields">
+        <div class="vf">
+          <div class="vf-l">Project</div>
+          <div class="vf-v pname">Coupon Framework</div>
+        </div>
+        <div class="visa-row">
+          <div class="vf"><div class="vf-l">Commenced</div><div class="vf-v">Sep 2023</div></div>
+          <div class="vf"><div class="vf-l">Still in use</div><div class="vf-v">Daily</div></div>
+        </div>
+        <div class="vf">
+          <div class="vf-l">Impact</div>
+          <div class="vf-v">7 days → 10 minutes. Used daily by ops.</div>
+        </div>
+      </div>
+      <div class="visa-mrz">
+        <div class="visa-case">CASE-0003</div>
+        <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visa" id="v4">
+    <div class="visa-holo"></div>
+    <div class="visa-specular"></div>
+    <div class="visa-img-zone" style="background:#151e4a; border: 2px dashed rgba(255,255,255,0.1); border-bottom:none">
+      <span style="font-size:2rem;opacity:0.3">🗂</span>
+    </div>
+    <div class="visa-doc">
+      <div class="visa-head">
+        <span class="visa-authority">Bureau of Shipped Work</span>
+        <span class="visa-cat">System · Design</span>
+      </div>
+      <div class="visa-fields">
+        <div class="vf">
+          <div class="vf-l">Project</div>
+          <div class="vf-v pname" style="opacity:0.5">Design System Docs</div>
+        </div>
+        <div class="visa-row">
+          <div class="vf"><div class="vf-l">Commenced</div><div class="vf-v" style="opacity:0.5">2024</div></div>
+          <div class="vf"><div class="vf-l">Status</div><div class="vf-v" style="color:#c9a84c">In progress</div></div>
+        </div>
+        <div class="vf">
+          <div class="vf-l">Note</div>
+          <div class="vf-v" style="opacity:0.4">Documentation coming soon</div>
+        </div>
+      </div>
+      <div class="visa-mrz">
+        <div class="visa-case" style="opacity:0.4">CASE-0004</div>
+        <div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Position-driven holographic effect — same logic as passport
+document.querySelectorAll('.visa').forEach(function(card) {
+  card.addEventListener('mousemove', function(e) {
+    var rect = card.getBoundingClientRect();
+    var cx = ((e.clientX - rect.left) / rect.width * 100).toFixed(1) + '%';
+    var cy = ((e.clientY - rect.top) / rect.height * 100).toFixed(1) + '%';
+    var dx = (e.clientX - rect.left) / rect.width - 0.5;
+    var dy = (e.clientY - rect.top) / rect.height - 0.5;
+    var angle = (Math.atan2(dy, dx) * 180 / Math.PI + 180).toFixed(1) + 'deg';
+    card.style.setProperty('--holo-cx', cx);
+    card.style.setProperty('--holo-cy', cy);
+    card.style.setProperty('--holo-angle', angle);
+
+    // subtle 3D tilt
+    var tiltX = (dy * -8).toFixed(2);
+    var tiltY = (dx * 8).toFixed(2);
+    card.style.transform = 'translateY(-3px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg)';
+  });
+
+  card.addEventListener('mouseleave', function() {
+    card.style.transform = '';
+    card.style.removeProperty('--holo-cx');
+    card.style.removeProperty('--holo-cy');
+  });
+});
+</script>
+</body>
+</html>

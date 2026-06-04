@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #2a2a2a; font-family: system-ui, sans-serif; padding: 2.5rem 2rem 5rem; color: #0A0A0A; }
+
+h2 { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.25rem; color: #F7F7F5; }
+.sub { font-size: 0.75rem; color: #777; margin-bottom: 2.5rem; }
+
+.section-label { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #555; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: #333; }
+.concept { margin-bottom: 3rem; }
+
+/* ──────────────────────────────────────────────────────────
+   SCHENGEN VISA
+   Proportions: ~85.6mm × 54mm, landscape. The real thing.
+   ────────────────────────────────────────────────────────── */
+.schengen-wrap { display: flex; flex-direction: column; gap: 1.25rem; max-width: 600px; }
+
+.schengen {
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.3);
+  cursor: pointer;
+  /* aspect ratio of a real visa sticker ~1.58:1 */
+  aspect-ratio: 1.58 / 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Security guilloché background */
+.schengen-bg {
+  position: absolute; inset: 0;
+  background-color: var(--visa-bg, #e8d5c4);
+}
+.schengen-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent, transparent 3px,
+      rgba(255,255,255,0.08) 3px, rgba(255,255,255,0.08) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent, transparent 3px,
+      rgba(255,255,255,0.05) 3px, rgba(255,255,255,0.05) 4px
+    );
+}
+/* Wavy guilloché lines — the real security pattern */
+.schengen-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='80'%3E%3Cpath d='M0,40 C25,20 50,60 75,40 C100,20 125,60 150,40 C175,20 200,60 225,40' stroke='rgba(255,255,255,0.12)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M0,50 C25,30 50,70 75,50 C100,30 125,70 150,50 C175,30 200,70 225,50' stroke='rgba(255,255,255,0.09)' stroke-width='1' fill='none'/%3E%3Cpath d='M0,30 C25,10 50,50 75,30 C100,10 125,50 150,30 C175,10 200,50 225,30' stroke='rgba(255,255,255,0.09)' stroke-width='1' fill='none'/%3E%3Cpath d='M0,20 C25,5 50,38 75,20 C100,5 125,38 150,20 C175,5 200,38 225,20' stroke='rgba(0,0,0,0.06)' stroke-width='1' fill='none'/%3E%3Cpath d='M0,60 C25,45 50,75 75,60 C100,45 125,75 150,60 C175,45 200,75 225,60' stroke='rgba(0,0,0,0.06)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-size: 200px 80px;
+  opacity: 0.8;
+}
+
+.schengen-inner {
+  position: relative; z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+}
+
+/* Top header bar */
+.sv-header {
+  padding: 0.45rem 0.75rem 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.sv-states { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(0,0,0,0.55); }
+.sv-type-badge {
+  font-size: 0.45rem; font-weight: 700; letter-spacing: 0.1em;
+  border: 1px solid rgba(0,0,0,0.25);
+  border-radius: 2px;
+  padding: 1px 5px;
+  color: rgba(0,0,0,0.5);
+}
+
+/* Main content area */
+.sv-body {
+  flex: 1;
+  display: flex;
+  padding: 0.5rem 0.75rem;
+  gap: 0.65rem;
+}
+
+/* Left: fields */
+.sv-fields { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+.sv-field { display: flex; flex-direction: column; gap: 1px; }
+.sv-field-label {
+  font-size: 0.38rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(0,0,0,0.4);
+}
+.sv-field-value {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.01em;
+  color: rgba(0,0,0,0.8); line-height: 1.1;
+}
+.sv-field-value.big {
+  font-size: 0.85rem; font-weight: 800; letter-spacing: -0.01em;
+}
+.sv-row { display: flex; gap: 1.25rem; }
+.sv-row .sv-field { flex: 1; }
+
+/* Right: photo/image */
+.sv-photo {
+  width: 28%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: rgba(255,255,255,0.3);
+  position: relative;
+}
+.sv-photo-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Holographic strip on photo */
+.sv-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(75,78,252,0.0) 0%, rgba(75,78,252,0.2) 25%,
+    rgba(255,100,150,0.2) 50%, rgba(75,78,252,0.0) 75%);
+  pointer-events: none;
+}
+
+/* MRZ — machine readable zone */
+.sv-mrz {
+  padding: 0.3rem 0.75rem 0.4rem;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.04);
+}
+.sv-mrz-line {
+  font-family: 'Courier New', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.05em;
+  color: rgba(0,0,0,0.35);
+  line-height: 1.6;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* visa colour themes */
+.sv-salmon  { --visa-bg: #e8c9b5; }
+.sv-blue    { --visa-bg: #c5d5e8; }
+.sv-green   { --visa-bg: #c5e0ce; }
+.sv-gold    { --visa-bg: #e8ddb5; }
+
+
+/* ──────────────────────────────────────────────────────────
+   US VISA — full passport page, portrait
+   ────────────────────────────────────────────────────────── */
+.us-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 720px; }
+
+.usvisa {
+  background: #f5f2ec;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 0.7 / 1;
+}
+
+/* Large decorative background — US visa has a big watermark image */
+.uv-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: var(--uv-bg, #f5f2ec);
+  overflow: hidden;
+}
+.uv-bg::before {
+  content: var(--uv-emblem, '🦅');
+  position: absolute;
+  font-size: 8rem;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.06;
+  line-height: 1;
+}
+/* fine line security pattern */
+.uv-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent, transparent 4px,
+    rgba(0,0,0,0.025) 4px, rgba(0,0,0,0.025) 5px
+  );
+}
+
+.uv-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+
+.uv-top-bar {
+  padding: 0.4rem 0.6rem 0.35rem;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 2px solid var(--uv-accent, #4B4EFC);
+}
+.uv-country-name { font-size: 0.42rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--uv-accent, #4B4EFC); }
+.uv-visa-type {
+  font-size: 0.7rem; font-weight: 800; color: var(--uv-accent, #4B4EFC);
+  letter-spacing: -0.01em;
+}
+
+/* photo zone */
+.uv-photo-row { display: flex; gap: 0.5rem; padding: 0.5rem 0.6rem; align-items: flex-start; }
+.uv-photo {
+  width: 38%;
+  flex-shrink: 0;
+  aspect-ratio: 3/4;
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  overflow: hidden;
+}
+.uv-photo-fields { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+
+.uv-field { display: flex; flex-direction: column; gap: 1px; }
+.uv-field-label { font-size: 0.35rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.4); }
+.uv-field-value { font-size: 0.58rem; font-weight: 700; color: rgba(0,0,0,0.8); line-height: 1.15; }
+.uv-field-value.name { font-size: 0.7rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; }
+
+/* lower fields */
+.uv-lower { padding: 0 0.6rem; flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+.uv-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 0.75rem; }
+
+/* MRZ */
+.uv-mrz {
+  margin-top: auto;
+  padding: 0.3rem 0.6rem 0.35rem;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.03);
+}
+.uv-mrz-line {
+  font-family: 'Courier New', monospace;
+  font-size: 0.36rem; letter-spacing: 0.04em;
+  color: rgba(0,0,0,0.3); line-height: 1.7;
+  white-space: nowrap; overflow: hidden;
+}
+
+.uv-indigo { --uv-bg: #f0f0ff; --uv-accent: #4B4EFC; --uv-emblem: '⚡'; }
+.uv-orange { --uv-bg: #fff5f0; --uv-accent: #c45e2a; --uv-emblem: '🛴'; }
+.uv-green  { --uv-bg: #f0f8f4; --uv-accent: #1a7a47; --uv-emblem: '🎟'; }
+</style>
+</head>
+<body>
+
+<h2>Real visa formats</h2>
+<p class="sub">Two authentic reference points — Schengen sticker and US visa page.</p>
+
+
+<!-- ── SCHENGEN ────────────────────────────────── -->
+<div class="concept">
+  <div class="section-label">Schengen visa sticker &nbsp; salmon/blue guilloché security background, MRZ, photo inset</div>
+  <div class="schengen-wrap">
+
+    <div class="schengen sv-salmon">
+      <div class="schengen-bg"></div>
+      <div class="schengen-inner">
+        <div class="sv-header">
+          <span class="sv-states">EUROPEAN UNION — SHORT STAY</span>
+          <span class="sv-type-badge">TYPE C · PRODUCT DESIGN</span>
+        </div>
+        <div class="sv-body">
+          <div class="sv-fields">
+            <div class="sv-field">
+              <div class="sv-field-label">Holder / Project</div>
+              <div class="sv-field-value big">Earn with Yulu</div>
+            </div>
+            <div class="sv-row">
+              <div class="sv-field">
+                <div class="sv-field-label">Issued by</div>
+                <div class="sv-field-value">Yulu Bikes, India</div>
+              </div>
+              <div class="sv-field">
+                <div class="sv-field-label">Duration</div>
+                <div class="sv-field-value">8 months</div>
+              </div>
+            </div>
+            <div class="sv-row">
+              <div class="sv-field">
+                <div class="sv-field-label">From</div>
+                <div class="sv-field-value">Jan 2024</div>
+              </div>
+              <div class="sv-field">
+                <div class="sv-field-label">Until</div>
+                <div class="sv-field-value">Sep 2024</div>
+              </div>
+            </div>
+            <div class="sv-field">
+              <div class="sv-field-label">Outcome</div>
+              <div class="sv-field-value">99% order fulfillment for gig delivery partners across India</div>
+            </div>
+          </div>
+          <div class="sv-photo">
+            <span>🛵</span>
+          </div>
+        </div>
+        <div class="sv-mrz">
+          <div class="sv-mrz-line">V&lt;IND&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="sv-mrz-line">YLU2024001IND9801011F2409308&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="schengen sv-blue">
+      <div class="schengen-bg"></div>
+      <div class="schengen-inner">
+        <div class="sv-header">
+          <span class="sv-states">EUROPEAN UNION — SHORT STAY</span>
+          <span class="sv-type-badge">TYPE C · PRODUCT DESIGN</span>
+        </div>
+        <div class="sv-body">
+          <div class="sv-fields">
+            <div class="sv-field">
+              <div class="sv-field-label">Holder / Project</div>
+              <div class="sv-field-value big">Quick Ride Revamp</div>
+            </div>
+            <div class="sv-row">
+              <div class="sv-field">
+                <div class="sv-field-label">Issued by</div>
+                <div class="sv-field-value">Yulu Bikes, India</div>
+              </div>
+              <div class="sv-field">
+                <div class="sv-field-label">Duration</div>
+                <div class="sv-field-value">5 months</div>
+              </div>
+            </div>
+            <div class="sv-row">
+              <div class="sv-field">
+                <div class="sv-field-label">From</div>
+                <div class="sv-field-value">Apr 2024</div>
+              </div>
+              <div class="sv-field">
+                <div class="sv-field-label">Until</div>
+                <div class="sv-field-value">Sep 2024</div>
+              </div>
+            </div>
+            <div class="sv-field">
+              <div class="sv-field-label">Outcome</div>
+              <div class="sv-field-value">Better UX, meaningful reduction in tech support costs</div>
+            </div>
+          </div>
+          <div class="sv-photo">
+            <span>🛴</span>
+          </div>
+        </div>
+        <div class="sv-mrz">
+          <div class="sv-mrz-line">V&lt;IND&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="sv-mrz-line">YLU2024002IND9801011F2409308&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ── US VISA ─────────────────────────────────── -->
+<div class="concept" style="margin-top:2.5rem">
+  <div class="section-label">US visa (passport page) &nbsp; big background watermark, photo, type code, MRZ</div>
+  <div class="us-wrap">
+
+    <div class="usvisa uv-indigo">
+      <div class="uv-bg"></div>
+      <div class="uv-inner">
+        <div class="uv-top-bar">
+          <span class="uv-country-name">YULU DESIGN BUREAU</span>
+          <span class="uv-visa-type">PD-1</span>
+        </div>
+        <div class="uv-photo-row">
+          <div class="uv-photo">🛵</div>
+          <div class="uv-photo-fields">
+            <div class="uv-field">
+              <div class="uv-field-label">Project</div>
+              <div class="uv-field-value name">Earn with<br>Yulu</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Designer</div>
+              <div class="uv-field-value">Jawdekar, Vaishnavi</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Type</div>
+              <div class="uv-field-value">0 → 1 · Logistics</div>
+            </div>
+          </div>
+        </div>
+        <div class="uv-lower">
+          <div class="uv-grid2">
+            <div class="uv-field">
+              <div class="uv-field-label">Issued</div>
+              <div class="uv-field-value">01 JAN 2024</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Expires</div>
+              <div class="uv-field-value">01 SEP 2024</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Entries</div>
+              <div class="uv-field-value">Multiple</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Status</div>
+              <div class="uv-field-value">✓ Shipped</div>
+            </div>
+          </div>
+          <div class="uv-field" style="margin-top:0.2rem">
+            <div class="uv-field-label">Annotation</div>
+            <div class="uv-field-value">99% order fulfillment. Gig delivery partners across India.</div>
+          </div>
+        </div>
+        <div class="uv-mrz">
+          <div class="uv-mrz-line">VIND&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="uv-mrz-line">YLU24001&lt;4IND8901011F2501019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="usvisa uv-orange">
+      <div class="uv-bg"></div>
+      <div class="uv-inner">
+        <div class="uv-top-bar">
+          <span class="uv-country-name">YULU DESIGN BUREAU</span>
+          <span class="uv-visa-type">PD-2</span>
+        </div>
+        <div class="uv-photo-row">
+          <div class="uv-photo">🛴</div>
+          <div class="uv-photo-fields">
+            <div class="uv-field">
+              <div class="uv-field-label">Project</div>
+              <div class="uv-field-value name">Quick Ride<br>Revamp</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Designer</div>
+              <div class="uv-field-value">Jawdekar, Vaishnavi</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Type</div>
+              <div class="uv-field-value">Redesign · Mobile</div>
+            </div>
+          </div>
+        </div>
+        <div class="uv-lower">
+          <div class="uv-grid2">
+            <div class="uv-field">
+              <div class="uv-field-label">Issued</div>
+              <div class="uv-field-value">01 APR 2024</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Expires</div>
+              <div class="uv-field-value">01 SEP 2024</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Entries</div>
+              <div class="uv-field-value">Multiple</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Status</div>
+              <div class="uv-field-value">✓ Shipped</div>
+            </div>
+          </div>
+          <div class="uv-field" style="margin-top:0.2rem">
+            <div class="uv-field-label">Annotation</div>
+            <div class="uv-field-value">Better UX. Meaningful reduction in tech support costs.</div>
+          </div>
+        </div>
+        <div class="uv-mrz">
+          <div class="uv-mrz-line">VIND&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="uv-mrz-line">YLU24002&lt;4IND8901011F2501019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="usvisa uv-green">
+      <div class="uv-bg"></div>
+      <div class="uv-inner">
+        <div class="uv-top-bar">
+          <span class="uv-country-name">YULU DESIGN BUREAU</span>
+          <span class="uv-visa-type">PD-3</span>
+        </div>
+        <div class="uv-photo-row">
+          <div class="uv-photo">🎟</div>
+          <div class="uv-photo-fields">
+            <div class="uv-field">
+              <div class="uv-field-label">Project</div>
+              <div class="uv-field-value name">Coupon<br>Framework</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Designer</div>
+              <div class="uv-field-value">Jawdekar, Vaishnavi</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Type</div>
+              <div class="uv-field-value">Internal Tool · Ops</div>
+            </div>
+          </div>
+        </div>
+        <div class="uv-lower">
+          <div class="uv-grid2">
+            <div class="uv-field">
+              <div class="uv-field-label">Issued</div>
+              <div class="uv-field-value">01 SEP 2023</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Expires</div>
+              <div class="uv-field-value">Still in use</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Entries</div>
+              <div class="uv-field-value">Unlimited</div>
+            </div>
+            <div class="uv-field">
+              <div class="uv-field-label">Status</div>
+              <div class="uv-field-value">✓ Shipped</div>
+            </div>
+          </div>
+          <div class="uv-field" style="margin-top:0.2rem">
+            <div class="uv-field-label">Annotation</div>
+            <div class="uv-field-value">7 days → 10 mins. Used daily by ops team.</div>
+          </div>
+        </div>
+        <div class="uv-mrz">
+          <div class="uv-mrz-line">VIND&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="uv-mrz-line">YLU23001&lt;4IND8901011F2501019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

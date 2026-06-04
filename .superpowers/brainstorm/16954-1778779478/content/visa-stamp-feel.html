@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #F7F7F5; font-family: 'Satoshi', system-ui, sans-serif; padding: 2.5rem 2rem 5rem; color: #0A0A0A; }
+
+.label { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #aaa; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.label::after { content: ''; flex: 1; height: 1px; background: #e8e8e8; }
+.set { margin-bottom: 3rem; }
+
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.1rem; max-width: 520px; }
+
+/* base card */
+.visa {
+  border-radius: 6px; overflow: hidden; position: relative;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  cursor: pointer; display: flex; flex-direction: column;
+  background: var(--bg, #ede8df);
+  transition: box-shadow 0.25s ease;
+}
+.visa:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+
+.visa-img-zone {
+  width: 100%; height: 140px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; flex-shrink: 0; position: relative; overflow: hidden;
+  background: var(--img-bg, #ddd8cf);
+}
+.visa-img-zone img { width:100%; height:100%; object-fit:cover; display:block; }
+
+.visa-doc { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+
+.visa-waves {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='10'%3E%3Cpath d='M0 5 Q25 0 50 5 Q75 10 100 5 Q125 0 150 5 Q175 10 200 5' stroke='rgba(13%2C13%2C43%2C0.07)' fill='none' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 200px 10px;
+}
+.visa-waves-holo {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2; opacity: 0;
+  mix-blend-mode: color;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='10'%3E%3Cpath d='M0 5 Q25 0 50 5 Q75 10 100 5 Q125 0 150 5 Q175 10 200 5' stroke='rgba(100%2C100%2C255%2C0.9)' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-size: 200px 10px; transition: opacity 0.3s ease;
+}
+.visa-holo {
+  position: absolute; inset: 0; z-index: 3; opacity: 0; pointer-events: none;
+  mix-blend-mode: screen; transition: opacity 0.3s ease;
+  background: conic-gradient(from var(--angle,0deg) at var(--cx,50%) var(--cy,50%),
+    rgba(75,78,252,0.15),rgba(167,139,250,0.12),rgba(244,114,182,0.12),
+    rgba(251,191,36,0.08),rgba(52,211,153,0.08),rgba(75,78,252,0.15));
+}
+.visa-specular {
+  position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle at var(--cx,50%) var(--cy,50%),
+    rgba(255,255,255,0.4) 0%,rgba(255,255,255,0.06) 40%,transparent 68%);
+}
+.visa:hover .visa-waves-holo, .visa:hover .visa-holo, .visa:hover .visa-specular { opacity: 1; }
+
+.visa-body { position: relative; z-index: 5; padding: 0.7rem 0.7rem 0.6rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+.visa-name { font-size: 0.88rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; color: #0A0A0A; margin-bottom: 0.3rem; }
+.visa-impact { font-size: 0.63rem; font-weight: 700; color: rgba(0,0,0,0.65); line-height: 1.35; }
+.visa-meta { font-size: 0.43rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.28); }
+
+.visa-mrz {
+  position: relative; z-index: 5;
+  padding: 0.2rem 0.7rem 0.22rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.mrz { font-family: 'Courier New', monospace; font-size: 0.33rem; letter-spacing: 0.05em; color: rgba(0,0,0,0.15); white-space: nowrap; overflow: hidden; }
+
+.v-warm  { --bg: #ede8df; --img-bg: #ddd8cf; }
+.v-sky   { --bg: #dce6f0; --img-bg: #ccd6e0; }
+.v-sage  { --bg: #daeae0; --img-bg: #cadad0; }
+.v-lilac { --bg: #e8e0f0; --img-bg: #d8d0e0; }
+
+
+/* ── OPTION 1: circular stamp watermark ───────── */
+.stamp-circle {
+  position: absolute; z-index: 5;
+  top: 0.65rem; right: 0.65rem;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0,0,0,0.18);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0.22;
+  font-size: 0.35rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  text-align: center; line-height: 1.4; color: #0A0A0A;
+  pointer-events: none;
+}
+
+/* ── OPTION 2: thin colored top strip ─────────── */
+.color-strip { height: 3px; width: 100%; background: var(--strip, #0A0A0A); flex-shrink: 0; }
+
+/* ── OPTION 3: perforated left edge ──────────── */
+.perf-left {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 14px; z-index: 5;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent, transparent 6px,
+    rgba(0,0,0,0.08) 6px, rgba(0,0,0,0.08) 7px
+  );
+  border-right: 1px solid rgba(0,0,0,0.08);
+}
+.has-perf .visa-body { padding-left: 1.1rem; }
+.has-perf .visa-mrz { padding-left: 1.1rem; }
+
+/* ── OPTION 4: thick left border accent ──────── */
+.border-accent {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px; z-index: 5;
+  background: var(--accent, #0A0A0A); opacity: 0.5;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<!-- OPTION 1: circular stamp watermark -->
+<div class="set">
+  <div class="label">1 — Circular stamp watermark in corner</div>
+  <div class="grid2">
+    <div class="visa v-warm">
+      <div class="visa-img-zone"><img src="../../../../../earn-with-yulu.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛵'"></div>
+      <div class="visa-doc">
+        <div class="visa-waves"></div><div class="visa-waves-holo"></div><div class="visa-holo"></div><div class="visa-specular"></div>
+        <div class="stamp-circle">Entry<br>Granted</div>
+        <div class="visa-body">
+          <div><div class="visa-name">Earn with Yulu</div><div class="visa-impact">99% order fulfillment for gig delivery partners</div></div>
+          <div class="visa-meta">Yulu · Logistics · 2024</div>
+        </div>
+        <div class="visa-mrz"><div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div></div>
+      </div>
+    </div>
+    <div class="visa v-sky">
+      <div class="visa-img-zone"><img src="../../../../../quick-ride.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛴'"></div>
+      <div class="visa-doc">
+        <div class="visa-waves"></div><div class="visa-waves-holo"></div><div class="visa-holo"></div><div class="visa-specular"></div>
+        <div class="stamp-circle">Entry<br>Granted</div>
+        <div class="visa-body">
+          <div><div class="visa-name">Quick Ride Revamp</div><div class="visa-impact">Better UX, meaningful drop in support costs</div></div>
+          <div class="visa-meta">Yulu · Mobile · 2024</div>
+        </div>
+        <div class="visa-mrz"><div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION 2: thin colored top strip per card -->
+<div class="set">
+  <div class="label">2 — Thin colour strip at top of doc section</div>
+  <div class="grid2">
+    <div class="visa v-warm">
+      <div class="visa-img-zone"><img src="../../../../../earn-with-yulu.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛵'"></div>
+      <div class="visa-doc">
+        <div class="visa-waves"></div><div class="visa-waves-holo"></div><div class="visa-holo"></div><div class="visa-specular"></div>
+        <div class="color-strip" style="--strip:#4B4EFC"></div>
+        <div class="visa-body">
+          <div><div class="visa-name">Earn with Yulu</div><div class="visa-impact">99% order fulfillment for gig delivery partners</div></div>
+          <div class="visa-meta">Yulu · Logistics · 2024</div>
+        </div>
+        <div class="visa-mrz"><div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div></div>
+      </div>
+    </div>
+    <div class="visa v-sky">
+      <div class="visa-img-zone"><img src="../../../../../quick-ride.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛴'"></div>
+      <div class="visa-doc">
+        <div class="visa-waves"></div><div class="visa-waves-holo"></div><div class="visa-holo"></div><div class="visa-specular"></div>
+        <div class="color-strip" style="--strip:#E8784A"></div>
+        <div class="visa-body">
+          <div><div class="visa-name">Quick Ride Revamp</div><div class="visa-impact">Better UX, meaningful drop in support costs</div></div>
+          <div class="visa-meta">Yulu · Mobile · 2024</div>
+        </div>
+        <div class="visa-mrz"><div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION 3: perforated left edge -->
+<div class="set">
+  <div class="label">3 — Perforated left edge, like a tear-off document</div>
+  <div class="grid2">
+    <div class="visa v-warm has-perf">
+      <div class="visa-img-zone"><img src="../../../../../earn-with-yulu.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛵'"></div>
+      <div class="visa-doc">
+        <div class="visa-waves"></div><div class="visa-waves-holo"></div><div class="visa-holo"></div><div class="visa-specular"></div>
+        <div class="perf-left"></div>
+        <div class="visa-body">
+          <div><div class="visa-name">Earn with Yulu</div><div class="visa-impact">99% order fulfillment for gig delivery partners</div></div>
+          <div class="visa-meta">Yulu · Logistics · 2024</div>
+        </div>
+        <div class="visa-mrz"><div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div></div>
+      </div>
+    </div>
+    <div class="visa v-sky has-perf">
+      <div class="visa-img-zone"><img src="../../../../../quick-ride.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛴'"></div>
+      <div class="visa-doc">
+        <div class="visa-waves"></div><div class="visa-waves-holo"></div><div class="visa-holo"></div><div class="visa-specular"></div>
+        <div class="perf-left"></div>
+        <div class="visa-body">
+          <div><div class="visa-name">Quick Ride Revamp</div><div class="visa-impact">Better UX, meaningful drop in support costs</div></div>
+          <div class="visa-meta">Yulu · Mobile · 2024</div>
+        </div>
+        <div class="visa-mrz"><div class="mrz">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION 4: make MRZ more prominent -->
+<div class="set">
+  <div class="label">4 — Bigger MRZ, let the document code do the work</div>
+  <div class="grid2">
+    <div class="visa v-warm">
+      <div class="visa-img-zone"><img src="../../../../../earn-with-yulu.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛵'"></div>
+      <div class="visa-doc">
+        <div class="visa-waves"></div><div class="visa-waves-holo"></div><div class="visa-holo"></div><div class="visa-specular"></div>
+        <div class="visa-body">
+          <div><div class="visa-name">Earn with Yulu</div><div class="visa-impact">99% order fulfillment for gig delivery partners</div></div>
+          <div class="visa-meta">Yulu · Logistics · 2024</div>
+        </div>
+        <div class="visa-mrz" style="padding:0.3rem 0.7rem 0.35rem; background:rgba(0,0,0,0.05)">
+          <div class="mrz" style="font-size:0.46rem;color:rgba(0,0,0,0.28);line-height:1.8">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="mrz" style="font-size:0.46rem;color:rgba(0,0,0,0.28);line-height:1.8">CASE0001&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2</div>
+        </div>
+      </div>
+    </div>
+    <div class="visa v-sky">
+      <div class="visa-img-zone"><img src="../../../../../quick-ride.png" onerror="this.style.display='none';this.parentNode.innerHTML='🛴'"></div>
+      <div class="visa-doc">
+        <div class="visa-waves"></div><div class="visa-waves-holo"></div><div class="visa-holo"></div><div class="visa-specular"></div>
+        <div class="visa-body">
+          <div><div class="visa-name">Quick Ride Revamp</div><div class="visa-impact">Better UX, meaningful drop in support costs</div></div>
+          <div class="visa-meta">Yulu · Mobile · 2024</div>
+        </div>
+        <div class="visa-mrz" style="padding:0.3rem 0.7rem 0.35rem; background:rgba(0,0,0,0.05)">
+          <div class="mrz" style="font-size:0.46rem;color:rgba(0,0,0,0.28);line-height:1.8">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="mrz" style="font-size:0.46rem;color:rgba(0,0,0,0.28);line-height:1.8">CASE0002&lt;DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.visa').forEach(function(card) {
+  card.addEventListener('mousemove', function(e) {
+    var rect = card.getBoundingClientRect();
+    var cx = ((e.clientX - rect.left) / rect.width * 100).toFixed(1) + '%';
+    var cy = ((e.clientY - rect.top) / rect.height * 100).toFixed(1) + '%';
+    var dx = (e.clientX - rect.left) / rect.width - 0.5;
+    var dy = (e.clientY - rect.top) / rect.height - 0.5;
+    var angle = (Math.atan2(dy, dx) * 180 / Math.PI + 180).toFixed(1) + 'deg';
+    card.style.setProperty('--cx', cx);
+    card.style.setProperty('--cy', cy);
+    card.style.setProperty('--angle', angle);
+  });
+});
+</script>
+</body>
+</html>

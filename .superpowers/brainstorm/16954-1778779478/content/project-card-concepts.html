@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #F0EFE9; font-family: 'Satoshi', system-ui, sans-serif; padding: 2rem 1.5rem 4rem; color: #0A0A0A; }
+
+h2 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.sub { font-size: 0.8rem; color: #666; margin-bottom: 2.5rem; }
+
+.concept { margin-bottom: 3.5rem; }
+.concept-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #888; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.concept-label::after { content: ''; flex: 1; height: 1px; background: #ddd; }
+
+/* ── CONCEPT A: VISA STAMPS ───────────────────── */
+.visa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 700px; }
+.visa-card {
+  background: #F7F7F5;
+  border-radius: 4px;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #e0ddd5;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  aspect-ratio: 3/4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+/* Stamp border — dashed perforation */
+.visa-card::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 2px dashed rgba(10,10,10,0.12);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.visa-country {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 0.3rem;
+}
+.visa-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+.visa-desc { font-size: 0.65rem; color: #666; line-height: 1.5; margin-bottom: 0.75rem; }
+.visa-stamp-mark {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.25;
+  font-size: 0.45rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.3;
+}
+.visa-meta { font-size: 0.55rem; color: #aaa; letter-spacing: 0.08em; font-family: monospace; }
+.visa-indigo { border-top: 3px solid #4B4EFC; }
+.visa-indigo .visa-stamp-mark { color: #4B4EFC; opacity: 0.3; }
+.visa-orange { border-top: 3px solid #E8784A; }
+.visa-orange .visa-stamp-mark { color: #E8784A; opacity: 0.3; }
+.visa-green  { border-top: 3px solid #2D9D5F; }
+.visa-green  .visa-stamp-mark { color: #2D9D5F; opacity: 0.3; }
+
+/* ── CONCEPT B: BOARDING PASS ─────────────────── */
+.bp-stack { display: flex; flex-direction: column; gap: 1rem; max-width: 560px; }
+.bp-card {
+  background: #F7F7F5;
+  border-radius: 8px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #e0ddd5;
+  position: relative;
+  cursor: pointer;
+}
+/* tear line */
+.bp-card::after {
+  content: '';
+  position: absolute;
+  left: 200px;
+  top: 0; bottom: 0;
+  width: 1px;
+  border-left: 2px dashed #e0ddd5;
+}
+.bp-main {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.bp-route { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem; }
+.bp-from, .bp-to { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+.bp-arrow { color: #ccc; font-size: 0.9rem; flex-shrink: 0; }
+.bp-from-label, .bp-to-label { font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; margin-top: 2px; }
+.bp-title { font-size: 0.75rem; font-weight: 700; color: #0A0A0A; }
+.bp-desc { font-size: 0.6rem; color: #888; line-height: 1.45; }
+.bp-stub {
+  width: 120px;
+  flex-shrink: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.bp-seat { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; text-align: center; }
+.bp-seat-label { font-size: 0.45rem; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; }
+.bp-barcode {
+  display: flex; gap: 2px; align-items: flex-end; height: 28px;
+}
+.bp-barcode span {
+  display: block;
+  width: 2px;
+  background: #0A0A0A;
+  opacity: 0.2;
+}
+.bp-indigo .bp-stub { background: #eef; }
+.bp-indigo .bp-from { color: #4B4EFC; }
+.bp-orange .bp-stub { background: #fff3ee; }
+.bp-orange .bp-from { color: #E8784A; }
+.bp-green  .bp-stub { background: #edf7f2; }
+.bp-green  .bp-from { color: #2D9D5F; }
+.bp-tags { font-size: 0.5rem; color: #bbb; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* ── CONCEPT C: ENTRY VISA (STICKER) ──────────── */
+.visa2-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; max-width: 640px; }
+.visa2-card {
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  position: relative;
+}
+.visa2-header {
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.visa2-header-left { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.8); }
+.visa2-header-right { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); font-family: monospace; }
+.visa2-img {
+  width: 100%; height: 120px; object-fit: cover; display: block;
+  background: #e0ddd5;
+  position: relative;
+}
+.visa2-img-placeholder {
+  width: 100%; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+}
+.visa2-body {
+  background: #F7F7F5;
+  padding: 0.85rem 1rem;
+}
+.visa2-issued { font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; margin-bottom: 0.2rem; }
+.visa2-title { font-size: 0.9rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.visa2-desc { font-size: 0.62rem; color: #666; line-height: 1.5; margin-bottom: 0.6rem; }
+.visa2-footer { display: flex; align-items: center; justify-content: space-between; }
+.visa2-tags { font-size: 0.5rem; letter-spacing: 0.06em; text-transform: uppercase; color: #bbb; }
+.visa2-admit { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.visa2-indigo .visa2-header { background: #4B4EFC; }
+.visa2-indigo .visa2-admit { color: #4B4EFC; }
+.visa2-orange .visa2-header { background: #E8784A; }
+.visa2-orange .visa2-admit { color: #E8784A; }
+.visa2-green  .visa2-header { background: #2D9D5F; }
+.visa2-green  .visa2-admit { color: #2D9D5F; }
+.visa2-dark   .visa2-header { background: #0A0A0A; }
+.visa2-dark   .visa2-admit { color: #0A0A0A; }
+
+hr.divider { border: none; border-top: 1px solid #ddd; margin: 2.5rem 0; }
+</style>
+</head>
+<body>
+
+<h2>Project cards — 3 travel concepts</h2>
+<p class="sub">All three use the same card content. React to what feels right, wrong, or interesting.</p>
+
+
+<!-- ── A: VISA STAMPS ─────────────────────────── -->
+<div class="concept">
+  <div class="concept-label">A — Visa stamps &nbsp; worn, personal, collected</div>
+  <div class="visa-grid">
+
+    <div class="visa-card visa-indigo">
+      <div class="visa-stamp-mark">Entry<br>Permitted</div>
+      <div class="visa-country">Yulu · Logistics · 2024</div>
+      <div class="visa-title">Earn with Yulu</div>
+      <div class="visa-desc">99% order fulfillment for a gig initiative supporting delivery partners across India</div>
+      <div class="visa-meta">REF: YLU-2024-01</div>
+    </div>
+
+    <div class="visa-card visa-orange">
+      <div class="visa-stamp-mark">Entry<br>Permitted</div>
+      <div class="visa-country">Yulu · Mobile · 2024</div>
+      <div class="visa-title">Quick Ride Revamp</div>
+      <div class="visa-desc">Better UX, meaningful reduction in tech support costs</div>
+      <div class="visa-meta">REF: YLU-2024-02</div>
+    </div>
+
+    <div class="visa-card visa-green">
+      <div class="visa-stamp-mark">Entry<br>Permitted</div>
+      <div class="visa-country">Yulu · Tools · 2023</div>
+      <div class="visa-title">Coupon Framework</div>
+      <div class="visa-desc">Cut coupon creation time from 7 days to 10 minutes</div>
+      <div class="visa-meta">REF: YLU-2023-01</div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── B: BOARDING PASSES ─────────────────────── -->
+<div class="concept">
+  <div class="concept-label">B — Boarding passes &nbsp; destination-driven, structured</div>
+  <div class="bp-stack">
+
+    <div class="bp-card bp-indigo">
+      <div class="bp-main">
+        <div class="bp-tags">Yulu · Logistics · 2024</div>
+        <div class="bp-route">
+          <div>
+            <div class="bp-from">PROB</div>
+            <div class="bp-from-label">Problem</div>
+          </div>
+          <div class="bp-arrow">→</div>
+          <div>
+            <div class="bp-to">SLVD</div>
+            <div class="bp-to-label">Solved</div>
+          </div>
+        </div>
+        <div class="bp-title">Earn with Yulu</div>
+        <div class="bp-desc">99% order fulfillment for a gig initiative supporting delivery partners across India</div>
+      </div>
+      <div class="bp-stub">
+        <div>
+          <div class="bp-seat">01A</div>
+          <div class="bp-seat-label">Case no.</div>
+        </div>
+        <div class="bp-barcode">
+          <span style="height:100%"></span><span style="height:60%"></span><span style="height:80%"></span><span style="height:45%"></span><span style="height:100%"></span><span style="height:70%"></span><span style="height:55%"></span><span style="height:90%"></span><span style="height:40%"></span><span style="height:75%"></span><span style="height:100%"></span><span style="height:65%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bp-card bp-orange">
+      <div class="bp-main">
+        <div class="bp-tags">Yulu · Mobile · 2024</div>
+        <div class="bp-route">
+          <div>
+            <div class="bp-from">CONF</div>
+            <div class="bp-from-label">Confused</div>
+          </div>
+          <div class="bp-arrow">→</div>
+          <div>
+            <div class="bp-to">CLRR</div>
+            <div class="bp-to-label">Clear</div>
+          </div>
+        </div>
+        <div class="bp-title">Quick Ride Revamp</div>
+        <div class="bp-desc">Better UX, meaningful reduction in tech support costs</div>
+      </div>
+      <div class="bp-stub">
+        <div>
+          <div class="bp-seat">02B</div>
+          <div class="bp-seat-label">Case no.</div>
+        </div>
+        <div class="bp-barcode">
+          <span style="height:100%"></span><span style="height:45%"></span><span style="height:70%"></span><span style="height:100%"></span><span style="height:55%"></span><span style="height:85%"></span><span style="height:40%"></span><span style="height:60%"></span><span style="height:100%"></span><span style="height:75%"></span><span style="height:50%"></span><span style="height:90%"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bp-card bp-green">
+      <div class="bp-main">
+        <div class="bp-tags">Yulu · Internal Tools · 2023</div>
+        <div class="bp-route">
+          <div>
+            <div class="bp-from">7DAY</div>
+            <div class="bp-from-label">Before</div>
+          </div>
+          <div class="bp-arrow">→</div>
+          <div>
+            <div class="bp-to">10MN</div>
+            <div class="bp-to-label">After</div>
+          </div>
+        </div>
+        <div class="bp-title">Coupon Framework</div>
+        <div class="bp-desc">Cut coupon creation time from 7 days to 10 minutes. A tool the whole ops team uses daily.</div>
+      </div>
+      <div class="bp-stub">
+        <div>
+          <div class="bp-seat">03C</div>
+          <div class="bp-seat-label">Case no.</div>
+        </div>
+        <div class="bp-barcode">
+          <span style="height:55%"></span><span style="height:100%"></span><span style="height:65%"></span><span style="height:80%"></span><span style="height:45%"></span><span style="height:100%"></span><span style="height:70%"></span><span style="height:55%"></span><span style="height:90%"></span><span style="height:40%"></span><span style="height:75%"></span><span style="height:100%"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── C: ENTRY VISA STICKER ──────────────────── -->
+<div class="concept">
+  <div class="concept-label">C — Entry visas &nbsp; official, image-forward, authoritative</div>
+  <div class="visa2-grid">
+
+    <div class="visa2-card visa2-indigo">
+      <div class="visa2-header">
+        <div class="visa2-header-left">Visa · Entry Permitted</div>
+        <div class="visa2-header-right">2024</div>
+      </div>
+      <div class="visa2-img-placeholder" style="background:#e8e9ff">🛵</div>
+      <div class="visa2-body">
+        <div class="visa2-issued">Yulu · Logistics</div>
+        <div class="visa2-title">Earn with Yulu</div>
+        <div class="visa2-desc">99% order fulfillment for a gig initiative supporting delivery partners across India</div>
+        <div class="visa2-footer">
+          <div class="visa2-tags">Mobile · 0 → 1</div>
+          <div class="visa2-admit">Admit ↗</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa2-card visa2-orange">
+      <div class="visa2-header">
+        <div class="visa2-header-left">Visa · Entry Permitted</div>
+        <div class="visa2-header-right">2024</div>
+      </div>
+      <div class="visa2-img-placeholder" style="background:#fff0eb">🛴</div>
+      <div class="visa2-body">
+        <div class="visa2-issued">Yulu · Mobile</div>
+        <div class="visa2-title">Quick Ride Revamp</div>
+        <div class="visa2-desc">Better UX, meaningful reduction in tech support costs</div>
+        <div class="visa2-footer">
+          <div class="visa2-tags">Redesign · Ops</div>
+          <div class="visa2-admit">Admit ↗</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa2-card visa2-green">
+      <div class="visa2-header">
+        <div class="visa2-header-left">Visa · Entry Permitted</div>
+        <div class="visa2-header-right">2023</div>
+      </div>
+      <div class="visa2-img-placeholder" style="background:#e6f4ec">🎟</div>
+      <div class="visa2-body">
+        <div class="visa2-issued">Yulu · Internal Tools</div>
+        <div class="visa2-title">Coupon Framework</div>
+        <div class="visa2-desc">Cut coupon creation from 7 days to 10 minutes. Used daily by ops.</div>
+        <div class="visa2-footer">
+          <div class="visa2-tags">Tools · Ops</div>
+          <div class="visa2-admit">Admit ↗</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa2-card visa2-dark">
+      <div class="visa2-header">
+        <div class="visa2-header-left">Visa · Coming Soon</div>
+        <div class="visa2-header-right">2025</div>
+      </div>
+      <div class="visa2-img-placeholder" style="background:#f0f0f0">🗂</div>
+      <div class="visa2-body">
+        <div class="visa2-issued">Yulu · Design</div>
+        <div class="visa2-title">Design System Docs</div>
+        <div class="visa2-desc">A living component library and token system. Documentation coming soon.</div>
+        <div class="visa2-footer">
+          <div class="visa2-tags">System · 2024–25</div>
+          <div class="visa2-admit" style="color:#bbb">Pending</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

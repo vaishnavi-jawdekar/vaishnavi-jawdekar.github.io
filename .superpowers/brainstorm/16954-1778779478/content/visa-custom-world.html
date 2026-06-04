@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1e1e1e; font-family: system-ui, sans-serif; padding: 2.5rem 2rem 5rem; color: #0A0A0A; }
+
+h2 { font-size: 1rem; font-weight: 700; color: #F7F7F5; margin-bottom: 0.25rem; }
+.sub { font-size: 0.75rem; color: #666; margin-bottom: 2.5rem; }
+.section-label { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #444; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: #333; }
+.concept { margin-bottom: 3rem; }
+hr.div { border: none; border-top: 1px solid #333; margin: 2.5rem 0; }
+
+/* ── SCHENGEN-STYLE — LANDSCAPE ───────────────── */
+.sch-wrap { display: flex; flex-direction: column; gap: 1.1rem; max-width: 580px; }
+
+.sch {
+  width: 100%;
+  aspect-ratio: 1.62 / 1;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.55);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.sch-bg {
+  position: absolute; inset: 0;
+  background: var(--bg, #e8d5c4);
+}
+/* fine micro-line grid */
+.sch-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(0,0,0,0.03) 5px, rgba(0,0,0,0.03) 6px),
+    repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(0,0,0,0.03) 5px, rgba(0,0,0,0.03) 6px);
+}
+/* guilloché waves */
+.sch-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='120'%3E%3Cpath d='M-50,60 C0,20 50,100 100,60 C150,20 200,100 250,60 C300,20 350,100 400,60' stroke='rgba(255,255,255,0.18)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M-50,75 C0,35 50,115 100,75 C150,35 200,115 250,75 C300,35 350,115 400,75' stroke='rgba(255,255,255,0.12)' stroke-width='1' fill='none'/%3E%3Cpath d='M-50,45 C0,5 50,85 100,45 C150,5 200,85 250,45 C300,5 350,85 400,45' stroke='rgba(255,255,255,0.12)' stroke-width='1' fill='none'/%3E%3Cpath d='M-50,90 C0,55 50,125 100,90 C150,55 200,125 250,90 C300,55 350,125 400,90' stroke='rgba(0,0,0,0.05)' stroke-width='1' fill='none'/%3E%3Cpath d='M-50,30 C0,-5 50,65 100,30 C150,-5 200,65 250,30 C300,-5 350,65 400,30' stroke='rgba(0,0,0,0.05)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-size: 300px 120px;
+}
+
+.sch-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+
+/* header strip */
+.sch-head {
+  padding: 0.38rem 0.7rem;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.06);
+}
+.sch-authority {
+  font-size: 0.42rem; font-weight: 800; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(0,0,0,0.5);
+}
+.sch-category {
+  font-size: 0.4rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(0,0,0,0.35);
+  border: 1px solid rgba(0,0,0,0.2); border-radius: 2px; padding: 1px 5px;
+}
+
+/* main area */
+.sch-body { flex: 1; display: flex; gap: 0.6rem; padding: 0.55rem 0.7rem; }
+
+.sch-fields { flex: 1; display: flex; flex-direction: column; gap: 0.32rem; }
+.sch-row { display: flex; gap: 1rem; }
+.sch-row .sch-f { flex: 1; }
+
+.sch-f { display: flex; flex-direction: column; gap: 1px; }
+.sch-f-label { font-size: 0.36rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(0,0,0,0.38); }
+.sch-f-value { font-size: 0.58rem; font-weight: 700; color: rgba(0,0,0,0.78); line-height: 1.15; }
+.sch-f-value.project-name { font-size: 0.9rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+
+/* photo box */
+.sch-photo {
+  width: 26%; flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.35);
+  font-size: 2rem;
+  position: relative;
+}
+/* iridescent sheen on photo */
+.sch-photo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg,
+    rgba(75,78,252,0) 0%, rgba(75,78,252,0.15) 30%,
+    rgba(200,80,180,0.12) 60%, rgba(75,78,252,0) 90%);
+}
+.sch-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+/* MRZ */
+.sch-mrz {
+  padding: 0.28rem 0.7rem 0.32rem;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.04);
+}
+.sch-mrz-line {
+  font-family: 'Courier New', monospace;
+  font-size: 0.4rem; letter-spacing: 0.05em;
+  color: rgba(0,0,0,0.3); line-height: 1.7;
+  white-space: nowrap; overflow: hidden;
+}
+
+.sch-salmon { --bg: #e8cbb5; }
+.sch-sky    { --bg: #b8cfe8; }
+.sch-mint   { --bg: #b8dfc9; }
+.sch-lilac  { --bg: #d5c8e8; }
+
+
+/* ── US-STYLE — PORTRAIT ──────────────────────── */
+.us-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 680px; }
+
+.uv {
+  background: #f6f3ee;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  cursor: pointer;
+  position: relative;
+  display: flex; flex-direction: column;
+  aspect-ratio: 0.68 / 1;
+}
+
+.uv-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: var(--uv-tint, #f6f3ee);
+}
+/* Large watermark character */
+.uv-bg::before {
+  content: var(--uv-mark, '✦');
+  position: absolute;
+  font-size: 9rem; line-height: 1;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -42%);
+  opacity: 0.05;
+}
+/* hatching */
+.uv-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg, transparent, transparent 5px,
+    rgba(0,0,0,0.018) 5px, rgba(0,0,0,0.018) 6px
+  );
+}
+
+.uv-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+
+.uv-top {
+  padding: 0.38rem 0.55rem 0.3rem;
+  border-bottom: 2px solid var(--uv-accent, #4B4EFC);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.uv-bureau { font-size: 0.38rem; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase; color: var(--uv-accent, #4B4EFC); }
+.uv-code { font-size: 0.72rem; font-weight: 800; color: var(--uv-accent, #4B4EFC); letter-spacing: -0.01em; }
+
+.uv-photo-row { display: flex; gap: 0.45rem; padding: 0.45rem 0.55rem; }
+.uv-photo {
+  width: 36%; flex-shrink: 0;
+  aspect-ratio: 3/4;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; overflow: hidden;
+}
+.uv-photo img { width: 100%; height: 100%; object-fit: cover; }
+.uv-photo-fields { flex: 1; display: flex; flex-direction: column; gap: 0.28rem; }
+
+.uv-f { display: flex; flex-direction: column; gap: 1px; }
+.uv-f-label { font-size: 0.33rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(0,0,0,0.38); }
+.uv-f-value { font-size: 0.55rem; font-weight: 700; color: rgba(0,0,0,0.78); line-height: 1.15; }
+.uv-f-value.pname { font-size: 0.68rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; }
+
+.uv-lower { padding: 0 0.55rem; flex: 1; display: flex; flex-direction: column; gap: 0.28rem; }
+.uv-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.28rem 0.6rem; }
+
+.uv-mrz {
+  margin-top: auto;
+  padding: 0.28rem 0.55rem 0.32rem;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.025);
+}
+.uv-mrz-line {
+  font-family: 'Courier New', monospace;
+  font-size: 0.34rem; letter-spacing: 0.04em;
+  color: rgba(0,0,0,0.28); line-height: 1.7;
+  white-space: nowrap; overflow: hidden;
+}
+
+.uv-a { --uv-tint: #eeeefc; --uv-accent: #4B4EFC; --uv-mark: '⚡'; }
+.uv-b { --uv-tint: #fef4ee; --uv-accent: #c45e2a; --uv-mark: '◎'; }
+.uv-c { --uv-tint: #edf8f2; --uv-accent: #1a7a47; --uv-mark: '✦'; }
+</style>
+</head>
+<body>
+
+<h2>Visa format — original world</h2>
+<p class="sub">No real country names. Entirely made up — "Ministry of Product Design", case numbers, designer as issuing authority.</p>
+
+
+<!-- ── SCHENGEN STYLE ─────────────────────────── -->
+<div class="concept">
+  <div class="section-label">Option 1 — Landscape sticker, Schengen proportions</div>
+  <div class="sch-wrap">
+
+    <div class="sch sch-salmon">
+      <div class="sch-bg"></div>
+      <div class="sch-inner">
+        <div class="sch-head">
+          <span class="sch-authority">Ministry of Product Design · Bureau of Shipped Work</span>
+          <span class="sch-category">Class 0→1 · Logistics</span>
+        </div>
+        <div class="sch-body">
+          <div class="sch-fields">
+            <div class="sch-f">
+              <div class="sch-f-label">Project</div>
+              <div class="sch-f-value project-name">Earn with Yulu</div>
+            </div>
+            <div class="sch-row">
+              <div class="sch-f">
+                <div class="sch-f-label">Designer</div>
+                <div class="sch-f-value">Jawdekar, V.</div>
+              </div>
+              <div class="sch-f">
+                <div class="sch-f-label">Duration</div>
+                <div class="sch-f-value">8 months</div>
+              </div>
+            </div>
+            <div class="sch-row">
+              <div class="sch-f">
+                <div class="sch-f-label">Commenced</div>
+                <div class="sch-f-value">Jan 2024</div>
+              </div>
+              <div class="sch-f">
+                <div class="sch-f-label">Shipped</div>
+                <div class="sch-f-value">Sep 2024</div>
+              </div>
+            </div>
+            <div class="sch-f">
+              <div class="sch-f-label">Impact</div>
+              <div class="sch-f-value">99% order fulfillment for gig delivery partners across India</div>
+            </div>
+          </div>
+          <div class="sch-photo">🛵</div>
+        </div>
+        <div class="sch-mrz">
+          <div class="sch-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="sch-mrz-line">CASE0001&lt;4DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sch sch-sky">
+      <div class="sch-bg"></div>
+      <div class="sch-inner">
+        <div class="sch-head">
+          <span class="sch-authority">Ministry of Product Design · Bureau of Shipped Work</span>
+          <span class="sch-category">Class Redesign · Mobile</span>
+        </div>
+        <div class="sch-body">
+          <div class="sch-fields">
+            <div class="sch-f">
+              <div class="sch-f-label">Project</div>
+              <div class="sch-f-value project-name">Quick Ride Revamp</div>
+            </div>
+            <div class="sch-row">
+              <div class="sch-f">
+                <div class="sch-f-label">Designer</div>
+                <div class="sch-f-value">Jawdekar, V.</div>
+              </div>
+              <div class="sch-f">
+                <div class="sch-f-label">Duration</div>
+                <div class="sch-f-value">5 months</div>
+              </div>
+            </div>
+            <div class="sch-row">
+              <div class="sch-f">
+                <div class="sch-f-label">Commenced</div>
+                <div class="sch-f-value">Apr 2024</div>
+              </div>
+              <div class="sch-f">
+                <div class="sch-f-label">Shipped</div>
+                <div class="sch-f-value">Sep 2024</div>
+              </div>
+            </div>
+            <div class="sch-f">
+              <div class="sch-f-label">Impact</div>
+              <div class="sch-f-value">Better UX, meaningful reduction in tech support costs</div>
+            </div>
+          </div>
+          <div class="sch-photo">🛴</div>
+        </div>
+        <div class="sch-mrz">
+          <div class="sch-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="sch-mrz-line">CASE0002&lt;4DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sch sch-mint">
+      <div class="sch-bg"></div>
+      <div class="sch-inner">
+        <div class="sch-head">
+          <span class="sch-authority">Ministry of Product Design · Bureau of Shipped Work</span>
+          <span class="sch-category">Class Internal Tool · Ops</span>
+        </div>
+        <div class="sch-body">
+          <div class="sch-fields">
+            <div class="sch-f">
+              <div class="sch-f-label">Project</div>
+              <div class="sch-f-value project-name">Coupon Framework</div>
+            </div>
+            <div class="sch-row">
+              <div class="sch-f">
+                <div class="sch-f-label">Designer</div>
+                <div class="sch-f-value">Jawdekar, V.</div>
+              </div>
+              <div class="sch-f">
+                <div class="sch-f-label">Duration</div>
+                <div class="sch-f-value">4 months</div>
+              </div>
+            </div>
+            <div class="sch-row">
+              <div class="sch-f">
+                <div class="sch-f-label">Commenced</div>
+                <div class="sch-f-value">Sep 2023</div>
+              </div>
+              <div class="sch-f">
+                <div class="sch-f-label">Still in use</div>
+                <div class="sch-f-value">Yes, daily</div>
+              </div>
+            </div>
+            <div class="sch-f">
+              <div class="sch-f-label">Impact</div>
+              <div class="sch-f-value">Cut creation time from 7 days to 10 minutes</div>
+            </div>
+          </div>
+          <div class="sch-photo">🎟</div>
+        </div>
+        <div class="sch-mrz">
+          <div class="sch-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="sch-mrz-line">CASE0003&lt;4DES9801011F2601019&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ── US STYLE ───────────────────────────────── -->
+<div class="concept">
+  <div class="section-label">Option 2 — Portrait page, US visa proportions</div>
+  <div class="us-wrap">
+
+    <div class="uv uv-a">
+      <div class="uv-bg"></div>
+      <div class="uv-inner">
+        <div class="uv-top">
+          <span class="uv-bureau">Bureau of Shipped Work</span>
+          <span class="uv-code">PD-1</span>
+        </div>
+        <div class="uv-photo-row">
+          <div class="uv-photo">🛵</div>
+          <div class="uv-photo-fields">
+            <div class="uv-f">
+              <div class="uv-f-label">Project</div>
+              <div class="uv-f-value pname">Earn with Yulu</div>
+            </div>
+            <div class="uv-f">
+              <div class="uv-f-label">Designer</div>
+              <div class="uv-f-value">Jawdekar, V.</div>
+            </div>
+            <div class="uv-f">
+              <div class="uv-f-label">Class</div>
+              <div class="uv-f-value">0→1 · Logistics</div>
+            </div>
+          </div>
+        </div>
+        <div class="uv-lower">
+          <div class="uv-grid2">
+            <div class="uv-f"><div class="uv-f-label">Commenced</div><div class="uv-f-value">Jan 2024</div></div>
+            <div class="uv-f"><div class="uv-f-label">Shipped</div><div class="uv-f-value">Sep 2024</div></div>
+            <div class="uv-f"><div class="uv-f-label">Status</div><div class="uv-f-value">✓ Live</div></div>
+            <div class="uv-f"><div class="uv-f-label">Entries</div><div class="uv-f-value">Multiple</div></div>
+          </div>
+          <div class="uv-f" style="margin-top:0.15rem">
+            <div class="uv-f-label">Impact</div>
+            <div class="uv-f-value">99% order fulfillment for gig delivery partners.</div>
+          </div>
+        </div>
+        <div class="uv-mrz">
+          <div class="uv-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="uv-mrz-line">CASE001&lt;DES9801011F260101&lt;&lt;&lt;&lt;2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="uv uv-b">
+      <div class="uv-bg"></div>
+      <div class="uv-inner">
+        <div class="uv-top">
+          <span class="uv-bureau">Bureau of Shipped Work</span>
+          <span class="uv-code">PD-2</span>
+        </div>
+        <div class="uv-photo-row">
+          <div class="uv-photo">🛴</div>
+          <div class="uv-photo-fields">
+            <div class="uv-f">
+              <div class="uv-f-label">Project</div>
+              <div class="uv-f-value pname">Quick Ride Revamp</div>
+            </div>
+            <div class="uv-f">
+              <div class="uv-f-label">Designer</div>
+              <div class="uv-f-value">Jawdekar, V.</div>
+            </div>
+            <div class="uv-f">
+              <div class="uv-f-label">Class</div>
+              <div class="uv-f-value">Redesign · Mobile</div>
+            </div>
+          </div>
+        </div>
+        <div class="uv-lower">
+          <div class="uv-grid2">
+            <div class="uv-f"><div class="uv-f-label">Commenced</div><div class="uv-f-value">Apr 2024</div></div>
+            <div class="uv-f"><div class="uv-f-label">Shipped</div><div class="uv-f-value">Sep 2024</div></div>
+            <div class="uv-f"><div class="uv-f-label">Status</div><div class="uv-f-value">✓ Live</div></div>
+            <div class="uv-f"><div class="uv-f-label">Entries</div><div class="uv-f-value">Multiple</div></div>
+          </div>
+          <div class="uv-f" style="margin-top:0.15rem">
+            <div class="uv-f-label">Impact</div>
+            <div class="uv-f-value">Better UX. Meaningful drop in support costs.</div>
+          </div>
+        </div>
+        <div class="uv-mrz">
+          <div class="uv-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="uv-mrz-line">CASE002&lt;DES9801011F260101&lt;&lt;&lt;&lt;8</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="uv uv-c">
+      <div class="uv-bg"></div>
+      <div class="uv-inner">
+        <div class="uv-top">
+          <span class="uv-bureau">Bureau of Shipped Work</span>
+          <span class="uv-code">PD-3</span>
+        </div>
+        <div class="uv-photo-row">
+          <div class="uv-photo">🎟</div>
+          <div class="uv-photo-fields">
+            <div class="uv-f">
+              <div class="uv-f-label">Project</div>
+              <div class="uv-f-value pname">Coupon Framework</div>
+            </div>
+            <div class="uv-f">
+              <div class="uv-f-label">Designer</div>
+              <div class="uv-f-value">Jawdekar, V.</div>
+            </div>
+            <div class="uv-f">
+              <div class="uv-f-label">Class</div>
+              <div class="uv-f-value">Tool · Internal</div>
+            </div>
+          </div>
+        </div>
+        <div class="uv-lower">
+          <div class="uv-grid2">
+            <div class="uv-f"><div class="uv-f-label">Commenced</div><div class="uv-f-value">Sep 2023</div></div>
+            <div class="uv-f"><div class="uv-f-label">Still in use</div><div class="uv-f-value">Daily</div></div>
+            <div class="uv-f"><div class="uv-f-label">Status</div><div class="uv-f-value">✓ Live</div></div>
+            <div class="uv-f"><div class="uv-f-label">Entries</div><div class="uv-f-value">Unlimited</div></div>
+          </div>
+          <div class="uv-f" style="margin-top:0.15rem">
+            <div class="uv-f-label">Impact</div>
+            <div class="uv-f-value">7 days → 10 mins. Used daily by ops.</div>
+          </div>
+        </div>
+        <div class="uv-mrz">
+          <div class="uv-mrz-line">P&lt;DES&lt;JAWDEKAR&lt;&lt;VAISHNAVI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+          <div class="uv-mrz-line">CASE003&lt;DES9801011F260101&lt;&lt;&lt;&lt;6</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
