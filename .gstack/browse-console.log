@@ -1,3 +1,16 @@
-[2026-05-19T08:35:07.824Z] [error] Failed to load resource: the server responded with a status of 404 (File not found)
-[2026-05-19T08:35:08.265Z] [error] Failed to load resource: the server responded with a status of 404 (File not found)
-[2026-05-19T08:35:08.317Z] [error] Failed to load resource: the server responded with a status of 404 (File not found)
+[2026-06-17T18:05:02.342Z] [warning] Google Maps JavaScript API has been loaded directly without loading=async. This can result in suboptimal performance. For best-practice loading patterns please see https://goo.gle/js-api-loading
+[2026-06-17T18:05:02.431Z] [log] routes  [Object, Object]
+[2026-06-17T18:05:02.933Z] [warning] Google Maps JavaScript API has been loaded directly without loading=async. This can result in suboptimal performance. For best-practice loading patterns please see https://goo.gle/js-api-loading
+[2026-06-17T18:05:02.965Z] [log] routes  [Object, Object]
+[2026-06-17T18:05:03.024Z] [log] main executed
+[2026-06-17T18:05:03.290Z] [error] ERROR TypeError: Cannot read properties of undefined (reading 'attributes')
+    at e.transformPostData (https://www.yulu.bike/881.89804c2ea5177264c82f.js:1:1809982)
+    at B._next (https://www.yulu.bike/881.89804c2ea5177264c82f.js:1:1809877)
+    at B.__tryOrUnsub (https://www.yulu.bike/main.8bc83850f865d77da440.js:1:721474)
+    at B.next (https://www.yulu.bike/main.8bc83850f865d77da440.js:1:720701)
+    at T._next (https://www.yulu.bike/main.8bc83850f865d77da440.js:1:719883)
+    at T.next (https://www.yulu.bike/main.8bc83850f865d77da440.js:1:719657)
+    at ve._next (https://www.yulu.bike/main.8bc83850f865d77da440.js:1:719883)
+    at ve.next (https://www.yulu.bike/main.8bc83850f865d77da440.js:1:719657)
+    at ve._next (https://www.yulu.bike/main.8bc83850f865d77da440.js:1:733115)
+    at ve.next (https://www.yulu.bike/main.8bc83850f865d77da440.js:1:719657)
